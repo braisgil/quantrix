@@ -50,11 +50,62 @@
   --matrix-green-light: #66ff66;
   --matrix-green-glow: rgba(0, 255, 65, 0.3);
   --matrix-green-soft: rgba(0, 255, 65, 0.1);
+  
+  /* Matrix Grid Colors for Light Theme */
+  --matrix-grid-light: rgba(0, 204, 51, 0.15);
+  --matrix-grid-light-strong: rgba(0, 204, 51, 0.25);
+  
+  /* Matrix Grid Colors for Dark Theme */
+  --matrix-grid-dark: rgba(0, 255, 65, 0.1);
+  --matrix-grid-dark-strong: rgba(0, 255, 65, 0.2);
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(240 5.3% 26.1%);
+  --sidebar-primary: hsl(240 5.9% 10%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(240 4.8% 95.9%);
+  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
-/* Default to Dark Theme with Matrix Colors */
+/* Default to Light Theme with Matrix Colors */
 :root {
   --radius: 0.5rem;
+  --background: oklch(0.98 0 0); /* Light background */
+  --foreground: oklch(0.15 0 0); /* Dark text */
+  --card: oklch(1 0 0); /* White card background */
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0 0);
+  --primary: var(--matrix-green-dark); /* Darker matrix green for light theme */
+  --primary-foreground: oklch(0.98 0 0); /* Light text on green */
+  --secondary: oklch(0.96 0 0); /* Light gray */
+  --secondary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.55 0 0);
+  --accent: oklch(0.96 0 0);
+  --accent-foreground: oklch(0.2 0 0);
+  --destructive: oklch(0.58 0.25 27); /* Red for light theme */
+  --border: oklch(0.9 0 0); /* Light border */
+  --input: oklch(0.9 0 0);
+  --ring: var(--matrix-green-dark);
+  --chart-1: var(--matrix-green-dark);
+  --chart-2: oklch(0.6 0.12 180);
+  --chart-3: oklch(0.4 0.07 240);
+  --chart-4: oklch(0.8 0.19 60);
+  --chart-5: oklch(0.77 0.19 300);
+  --sidebar: oklch(0.98 0 0);
+  --sidebar-foreground: oklch(0.15 0 0);
+  --sidebar-primary: var(--matrix-green-dark);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.96 0 0);
+  --sidebar-accent-foreground: oklch(0.2 0 0);
+  --sidebar-border: oklch(0.9 0 0);
+  --sidebar-ring: var(--matrix-green-dark);
+}
+
+/* Dark Theme (when toggled) */
+.dark {
   --background: oklch(0.05 0 0); /* Very dark background */
   --foreground: oklch(0.98 0 0); /* Almost white text */
   --card: oklch(0.08 0 0); /* Dark card background */
@@ -86,41 +137,6 @@
   --sidebar-accent-foreground: oklch(0.95 0 0);
   --sidebar-border: oklch(0.15 0 0);
   --sidebar-ring: var(--matrix-green);
-}
-
-/* Light Theme (when toggled) */
-.light {
-  --background: oklch(0.98 0 0);
-  --foreground: oklch(0.15 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0 0);
-  --primary: var(--matrix-green-dark);
-  --primary-foreground: oklch(0.98 0 0);
-  --secondary: oklch(0.96 0 0);
-  --secondary-foreground: oklch(0.2 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.55 0 0);
-  --accent: oklch(0.96 0 0);
-  --accent-foreground: oklch(0.2 0 0);
-  --destructive: oklch(0.58 0.25 27);
-  --border: oklch(0.9 0 0);
-  --input: oklch(0.9 0 0);
-  --ring: var(--matrix-green-dark);
-  --chart-1: var(--matrix-green-dark);
-  --chart-2: oklch(0.6 0.12 180);
-  --chart-3: oklch(0.4 0.07 240);
-  --chart-4: oklch(0.8 0.19 60);
-  --chart-5: oklch(0.77 0.19 300);
-  --sidebar: oklch(0.98 0 0);
-  --sidebar-foreground: oklch(0.15 0 0);
-  --sidebar-primary: var(--matrix-green-dark);
-  --sidebar-primary-foreground: oklch(0.98 0 0);
-  --sidebar-accent: oklch(0.96 0 0);
-  --sidebar-accent-foreground: oklch(0.2 0 0);
-  --sidebar-border: oklch(0.9 0 0);
-  --sidebar-ring: var(--matrix-green-dark);
 }
 
 @layer base {
@@ -186,6 +202,11 @@
   }
 }
 
+@keyframes matrix-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
 .matrix-glow {
   animation: glow-pulse 2s ease-in-out infinite;
 }
@@ -201,34 +222,109 @@
 
 .matrix-bg {
   background: linear-gradient(135deg, 
-    oklch(0.05 0 0) 0%, 
-    oklch(0.08 0 0) 50%, 
-    oklch(0.05 0 0) 100%
+    oklch(0.96 0 0) 0%, 
+    oklch(0.98 0 0) 50%, 
+    oklch(0.96 0 0) 100%
   );
 }
 
 .matrix-card {
   background: linear-gradient(135deg, 
-    rgba(0, 255, 65, 0.05) 0%, 
-    rgba(0, 0, 0, 0.8) 50%, 
-    rgba(0, 255, 65, 0.05) 100%
+    var(--matrix-green-soft) 0%, 
+    rgba(255, 255, 255, 0.9) 50%, 
+    var(--matrix-green-soft) 100%
   );
-  border: 1px solid rgba(0, 255, 65, 0.2);
+  border: 1px solid var(--matrix-grid-light-strong);
   backdrop-filter: blur(10px);
   /* Better mobile touch interaction */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Matrix container with subtle grid background */
+.matrix-container {
+  position: relative;
+  background: var(--background);
+}
+
+.matrix-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(var(--matrix-grid-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--matrix-grid-light) 1px, transparent 1px);
+  background-size: 30px 30px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Matrix section with animated grid */
+.matrix-section {
+  position: relative;
+  background: var(--background);
+}
+
+.matrix-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(var(--matrix-grid-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--matrix-grid-light) 1px, transparent 1px);
+  background-size: 25px 25px;
+  animation: matrix-flicker 4s ease-in-out infinite;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Matrix Grid Background - Light Theme */
 .matrix-grid-bg {
   background-image: 
-    linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px);
+    linear-gradient(var(--matrix-grid-light) 1px, transparent 1px),
+    linear-gradient(90deg, var(--matrix-grid-light) 1px, transparent 1px);
+  background-size: 25px 25px;
+  position: relative;
+}
+
+/* Enhanced matrix grid for sections that need more visibility */
+.matrix-grid-strong {
+  background-image: 
+    linear-gradient(var(--matrix-grid-light-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--matrix-grid-light-strong) 1px, transparent 1px);
   background-size: 20px 20px;
+}
+
+/* Dark Theme Matrix Grid */
+.dark .matrix-grid-bg {
+  background-image: 
+    linear-gradient(var(--matrix-grid-dark) 1px, transparent 1px),
+    linear-gradient(90deg, var(--matrix-grid-dark) 1px, transparent 1px);
+}
+
+.dark .matrix-grid-strong {
+  background-image: 
+    linear-gradient(var(--matrix-grid-dark-strong) 1px, transparent 1px),
+    linear-gradient(90deg, var(--matrix-grid-dark-strong) 1px, transparent 1px);
 }
 
 /* Responsive grid background for mobile */
 @media (max-width: 640px) {
-  .matrix-grid-bg {
+  .matrix-grid-bg,
+  .matrix-grid-strong {
+    background-size: 18px 18px;
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 480px) {
+  .matrix-grid-bg,
+  .matrix-grid-strong {
     background-size: 15px 15px;
     opacity: 0.5;
   }
@@ -247,7 +343,7 @@
   .matrix-glow {
     animation-duration: 3s;
   }
-  
+
   .matrix-text-glow {
     animation-duration: 4s;
   }
@@ -274,11 +370,11 @@
   .matrix-text-glow {
     animation: none;
   }
-  
+
   .matrix-card {
     transition: none;
   }
-  
+
   * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
@@ -308,4 +404,47 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--matrix-green-dark);
+}
+
+.dark {
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+/* Dark theme matrix backgrounds */
+.dark .matrix-bg {
+  background: linear-gradient(135deg, 
+    oklch(0.05 0 0) 0%, 
+    oklch(0.08 0 0) 50%, 
+    oklch(0.05 0 0) 100%
+  );
+}
+
+.dark .matrix-card {
+  background: linear-gradient(135deg, 
+    var(--matrix-green-soft) 0%, 
+    rgba(0, 0, 0, 0.8) 50%, 
+    var(--matrix-green-soft) 100%
+  );
+  border: 1px solid var(--matrix-grid-dark-strong);
+}
+
+/* Dark theme matrix containers */
+.dark .matrix-container::before {
+  background-image: 
+    linear-gradient(var(--matrix-grid-dark) 1px, transparent 1px),
+    linear-gradient(90deg, var(--matrix-grid-dark) 1px, transparent 1px);
+}
+
+.dark .matrix-section::before {
+  background-image: 
+    linear-gradient(var(--matrix-grid-dark) 1px, transparent 1px),
+    linear-gradient(90deg, var(--matrix-grid-dark) 1px, transparent 1px);
+  opacity: 0.5;
 }

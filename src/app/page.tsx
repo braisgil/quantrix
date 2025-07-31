@@ -1,24 +1,21 @@
 "use client"
 
 import { useState } from "react";
-import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { 
   Mic, 
-  Brain, 
   Globe, 
   GraduationCap, 
   MessageCircle, 
   Music, 
   Heart, 
   Laugh,
-  Sparkles,
   Zap,
-  Users,
   Star,
   Play,
   Headphones,
@@ -27,6 +24,7 @@ import {
   Menu,
   X
 } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -58,20 +56,24 @@ export default function Home() {
           <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">Features</Button>
           <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">Pricing</Button>
           <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">About</Button>
-          <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow">
-            Enter Matrix
+          <ModeToggle />
+          <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow" asChild>
+            <Link href="/sign-in">Enter Matrix</Link>
           </Button>
         </div>
 
-        {/* Mobile Menu Button */}
-        <Button
-          variant="ghost"
-          size="sm"
-          className="md:hidden text-primary z-10"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        >
-          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </Button>
+        {/* Mobile Navigation */}
+        <div className="flex md:hidden items-center space-x-3">
+          <ModeToggle />
+          <Button
+            variant="ghost"
+            size="sm"
+            className="text-primary z-10"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </Button>
+        </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
@@ -80,8 +82,8 @@ export default function Home() {
               <Button variant="ghost" className="justify-start text-muted-foreground hover:text-primary">Features</Button>
               <Button variant="ghost" className="justify-start text-muted-foreground hover:text-primary">Pricing</Button>
               <Button variant="ghost" className="justify-start text-muted-foreground hover:text-primary">About</Button>
-              <Button className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow mt-2">
-                Enter Matrix
+              <Button className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow mt-2" asChild>
+                <Link href="/sign-in">Enter Matrix</Link>
               </Button>
             </div>
           </div>
@@ -89,7 +91,7 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative px-4 sm:px-6 py-16 sm:py-24 text-center">
+      <section className="relative px-4 sm:px-6 py-16 sm:py-24 text-center matrix-section">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 blur-3xl"></div>
         <div className="relative max-w-6xl mx-auto">
           <Badge variant="secondary" className="mb-6 sm:mb-8 text-xs sm:text-sm bg-primary/10 text-primary border-primary/30">
@@ -113,9 +115,12 @@ export default function Home() {
             <Button 
               size="lg" 
               className="text-base sm:text-lg px-8 sm:px-10 py-6 sm:py-8 bg-primary hover:bg-primary/90 text-black font-bold matrix-glow transform hover:scale-105 transition-all duration-300 min-h-[56px]"
+              asChild
             >
-              <Play className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3" />
-              Jack Into the Matrix
+              <Link href="/sign-in">
+                <Play className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3" />
+                Jack Into the Matrix
+              </Link>
             </Button>
             <Button 
               size="lg" 
@@ -390,8 +395,8 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative px-4 sm:px-6 py-16 sm:py-24">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/20 to-primary/10"></div>
+      <section className="relative px-4 sm:px-6 py-16 sm:py-24 matrix-section">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 blur-3xl"></div>
         <div className="relative max-w-5xl mx-auto text-center">
           <div className="matrix-card p-8 sm:p-12 rounded-2xl">
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 sm:mb-8">
@@ -405,9 +410,12 @@ export default function Home() {
               <Button 
                 size="lg" 
                 className="text-base sm:text-lg px-8 sm:px-12 py-6 sm:py-8 bg-primary hover:bg-primary/90 text-black font-bold matrix-glow transform hover:scale-105 transition-all duration-300 min-h-[56px]"
+                asChild
               >
-                <Mic className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3" />
-                Start Neural Link
+                <Link href="/sign-up">
+                  <Mic className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3" />
+                  Start Neural Link
+                </Link>
               </Button>
               <Button 
                 size="lg" 
