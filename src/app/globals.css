@@ -348,11 +348,6 @@
     animation-duration: 4s;
   }
 
-  /* Better mobile card hover states */
-  .matrix-card:hover {
-    transform: scale(1.02);
-  }
-
   /* Improve touch feedback for buttons */
   button:active {
     transform: scale(0.98);
@@ -367,7 +362,8 @@
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {
   .matrix-glow,
-  .matrix-text-glow {
+  .matrix-text-glow,
+  .matrix-section::before {
     animation: none;
   }
 
@@ -375,10 +371,17 @@
     transition: none;
   }
 
-  * {
+  /* Only disable decorative animations, keep essential UI feedback like loading spinners */
+  .matrix-glow,
+  .matrix-text-glow,
+  [class*="matrix-"] {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  }
+
+  /* Keep transitions shorter but don't disable completely for better UX */
+  *:not([class*="animate-"]) {
+    transition-duration: 0.15s !important;
   }
 }
 
