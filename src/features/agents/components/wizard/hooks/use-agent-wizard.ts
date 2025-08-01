@@ -1,26 +1,8 @@
 import { useState } from "react";
 import { AGENT_CATEGORIES, CUSTOM_RULE_OPTIONS } from "@/constants/agent-categories";
-import type { AgentCategoryId } from "@/constants/agent-categories";
-
-export type { AgentCategoryId };
-
-export interface WizardState {
-  // Basic info
-  name: string;
-  
-  // Category selection
-  category: AgentCategoryId | null;
-  subcategory: string | null;
-  subSubcategory: string | null;
-  specificOption: string | null;
-  
-  // Custom rules
-  customRule1: string | null;
-  customRule2: string | null;
-  
-  // Generated instructions
-  instructions: string;
-}
+import type { WizardState, AgentCategoryId } from "../types/wizard";
+import { getTotalSteps } from "../lib/step-config";
+import { validateStep } from "../lib/wizard-utils";
 
 export const useAgentWizard = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -72,7 +54,8 @@ Remember: You are an expert in ${wizardState.specificOption} and should provide 
   };
 
   const nextStep = () => {
-    if (currentStep < 4) {
+    const totalSteps = getTotalSteps();
+    if (currentStep < totalSteps - 1) {
       setCurrentStep(prev => prev + 1);
     }
   };
@@ -111,14 +94,7 @@ Remember: You are an expert in ${wizardState.specificOption} and should provide 
   };
 
   const canProceed = (step: number): boolean => {
-    switch (step) {
-      case 0: return wizardState.name.trim().length > 0;
-      case 1: return wizardState.category !== null;
-      case 2: return wizardState.subcategory !== null && wizardState.subSubcategory !== null;
-      case 3: return wizardState.specificOption !== null;
-      case 4: return wizardState.customRule1 !== null && wizardState.customRule2 !== null;
-      default: return false;
-    }
+    return validateStep(step, wizardState);
   };
 
   return {
@@ -132,4 +108,4 @@ Remember: You are an expert in ${wizardState.specificOption} and should provide 
     canProceed,
     generateInstructions,
   };
-}; 
+};
