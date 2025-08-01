@@ -32,15 +32,15 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
 
   // Placeholder data for demonstration - replace with actual TRPC queries
   const mockSessions = [
-    { id: "1", name: "Neural Language Training", type: "session" },
-    { id: "2", name: "Quantum Consciousness Dialog", type: "session" },
-    { id: "3", name: "Matrix Code Analysis", type: "session" },
+    { id: "1", name: "Spanish Practice Session", type: "session" },
+    { id: "2", name: "IELTS Writing Help", type: "session" },
+    { id: "3", name: "Career Planning Chat", type: "session" },
   ];
 
   const mockAgents = [
-    { id: "1", name: "Neo", type: "agent", avatar: "N" },
-    { id: "2", name: "Oracle", type: "agent", avatar: "O" },
-    { id: "3", name: "Morpheus", type: "agent", avatar: "M" },
+    { id: "1", name: "Alex - Language Tutor", type: "agent", avatar: "A" },
+    { id: "2", name: "Emma - Study Coach", type: "agent", avatar: "E" },
+    { id: "3", name: "Sam - Career Guide", type: "agent", avatar: "S" },
   ];
 
   const filteredSessions = mockSessions.filter(session =>
@@ -60,7 +60,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
       <div className="flex items-center border-b border-primary/20 px-3">
         <Terminal className="mr-2 h-4 w-4 shrink-0 text-primary" />
         <CommandInput
-          placeholder="Search neural networks, agents, or sessions..."
+          placeholder="Search companions, sessions..."
           value={search}
           onValueChange={(value) => setSearch(value)}
           className="border-0 focus:ring-0 text-foreground placeholder:text-muted-foreground"
@@ -73,16 +73,16 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
               <Brain className="h-6 w-6 text-primary" />
             </div>
             <span className="text-muted-foreground">
-              No neural networks found
+              No results found
             </span>
             <span className="text-xs text-muted-foreground">
-              Try searching for &quot;agent&quot;, &quot;session&quot;, or &quot;neural&quot;
+              Try searching for &quot;companion&quot;, &quot;session&quot;, or &quot;conversation&quot;
             </span>
           </div>
         </CommandEmpty>
         
         {filteredSessions.length > 0 && (
-          <CommandGroup heading="Neural Sessions">
+          <CommandGroup heading="Recent Sessions">
             {filteredSessions.map((session) => (
               <CommandItem
                 onSelect={() => {
@@ -102,7 +102,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
         )}
 
         {filteredAgents.length > 0 && (
-          <CommandGroup heading="AI Agents">
+          <CommandGroup heading="AI Companions">
             {filteredAgents.map((agent) => (
               <CommandItem
                 onSelect={() => {
@@ -138,7 +138,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
               <div className="p-1.5 bg-primary/10 rounded-lg matrix-glow">
                 <Zap className="h-4 w-4 text-primary" />
               </div>
-              <span className="text-sm font-medium">Create New Session</span>
+              <span className="text-sm font-medium">Start New Conversation</span>
             </CommandItem>
             <CommandItem
               onSelect={() => {
@@ -150,7 +150,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
               <div className="p-1.5 bg-primary/10 rounded-lg matrix-glow">
                 <Terminal className="h-4 w-4 text-primary" />
               </div>
-              <span className="text-sm font-medium">Create New Agent</span>
+              <span className="text-sm font-medium">Create New Companion</span>
             </CommandItem>
           </CommandGroup>
         )}

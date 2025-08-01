@@ -34,10 +34,10 @@ export const StepCategorySelection = ({ wizardState, updateWizardState }: StepCa
             </div>
           </div>
           <CardTitle className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow mb-2">
-            Intelligence Domain Selection
+            Choose Your Support Area
           </CardTitle>
           <CardDescription className="text-base text-muted-foreground">
-            Choose the primary neural pathway for your AI companion's specialization
+            Select the main area where you&apos;d like your AI companion to help you
           </CardDescription>
           <div className="flex justify-center mt-3">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-sm px-3 py-1">
@@ -121,7 +121,7 @@ export const StepCategorySelection = ({ wizardState, updateWizardState }: StepCa
             <div className="mt-6 p-4 bg-primary/10 rounded-lg matrix-border animate-in fade-in duration-500">
               <div className="flex items-center mb-3">
                 <div className="w-2 h-2 bg-primary rounded-full mr-3 animate-pulse"></div>
-                <h4 className="font-semibold text-primary matrix-text-glow">Neural Domain Locked</h4>
+                <h4 className="font-semibold text-primary matrix-text-glow">Support Area Selected</h4>
               </div>
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <div>
@@ -133,7 +133,7 @@ export const StepCategorySelection = ({ wizardState, updateWizardState }: StepCa
                   </p>
                 </div>
                 <div>
-                  <h6 className="font-medium text-primary mb-2">Available Specializations:</h6>
+                  <h6 className="font-medium text-primary mb-2">Available Focus Areas:</h6>
                   <div className="flex flex-wrap gap-1">
                     {Object.values(AGENT_CATEGORIES[wizardState.category].subcategories).map((subcat, index) => (
                       <Badge

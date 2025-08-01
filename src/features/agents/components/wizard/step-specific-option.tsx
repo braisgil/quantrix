@@ -35,10 +35,10 @@ export const StepSpecificOption = ({ wizardState, updateWizardState }: StepSpeci
             </div>
           </div>
           <CardTitle className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow mb-2">
-            Neural Specialization Matrix
+            Choose Your Specific Focus
           </CardTitle>
           <CardDescription className="text-base text-muted-foreground">
-            Activate your AI companion's core expertise within {subSubcategoryData.name}
+            Select the exact type of help you&apos;d like within {subSubcategoryData.name}
           </CardDescription>
           <div className="flex justify-center mt-3">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-sm px-3 py-1">
@@ -53,7 +53,7 @@ export const StepSpecificOption = ({ wizardState, updateWizardState }: StepSpeci
         <CardContent className="space-y-6 pb-6">
           <div className="text-center mb-6">
             <div className="inline-flex items-center space-x-2 bg-primary/10 px-3 py-2 rounded-lg matrix-border">
-              <span className="text-sm text-muted-foreground">Configuring neural pathways for:</span>
+              <span className="text-sm text-muted-foreground">Setting up assistance for:</span>
               <Badge variant="secondary" className="bg-primary/20 text-primary break-words">
                 {subSubcategoryData.name}
               </Badge>
@@ -106,13 +106,13 @@ export const StepSpecificOption = ({ wizardState, updateWizardState }: StepSpeci
                       {option}
                     </div>
                     <div className="text-sm text-muted-foreground">
-                      Specialized neural processing for {option.toLowerCase()}
+                      Focused assistance with {option.toLowerCase()}
                     </div>
                   </div>
                   
                   <div className="flex items-center space-x-2 pt-2">
                     <Sparkles className="w-3 h-3 text-muted-foreground" />
-                    <span className="text-xs text-muted-foreground">Advanced AI specialization</span>
+                    <span className="text-xs text-muted-foreground">Personalized support approach</span>
                   </div>
                 </div>
               </Button>
@@ -123,7 +123,7 @@ export const StepSpecificOption = ({ wizardState, updateWizardState }: StepSpeci
             <div className="mt-6 p-4 bg-primary/10 rounded-lg matrix-border animate-in fade-in duration-500">
               <div className="flex items-center mb-3">
                 <div className="w-2 h-2 bg-primary rounded-full mr-3 animate-pulse"></div>
-                <h4 className="font-semibold text-primary matrix-text-glow">Neural Specialization Activated</h4>
+                <h4 className="font-semibold text-primary matrix-text-glow">Support Focus Selected</h4>
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -132,19 +132,19 @@ export const StepSpecificOption = ({ wizardState, updateWizardState }: StepSpeci
                     {wizardState.specificOption}
                   </h5>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Your AI companion will operate as an elite specialist in this domain, 
-                    providing targeted, expert-level assistance with deep domain knowledge.
+                    Your AI companion will focus on helping you with this specific area, 
+                    providing personalized, knowledgeable assistance tailored to your needs.
                   </p>
                   
                   <div className="space-y-2">
                     <Badge variant="outline" className="bg-primary/5 text-primary border-primary/30 mr-2">
-                      Expert Knowledge Base
+                      Focused Knowledge
                     </Badge>
                     <Badge variant="outline" className="bg-primary/5 text-primary border-primary/30 mr-2">
-                      Contextual Understanding
+                      Personalized Help
                     </Badge>
                     <Badge variant="outline" className="bg-primary/5 text-primary border-primary/30">
-                      Adaptive Learning
+                      Adaptive Support
                     </Badge>
                   </div>
                 </div>
@@ -152,24 +152,24 @@ export const StepSpecificOption = ({ wizardState, updateWizardState }: StepSpeci
                 <div className="matrix-card border-primary/10 p-3 rounded-lg bg-primary/5">
                   <div className="flex items-center mb-2">
                     <Zap className="w-4 h-4 text-primary mr-2" />
-                    <h6 className="font-medium text-primary">Neural Capabilities</h6>
+                    <h6 className="font-medium text-primary">What You Can Expect</h6>
                   </div>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-0.5">•</span>
-                      <span>Deep expertise in {wizardState.specificOption.toLowerCase()}</span>
+                      <span>Focused knowledge in {wizardState.specificOption.toLowerCase()}</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-0.5">•</span>
-                      <span>Context-aware problem solving</span>
+                      <span>Thoughtful, context-aware responses</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-0.5">•</span>
-                      <span>Personalized learning pathways</span>
+                      <span>Support tailored to your pace and style</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-0.5">•</span>
-                      <span>Real-time adaptive responses</span>
+                      <span>Helpful, patient guidance</span>
                     </li>
                   </ul>
                 </div>

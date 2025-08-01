@@ -25,10 +25,10 @@ export const StepBasicInfo = ({ wizardState, updateWizardState }: StepBasicInfoP
             </div>
           </div>
           <CardTitle className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow mb-2">
-            Neural Agent Genesis
+            Create Your Companion
           </CardTitle>
           <CardDescription className="text-base text-muted-foreground">
-            Initialize your specialized AI companion with a distinctive neural signature
+            Give your AI assistant a meaningful name that reflects how you&apos;d like to work together
           </CardDescription>
           <div className="flex justify-center mt-3">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-sm px-3 py-1">
@@ -43,18 +43,18 @@ export const StepBasicInfo = ({ wizardState, updateWizardState }: StepBasicInfoP
         <CardContent className="space-y-6 pb-6">
           <div className="space-y-3">
             <Label htmlFor="agent-name" className="text-base font-semibold text-primary matrix-text-glow">
-              Neural Designation
+              Companion Name
             </Label>
             <Input
               id="agent-name"
               type="text"
-              placeholder="e.g., JavaScript Neural Mentor, IELTS Quantum Coach, Career Matrix Advisor..."
+              placeholder="e.g., Alex - My Programming Tutor, Sarah - IELTS Coach, Career Guide..."
               value={wizardState.name}
               onChange={(e) => updateWizardState({ name: e.target.value })}
               className="text-base p-3 h-12 border-primary/30 focus:border-primary focus:ring-primary/50 bg-background/50 backdrop-blur-sm matrix-border transition-all duration-300"
             />
             <p className="text-sm text-muted-foreground">
-              Define a unique identifier that reflects your agent's specialized neural pathways
+              Choose a name that feels personal and reflects the kind of help you&apos;re looking for
             </p>
           </div>
 
@@ -62,24 +62,24 @@ export const StepBasicInfo = ({ wizardState, updateWizardState }: StepBasicInfoP
             <div className="matrix-card border-primary/10 p-4 rounded-lg bg-primary/5">
               <div className="flex items-center mb-3">
                 <Zap className="w-4 h-4 text-primary mr-2" />
-                <h4 className="font-semibold text-primary">Neural Naming Protocol</h4>
+                <h4 className="font-semibold text-primary">Naming Guidelines</h4>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">•</span>
-                  <span>Specify the agent's core intelligence domain</span>
+                  <span>Choose something that feels personal and approachable</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">•</span>
-                  <span>Include neural classification terms: "Mentor", "Coach", "Matrix", "Quantum"</span>
+                  <span>Include the main area where you need help</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">•</span>
-                  <span>Reference the specialized knowledge substrate</span>
+                  <span>Consider using a friendly human name or title</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">•</span>
-                  <span>Maintain professional designation standards</span>
+                  <span>Make it something you&apos;ll be comfortable using regularly</span>
                 </li>
               </ul>
             </div>
@@ -87,24 +87,24 @@ export const StepBasicInfo = ({ wizardState, updateWizardState }: StepBasicInfoP
             <div className="matrix-card border-primary/10 p-4 rounded-lg bg-primary/5">
               <div className="flex items-center mb-3">
                 <Bot className="w-4 h-4 text-primary mr-2" />
-                <h4 className="font-semibold text-primary">Example Neural Signatures</h4>
+                <h4 className="font-semibold text-primary">Example Names</h4>
               </div>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">→</span>
-                  <span>"React Neural Architect"</span>
+                  <span>"Alex - My React Tutor"</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">→</span>
-                  <span>"IELTS Quantum Strategist"</span>
+                  <span>"Emma - IELTS Study Buddy"</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">→</span>
-                  <span>"Leadership Matrix Guide"</span>
+                  <span>"Mike - Career Coach"</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">→</span>
-                  <span>"Python Code Synthesizer"</span>
+                  <span>"Code Helper"</span>
                 </li>
               </ul>
             </div>
@@ -114,13 +114,13 @@ export const StepBasicInfo = ({ wizardState, updateWizardState }: StepBasicInfoP
             <div className="mt-4 p-4 bg-primary/10 rounded-lg matrix-border animate-in fade-in duration-300">
               <div className="flex items-center mb-2">
                 <div className="w-2 h-2 bg-primary rounded-full mr-3 animate-pulse"></div>
-                <h4 className="font-medium text-primary">Neural Signature Preview</h4>
+                <h4 className="font-medium text-primary">Name Preview</h4>
               </div>
               <p className="text-lg font-semibold quantrix-gradient break-words">
                 {wizardState.name}
               </p>
               <p className="text-sm text-muted-foreground mt-1">
-                Designation registered in neural network matrix
+                This is how your companion will be identified
               </p>
             </div>
           )}

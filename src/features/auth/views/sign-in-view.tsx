@@ -17,8 +17,8 @@ import { useRouter } from 'next/navigation';
 import { authClient } from '@/lib/auth-client';
 
 const formSchema = z.object({
-  email: z.email({ message: "Please enter a valid neural ID" }),
-  password: z.string().min(1, { message: "Access key is required" }),
+  email: z.email({ message: "Please enter a valid email address" }),
+  password: z.string().min(1, { message: "Password is required" }),
 });
 
 const SignInView: React.FC = () => {
@@ -100,16 +100,16 @@ const SignInView: React.FC = () => {
             Quantrix
           </h1>
           <p className="text-muted-foreground text-lg mb-4">
-            Neural Interface Access Portal
+            Welcome back to your AI companions
           </p>
           <div className="flex justify-center gap-2">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
               <Shield className="w-3 h-3 mr-1" />
-              Quantum Encrypted
+              Secure Login
             </Badge>
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
               <Zap className="w-3 h-3 mr-1" />
-              Live Matrix
+              Always Online
             </Badge>
           </div>
         </div>
@@ -127,12 +127,12 @@ const SignInView: React.FC = () => {
                       <FormItem>
                         <FormLabel className="text-foreground font-medium flex items-center gap-2">
                           <Code className="w-4 h-4 text-primary" />
-                          Neural ID
+                          Email Address
                         </FormLabel>
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="neural.agent@quantrix.ai"
+                            placeholder="your.email@example.com"
                             className="matrix-border bg-card/50 focus:bg-card/80 transition-all duration-300 h-12 text-base focus:ring-2 focus:ring-primary/50"
                             {...field}
                           />
@@ -149,7 +149,7 @@ const SignInView: React.FC = () => {
                       <FormItem>
                         <FormLabel className="text-foreground font-medium flex items-center gap-2">
                           <Lock className="w-4 h-4 text-primary" />
-                          Access Key
+                          Password
                         </FormLabel>
                         <FormControl>
                           <div className="relative">
@@ -180,7 +180,7 @@ const SignInView: React.FC = () => {
                 {!!error && (
                   <Alert className="bg-destructive/10 border-destructive/30 matrix-border">
                     <OctagonAlertIcon className="h-4 w-4 text-destructive" />
-                    <AlertTitle className="text-destructive font-medium">Neural Link Failed</AlertTitle>
+                    <AlertTitle className="text-destructive font-medium">Sign In Failed</AlertTitle>
                     <p className="text-destructive/90 text-sm mt-1">{error}</p>
                   </Alert>
                 )}
@@ -194,12 +194,12 @@ const SignInView: React.FC = () => {
                   {pending ? (
                     <div className="flex items-center space-x-3">
                       <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
-                      <span>Establishing Neural Link...</span>
+                      <span>Signing you in...</span>
                     </div>
                   ) : (
                     <div className="flex items-center space-x-3">
                       <Zap className="w-5 h-5" />
-                      <span>Jack Into the Matrix</span>
+                      <span>Sign In</span>
                     </div>
                   )}
                 </Button>
@@ -211,7 +211,7 @@ const SignInView: React.FC = () => {
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-card/80 px-4 text-muted-foreground font-medium tracking-wider">
-                      Alternative Protocols
+                      Or continue with
                     </span>
                   </div>
                 </div>
@@ -241,12 +241,12 @@ const SignInView: React.FC = () => {
                 {/* Links */}
                 <div className="text-center space-y-3 pt-4">
                   <div className="text-sm">
-                    <span className="text-muted-foreground">New to the Neural Network? </span>
+                    <span className="text-muted-foreground">Don&apos;t have an account? </span>
                     <Link 
                       href="/sign-up" 
                       className="text-primary hover:text-primary/80 underline underline-offset-4 font-medium transition-colors"
                     >
-                      Create Profile
+                      Sign Up
                     </Link>
                   </div>
                   <div className="text-xs text-muted-foreground">
@@ -254,7 +254,7 @@ const SignInView: React.FC = () => {
                       href="#" 
                       className="hover:text-primary transition-colors"
                     >
-                      Forgot your access key?
+                      Forgot your password?
                     </Link>
                   </div>
                 </div>
@@ -265,13 +265,13 @@ const SignInView: React.FC = () => {
 
         {/* Footer */}
         <div className="text-center text-xs text-muted-foreground mt-8 space-y-2">
-          <p>Secured by quantum-enhanced encryption protocols</p>
+          <p>Secured with industry-standard encryption</p>
           <div className="flex justify-center space-x-4">
             <a href="#" className="text-primary/70 hover:text-primary underline underline-offset-4 transition-colors">
-              Privacy Matrix
+              Privacy Policy
             </a>
             <a href="#" className="text-primary/70 hover:text-primary underline underline-offset-4 transition-colors">
-              Neural Terms
+              Terms of Service
             </a>
           </div>
         </div>

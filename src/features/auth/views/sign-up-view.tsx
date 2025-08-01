@@ -17,13 +17,13 @@ import { FaGithub, FaGoogle } from 'react-icons/fa';
 import z from 'zod';
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "Neural name is required" }),
-  email: z.email({ message: "Please enter a valid neural ID" }),
-  password: z.string().min(8, { message: "Access key must be at least 8 characters" }),
-  confirmPassword: z.string().min(8, { message: "Access key confirmation required" }),
+  name: z.string().min(1, { message: "Name is required" }),
+  email: z.email({ message: "Please enter a valid email address" }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters" }),
+  confirmPassword: z.string().min(8, { message: "Password confirmation required" }),
 })
 .refine((data) => data.password === data.confirmPassword, {
-  message: "Access keys don't match",
+  message: "Passwords don't match",
   path: ["confirmPassword"],
 });
 
@@ -109,12 +109,12 @@ const SignUpView: React.FC = () => {
             Quantrix
           </h1>
           <p className="text-muted-foreground text-lg mb-4">
-            Neural Profile Initialization
+            Create your account and meet your first AI companion
           </p>
           <div className="flex justify-center gap-2">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
               <Shield className="w-3 h-3 mr-1" />
-              Quantum Secure
+              Secure & Safe
             </Badge>
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
               <Mail className="w-3 h-3 mr-1" />
@@ -136,12 +136,12 @@ const SignUpView: React.FC = () => {
                       <FormItem>
                         <FormLabel className="text-foreground font-medium flex items-center gap-2">
                           <User className="w-4 h-4 text-primary" />
-                          Neural Name
+                          Your Name
                         </FormLabel>
                         <FormControl>
                           <Input
                             type="text"
-                            placeholder="Agent Cipher"
+                            placeholder="John Doe"
                             className="matrix-border bg-card/50 focus:bg-card/80 transition-all duration-300 h-12 text-base focus:ring-2 focus:ring-primary/50"
                             {...field}
                           />
@@ -158,12 +158,12 @@ const SignUpView: React.FC = () => {
                       <FormItem>
                         <FormLabel className="text-foreground font-medium flex items-center gap-2">
                           <Code className="w-4 h-4 text-primary" />
-                          Neural ID
+                          Email Address
                         </FormLabel>
                         <FormControl>
                           <Input
                             type="email"
-                            placeholder="neural.agent@quantrix.ai"
+                            placeholder="your.email@example.com"
                             className="matrix-border bg-card/50 focus:bg-card/80 transition-all duration-300 h-12 text-base focus:ring-2 focus:ring-primary/50"
                             {...field}
                           />
@@ -180,7 +180,7 @@ const SignUpView: React.FC = () => {
                       <FormItem>
                         <FormLabel className="text-foreground font-medium flex items-center gap-2">
                           <Lock className="w-4 h-4 text-primary" />
-                          Access Key
+                          Password
                         </FormLabel>
                         <FormControl>
                           <div className="relative">
@@ -213,7 +213,7 @@ const SignUpView: React.FC = () => {
                       <FormItem>
                         <FormLabel className="text-foreground font-medium flex items-center gap-2">
                           <Shield className="w-4 h-4 text-primary" />
-                          Confirm Access Key
+                          Confirm Password
                         </FormLabel>
                         <FormControl>
                           <div className="relative">
@@ -244,7 +244,7 @@ const SignUpView: React.FC = () => {
                 {!!error && (
                   <Alert className="bg-destructive/10 border-destructive/30 matrix-border">
                     <OctagonAlertIcon className="h-4 w-4 text-destructive" />
-                    <AlertTitle className="text-destructive font-medium">Profile Creation Failed</AlertTitle>
+                    <AlertTitle className="text-destructive font-medium">Sign Up Failed</AlertTitle>
                     <p className="text-destructive/90 text-sm mt-1">{error}</p>
                   </Alert>
                 )}
@@ -258,12 +258,12 @@ const SignUpView: React.FC = () => {
                   {pending ? (
                     <div className="flex items-center space-x-3">
                       <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
-                      <span>Initializing Neural Profile...</span>
+                      <span>Creating your account...</span>
                     </div>
                   ) : (
                     <div className="flex items-center space-x-3">
                       <Zap className="w-5 h-5" />
-                      <span>Enter the Matrix</span>
+                      <span>Create Account</span>
                     </div>
                   )}
                 </Button>
@@ -275,7 +275,7 @@ const SignUpView: React.FC = () => {
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-card/80 px-4 text-muted-foreground font-medium tracking-wider">
-                      Quick Access Protocols
+                      Or sign up with
                     </span>
                   </div>
                 </div>
@@ -305,12 +305,12 @@ const SignUpView: React.FC = () => {
                 {/* Links */}
                 <div className="text-center space-y-3 pt-4">
                   <div className="text-sm">
-                    <span className="text-muted-foreground">Already connected to the Matrix? </span>
+                    <span className="text-muted-foreground">Already have an account? </span>
                     <Link 
                       href="/sign-in" 
                       className="text-primary hover:text-primary/80 underline underline-offset-4 font-medium transition-colors"
                     >
-                      Access Neural Interface
+                      Sign In
                     </Link>
                   </div>
                 </div>
@@ -321,13 +321,13 @@ const SignUpView: React.FC = () => {
 
         {/* Footer */}
         <div className="text-center text-xs text-muted-foreground mt-8 space-y-2">
-          <p>Protected by quantum-enhanced neural encryption</p>
+          <p>Protected by industry-standard encryption</p>
           <div className="flex justify-center space-x-4">
             <a href="#" className="text-primary/70 hover:text-primary underline underline-offset-4 transition-colors">
-              Neural Protocol Agreement
+              Terms of Service
             </a>
             <a href="#" className="text-primary/70 hover:text-primary underline underline-offset-4 transition-colors">
-              Privacy Matrix
+              Privacy Policy
             </a>
           </div>
         </div>

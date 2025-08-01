@@ -45,10 +45,10 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
             </div>
           </div>
           <CardTitle className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow mb-2">
-            Neural Pathway Refinement
+            Personalize Your Support
           </CardTitle>
           <CardDescription className="text-base text-muted-foreground">
-            Define the specific cognitive architecture within {categoryData.name}
+            Help us understand the specific type of assistance you need within {categoryData.name}
           </CardDescription>
           <div className="flex justify-center mt-3">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-sm px-3 py-1">
@@ -67,7 +67,7 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
               <div className="w-6 h-6 bg-primary/20 rounded-lg flex items-center justify-center mr-3">
                 <span className="text-xs font-bold text-primary">1</span>
               </div>
-              <h3 className="text-lg sm:text-xl font-bold text-primary matrix-text-glow">Neural Focus Sector</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-primary matrix-text-glow">Choose Your Focus</h3>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -112,7 +112,7 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
                     </div>
                     
                     <Badge variant="secondary" className="text-xs">
-                      {Object.keys(subcategory.subSubcategories).length} specializations
+                      {Object.keys(subcategory.subSubcategories).length} options
                     </Badge>
                   </div>
                 </Button>
@@ -127,7 +127,7 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
                 <div className="w-6 h-6 bg-primary/20 rounded-lg flex items-center justify-center mr-3">
                   <span className="text-xs font-bold text-primary">2</span>
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-primary matrix-text-glow">Cognitive Architecture</h3>
+                <h3 className="text-lg sm:text-xl font-bold text-primary matrix-text-glow">Refine Your Choice</h3>
               </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
@@ -167,7 +167,7 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
                           {subSubcategory.name}
                         </div>
                         <div className="text-xs text-muted-foreground mt-1">
-                          Advanced neural processing module
+                          Specialized assistance approach
                         </div>
                       </div>
                       
@@ -186,13 +186,13 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
             <div className="mt-6 p-4 bg-primary/10 rounded-lg matrix-border animate-in fade-in duration-500">
               <div className="flex items-center mb-3">
                 <div className="w-2 h-2 bg-primary rounded-full mr-3 animate-pulse"></div>
-                <h4 className="font-semibold text-primary matrix-text-glow">Neural Architecture Defined</h4>
+                <h4 className="font-semibold text-primary matrix-text-glow">Support Focus Confirmed</h4>
               </div>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
                 <div className="flex items-center space-x-2">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/30">
-                    Domain
+                    Category
                   </Badge>
                   <ArrowRight className="w-3 h-3 text-muted-foreground flex-shrink-0" />
                   <span className="font-medium break-words">{categoryData.name}</span>
@@ -208,7 +208,7 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
                 
                 <div className="flex items-center space-x-2">
                   <Badge variant="outline" className="bg-primary/5 text-primary border-primary/30">
-                    Architecture
+                    Approach
                   </Badge>
                   <ArrowRight className="w-3 h-3 text-muted-foreground flex-shrink-0" />
                   <span className="font-medium break-words">{categoryData.subcategories[wizardState.subcategory].subSubcategories[wizardState.subSubcategory].name}</span>

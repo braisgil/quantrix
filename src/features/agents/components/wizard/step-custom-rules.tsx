@@ -41,10 +41,10 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepCustomRu
             </div>
           </div>
           <CardTitle className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow mb-2">
-            Neural Personality Matrix
+            Personalize Communication Style
           </CardTitle>
           <CardDescription className="text-base text-muted-foreground">
-            Configure your AI companion's behavioral patterns and cognitive approach
+            Help your AI companion understand how you prefer to communicate and learn
           </CardDescription>
           <div className="flex justify-center mt-3">
             <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-sm px-3 py-1">
@@ -186,13 +186,13 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepCustomRu
             <div className="mt-6 p-4 bg-primary/10 rounded-lg matrix-border animate-in fade-in duration-500">
               <div className="flex items-center mb-4">
                 <div className="w-2 h-2 bg-primary rounded-full mr-3 animate-pulse"></div>
-                <h4 className="font-bold text-base sm:text-lg text-primary matrix-text-glow">Neural Personality Configuration Complete</h4>
+                <h4 className="font-bold text-base sm:text-lg text-primary matrix-text-glow">Communication Preferences Set</h4>
               </div>
               
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div className="space-y-3">
                   <div>
-                    <h5 className="font-semibold text-primary mb-2">Interaction Protocol</h5>
+                    <h5 className="font-semibold text-primary mb-2">Communication Style</h5>
                     <div className="p-3 bg-primary/5 rounded-lg matrix-border">
                       <div className="font-medium quantrix-gradient text-base break-words">
                         {getSelectedRule1()?.name}
@@ -204,7 +204,7 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepCustomRu
                   </div>
                   
                   <div>
-                    <h5 className="font-semibold text-primary mb-2">Learning Methodology</h5>
+                    <h5 className="font-semibold text-primary mb-2">Learning Approach</h5>
                     <div className="p-3 bg-primary/5 rounded-lg matrix-border">
                       <div className="font-medium quantrix-gradient text-base break-words">
                         {getSelectedRule2()?.name}
@@ -219,24 +219,24 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepCustomRu
                 <div className="matrix-card border-primary/10 p-4 rounded-lg bg-primary/5">
                   <div className="flex items-center mb-3">
                     <Sparkles className="w-4 h-4 text-primary mr-2" />
-                    <h6 className="font-semibold text-primary">Personality Matrix Features</h6>
+                    <h6 className="font-semibold text-primary">What This Means</h6>
                   </div>
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-0.5">•</span>
-                      <span>Consistent behavioral patterns across all interactions</span>
+                      <span>Consistent communication style in all conversations</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-0.5">•</span>
-                      <span>Adaptive communication style based on context</span>
+                      <span>Responses adapted to your preferences and context</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-0.5">•</span>
-                      <span>Optimized learning approach for your preferences</span>
+                      <span>Support approach tailored to how you learn best</span>
                     </li>
                     <li className="flex items-start">
                       <span className="text-primary mr-2 mt-0.5">•</span>
-                      <span>Seamless integration with specialized knowledge base</span>
+                      <span>Thoughtful integration of knowledge and empathy</span>
                     </li>
                   </ul>
                 </div>
@@ -246,7 +246,7 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepCustomRu
                 <div className="flex items-center justify-center space-x-2 text-center">
                   <Sparkles className="w-4 h-4 text-primary animate-pulse flex-shrink-0" />
                   <span className="text-sm font-medium text-primary">
-                    Your AI companion is ready for neural initialization
+                    Your AI companion is ready to be created
                   </span>
                   <Sparkles className="w-4 h-4 text-primary animate-pulse flex-shrink-0" />
                 </div>

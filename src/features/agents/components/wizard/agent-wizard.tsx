@@ -20,11 +20,11 @@ interface AgentWizardProps {
 }
 
 const STEP_TITLES = [
-  { name: "Neural Genesis", description: "Initialize agent designation" },
-  { name: "Domain Selection", description: "Choose intelligence sector" },
-  { name: "Pathway Refinement", description: "Define cognitive architecture" },
-  { name: "Specialization", description: "Activate core expertise" },
-  { name: "Personality Matrix", description: "Configure behavioral patterns" }
+  { name: "Getting Started", description: "Choose a name for your companion" },
+  { name: "Purpose & Focus", description: "What kind of support do you need?" },
+  { name: "Personalization", description: "Tailor your companion's approach" },
+  { name: "Specialization", description: "Define specific areas of help" },
+  { name: "Personality", description: "Set communication style and tone" }
 ];
 
 export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
@@ -44,15 +44,15 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
   } = useAgentWizard();
 
   const createAgentMutation = useMutation({
-    mutationFn: trpc.agents.create.mutate,
+    mutationFn: (data: any) => trpc.agents.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["agents"] });
-      toast.success("Neural agent successfully initialized!");
+      toast.success("Your AI companion has been created successfully!");
       resetWizard();
       onSuccess?.();
     },
-    onError: (error) => {
-      toast.error(error.message || "Failed to initialize neural agent");
+    onError: (error: any) => {
+      toast.error(error.message || "Failed to create your AI companion");
     },
   });
 
@@ -123,10 +123,10 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
                 </div>
               </div>
               <h1 className="text-xl sm:text-2xl font-bold quantrix-gradient matrix-text-glow">
-                Neural Agent Initialization Protocol
+                Create Your AI Companion
               </h1>
               <p className="text-sm text-muted-foreground">
-                Configuring advanced AI companion with specialized neural pathways
+                Set up a personalized AI assistant tailored to your unique needs and preferences
               </p>
             </div>
 
@@ -137,7 +137,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
                   {STEP_TITLES[currentStep].name}
                 </Badge>
                 <span className="text-sm text-muted-foreground">
-                  Phase {currentStep + 1} of 5
+                  Step {currentStep + 1} of 5
                 </span>
               </div>
               
@@ -203,7 +203,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
                 className="border-primary/30 hover:bg-primary/10 hover:border-primary matrix-border"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Previous Phase</span>
+                <span className="hidden sm:inline">Previous Step</span>
                 <span className="sm:hidden">Previous</span>
               </Button>
             )}
@@ -212,7 +212,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
               onClick={onCancel}
               className="text-muted-foreground hover:text-foreground hidden sm:flex"
             >
-              Abort Protocol
+              Cancel Setup
             </Button>
           </div>
 
@@ -227,7 +227,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
                     : "opacity-50 cursor-not-allowed"
                 }`}
               >
-                <span className="hidden sm:inline">Continue Protocol</span>
+                <span className="hidden sm:inline">Continue</span>
                 <span className="sm:hidden">Continue</span>
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -240,14 +240,14 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
                 {createAgentMutation.isPending ? (
                   <>
                     <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin mr-2" />
-                    <span className="hidden sm:inline">Initializing Neural Matrix...</span>
-                    <span className="sm:hidden">Initializing...</span>
+                    <span className="hidden sm:inline">Creating your companion...</span>
+                    <span className="sm:hidden">Creating...</span>
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-4 h-4 mr-2" />
-                    <span className="hidden sm:inline">Initialize AI Companion</span>
-                    <span className="sm:hidden">Initialize</span>
+                    <span className="hidden sm:inline">Create My Companion</span>
+                    <span className="sm:hidden">Create</span>
                   </>
                 )}
               </Button>
@@ -270,17 +270,17 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
                 </div>
               </div>
               <h3 className="text-lg sm:text-xl font-bold quantrix-gradient matrix-text-glow mb-2">
-                Neural Agent Configuration Preview
+                Review Your AI Companion
               </h3>
               <p className="text-sm text-muted-foreground">
-                Final review of your AI companion's specifications
+                Take a final look at your personalized AI assistant&apos;s configuration
               </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-semibold text-primary mb-2">Agent Designation</h4>
+                  <h4 className="font-semibold text-primary mb-2">Companion Name</h4>
                   <div className="p-3 bg-primary/10 rounded-lg matrix-border">
                     <div className="text-base sm:text-lg font-bold quantrix-gradient break-words">
                       {wizardState.name}
@@ -289,7 +289,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-primary mb-2">Core Specialization</h4>
+                  <h4 className="font-semibold text-primary mb-2">Area of Focus</h4>
                   <div className="p-3 bg-primary/10 rounded-lg matrix-border">
                     <div className="font-medium break-words">
                       {wizardState.specificOption}
@@ -299,7 +299,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
               </div>
 
               <div>
-                <h4 className="font-semibold text-primary mb-2">Neural Instructions</h4>
+                <h4 className="font-semibold text-primary mb-2">Instructions & Guidelines</h4>
                 <div className="p-3 bg-primary/5 rounded-lg matrix-border max-h-48 overflow-y-auto">
                   <pre className="text-xs text-muted-foreground whitespace-pre-wrap font-mono break-words">
                     {generateInstructions()}
@@ -312,7 +312,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
               <div className="flex items-center justify-center space-x-2 text-center">
                 <Sparkles className="w-4 h-4 text-primary animate-pulse flex-shrink-0" />
                 <span className="text-sm font-medium text-primary">
-                  Neural pathways configured • Personality matrix optimized • Ready for initialization
+                  Configuration complete • Personality settings applied • Ready to create your companion
                 </span>
                 <Sparkles className="w-4 h-4 text-primary animate-pulse flex-shrink-0" />
               </div>
