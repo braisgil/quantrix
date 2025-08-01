@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Target, CheckCircle2, GraduationCap, Gamepad2, Briefcase, Heart } from "lucide-react";
+import { Target, CheckCircle2, GraduationCap, Gamepad2, Briefcase, Heart, Palette, Home, Microscope } from "lucide-react";
 import { AGENT_CATEGORIES } from "@/constants/agent-categories";
 import { type WizardState, type AgentCategoryId } from "../../hooks/use-agent-wizard";
 
@@ -14,9 +14,12 @@ interface StepCategorySelectionProps {
 // Icon mapping for each category
 const categoryIcons = {
   "learning-education": GraduationCap,
+  "creative-arts": Palette,
+  "professional-career": Briefcase,
+  "health-wellness": Heart,
+  "lifestyle-practical": Home,
   "entertainment-social": Gamepad2,
-  "professional-development": Briefcase,
-  "health-wellbeing": Heart,
+  "specialized-knowledge": Microscope,
 } as const;
 
 // Category-specific colors
@@ -26,20 +29,35 @@ const categoryColors = {
     iconHover: "group-hover:text-yellow-500",
     iconSelected: "text-yellow-600",
   },
+  "creative-arts": {
+    icon: "text-pink-500", // Pink/Magenta
+    iconHover: "group-hover:text-pink-500",
+    iconSelected: "text-pink-600",
+  },
+  "professional-career": {
+    icon: "text-blue-500", // Blue
+    iconHover: "group-hover:text-blue-500",
+    iconSelected: "text-blue-600",
+  },
+  "health-wellness": {
+    icon: "text-red-500", // Red
+    iconHover: "group-hover:text-red-500",
+    iconSelected: "text-red-600",
+  },
+  "lifestyle-practical": {
+    icon: "text-green-500", // Green
+    iconHover: "group-hover:text-green-500",
+    iconSelected: "text-green-600",
+  },
   "entertainment-social": {
     icon: "text-purple-500", // Purple
     iconHover: "group-hover:text-purple-500",
     iconSelected: "text-purple-600",
   },
-  "professional-development": {
-    icon: "text-amber-700", // Brown
-    iconHover: "group-hover:text-amber-700",
-    iconSelected: "text-amber-800",
-  },
-  "health-wellbeing": {
-    icon: "text-red-500", // Red
-    iconHover: "group-hover:text-red-500",
-    iconSelected: "text-red-600",
+  "specialized-knowledge": {
+    icon: "text-indigo-500", // Indigo
+    iconHover: "group-hover:text-indigo-500",
+    iconSelected: "text-indigo-600",
   },
 } as const;
 
@@ -102,7 +120,7 @@ export const StepCategorySelection = ({ wizardState, updateWizardState }: StepCa
                             <IconComponent 
                               className={`transition-all duration-500 ${
                                 wizardState.category === categoryId 
-                                  ? `!w-8 !h-8 ${colors.iconSelected} animate-pulse` 
+                                  ? `!w-8 !h-8 ${colors.iconSelected}` 
                                   : `!w-7 !h-7 ${colors.icon} ${colors.iconHover}`
                               }`} 
                             />

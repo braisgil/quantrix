@@ -46,13 +46,13 @@ export const useAgentWizard = () => {
     }
 
     const categoryData = AGENT_CATEGORIES[wizardState.category];
-    const subcategoryData = categoryData.subcategories[wizardState.subcategory];
-    const subSubcategoryData = subcategoryData.subSubcategories[wizardState.subSubcategory];
+    const subcategoryData = (categoryData.subcategories as any)[wizardState.subcategory];
+    const subSubcategoryData = (subcategoryData.subSubcategories as any)[wizardState.subSubcategory];
 
     const rule1 = CUSTOM_RULE_OPTIONS.interaction_style.options.find(opt => opt.id === wizardState.customRule1);
-    const rule2 = CUSTOM_RULE_OPTIONS.content_focus.options.find(opt => opt.id === wizardState.customRule2);
+    const rule2 = CUSTOM_RULE_OPTIONS.learning_approach.options.find(opt => opt.id === wizardState.customRule2);
 
-    return `You are an AI agent specialized in ${categoryData.name.replace(/🎓|🎭|💼|💚/g, '').trim()} with focus on ${subcategoryData.name.replace(/🌍|💻|📚|🎨|🎮|🎯|📈|🚀|🧠|💪|🌱/g, '').trim()}.
+    return `You are an AI agent specialized in ${categoryData.name} with focus on ${subcategoryData.name}.
 
 Specifically, you help users with: ${wizardState.specificOption}
 

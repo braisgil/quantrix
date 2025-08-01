@@ -25,7 +25,7 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepCustomRu
   };
 
   const getSelectedRule2 = () => {
-    return CUSTOM_RULE_OPTIONS.content_focus.options.find(opt => opt.id === wizardState.customRule2);
+    return CUSTOM_RULE_OPTIONS.learning_approach.options.find(opt => opt.id === wizardState.customRule2);
   };
 
   return (
@@ -119,7 +119,7 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepCustomRu
             </div>
           </div>
 
-          {/* Content Focus */}
+          {/* Learning Approach */}
           <div>
             <div className="flex items-center mb-4">
               <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center mr-3">
@@ -127,16 +127,16 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepCustomRu
               </div>
               <div>
                 <h3 className="text-lg sm:text-xl font-bold text-primary matrix-text-glow">
-                  {CUSTOM_RULE_OPTIONS.content_focus.name}
+                  {CUSTOM_RULE_OPTIONS.learning_approach.name}
                 </h3>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {CUSTOM_RULE_OPTIONS.content_focus.description}
+                  {CUSTOM_RULE_OPTIONS.learning_approach.description}
                 </p>
               </div>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-              {CUSTOM_RULE_OPTIONS.content_focus.options.map((option) => (
+              {CUSTOM_RULE_OPTIONS.learning_approach.options.map((option) => (
                 <Button
                   key={option.id}
                   variant="ghost"
