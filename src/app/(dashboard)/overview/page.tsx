@@ -11,7 +11,7 @@ const Page: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold quantrix-gradient matrix-text-glow">
-            My Agents
+            AI Agents
           </h1>
           <p className="text-muted-foreground mt-2">
             Manage your neural network companions

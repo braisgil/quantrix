@@ -391,6 +391,12 @@
   outline-offset: 2px;
 }
 
+/* Remove focus outline for command input specifically */
+[data-slot="command-input"]:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
 /* Better mobile scrollbar styling */
 ::-webkit-scrollbar {
   width: 4px;

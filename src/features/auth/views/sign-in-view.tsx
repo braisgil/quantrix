@@ -45,12 +45,12 @@ const SignInView: React.FC = () => {
       {
         email: data.email,
         password: data.password,
-        callbackURL: "/",
+        callbackURL: "/agents",
       },
       {
         onSuccess: () => {
           setPending(false);
-          router.push("/");
+          router.push("/agents");
         },
         onError: ({ error }) => {
           setPending(false);
