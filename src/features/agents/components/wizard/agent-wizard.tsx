@@ -110,41 +110,37 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
 
       {/* Enhanced Progress Header */}
       <Card className="matrix-card border-primary/20 backdrop-blur-md">
-        <CardContent className="pt-6 pb-4">
-          <div className="space-y-4">
-            {/* Title and Status */}
-            <div className="text-center space-y-3">
-              <div className="flex items-center justify-center mb-3">
-                <div className="relative matrix-glow">
-                  <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center matrix-border">
-                    <Zap className="w-5 h-5 text-black" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+        <CardContent className="pt-3 pb-2">
+          <div className="space-y-2">
+            {/* Title and Logo - Inline */}
+            <div className="flex items-center justify-center gap-2">
+              <div className="relative matrix-glow">
+                <div className="w-6 h-6 bg-gradient-to-br from-primary to-primary/80 rounded-md flex items-center justify-center matrix-border">
+                  <Zap className="w-3 h-3 text-black" />
                 </div>
+                <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
               </div>
-              <h1 className="text-xl sm:text-2xl font-bold quantrix-gradient matrix-text-glow">
+              <h1 className="text-base sm:text-lg font-bold quantrix-gradient matrix-text-glow">
                 Create Your AI Companion
               </h1>
-              <p className="text-sm text-muted-foreground">
-                Set up a personalized AI assistant tailored to your unique needs and preferences
-              </p>
             </div>
 
             {/* Progress Indicator */}
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-sm">
+                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
                   {STEP_TITLES[currentStep].name}
                 </Badge>
-                <span className="text-sm text-muted-foreground">
+                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
+                  <Sparkles className="w-2.5 h-2.5 mr-1" />
                   Step {currentStep + 1} of 5
-                </span>
+                </Badge>
               </div>
               
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Progress 
                   value={progressPercentage} 
-                  className="w-full h-2 matrix-border" 
+                  className="w-full h-1.5 matrix-border" 
                 />
                 <div className="flex justify-between text-xs text-muted-foreground">
                   <span>{Math.round(progressPercentage)}% Complete</span>
@@ -153,14 +149,12 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
               </div>
             </div>
 
-            <Separator className="bg-primary/20" />
-
             {/* Step Navigation Pills - Responsive */}
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-1.5">
               {STEP_TITLES.map((step, index) => (
                 <div
                   key={index}
-                  className={`flex items-center space-x-1 sm:space-x-2 px-2 sm:px-3 py-1 rounded-lg transition-all duration-300 ${
+                  className={`flex items-center space-x-1 px-2 py-0.5 rounded-md transition-all duration-300 ${
                     index < currentStep
                       ? "bg-primary/20 matrix-border"
                       : index === currentStep
@@ -169,11 +163,11 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
                   }`}
                 >
                   {index < currentStep ? (
-                    <CheckCircle2 className="w-3 h-3 text-primary" />
+                    <CheckCircle2 className="w-2.5 h-2.5 text-primary" />
                   ) : index === currentStep ? (
-                    <Circle className="w-3 h-3 text-primary animate-pulse" />
+                    <Circle className="w-2.5 h-2.5 text-primary animate-pulse" />
                   ) : (
-                    <Circle className="w-3 h-3 text-muted-foreground" />
+                    <Circle className="w-2.5 h-2.5 text-muted-foreground" />
                   )}
                   <span className={`text-xs font-medium hidden sm:block ${
                     index <= currentStep ? "text-primary" : "text-muted-foreground"
@@ -194,59 +188,63 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
 
       {/* Enhanced Navigation */}
       <Card className="matrix-card border-primary/20 backdrop-blur-md">
-        <CardFooter className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-6 pb-4">
-          <div className="flex items-center gap-3 order-2 sm:order-1">
+        <CardFooter className="flex flex-col sm:flex-row justify-between items-center gap-2 sm:gap-3 pt-3 pb-3">
+          <div className="flex items-center gap-2 order-2 sm:order-1">
             {currentStep > 0 && (
               <Button 
                 variant="outline" 
                 onClick={prevStep}
-                className="border-primary/30 hover:bg-primary/10 hover:border-primary matrix-border"
+                size="sm"
+                className="border-primary/30 hover:bg-primary/10 hover:border-primary matrix-border text-xs"
               >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Previous Step</span>
-                <span className="sm:hidden">Previous</span>
+                <ArrowLeft className="w-3 h-3 mr-1" />
+                <span className="hidden sm:inline">Previous</span>
+                <span className="sm:hidden">Back</span>
               </Button>
             )}
             <Button 
               variant="ghost" 
               onClick={onCancel}
-              className="text-muted-foreground hover:text-foreground hidden sm:flex"
+              size="sm"
+              className="text-muted-foreground hover:text-foreground hidden sm:flex text-xs"
             >
-              Cancel Setup
+              Cancel
             </Button>
           </div>
 
-          <div className="flex items-center gap-3 order-1 sm:order-2">
+          <div className="flex items-center gap-2 order-1 sm:order-2">
             {currentStep < 4 ? (
               <Button 
                 onClick={handleNext}
                 disabled={!canProceed(currentStep)}
-                className={`matrix-glow font-semibold px-4 sm:px-6 ${
+                size="sm"
+                className={`matrix-glow font-semibold px-3 sm:px-4 text-xs ${
                   canProceed(currentStep) 
                     ? "bg-primary hover:bg-primary/90 text-black" 
                     : "opacity-50 cursor-not-allowed"
                 }`}
               >
                 <span className="hidden sm:inline">Continue</span>
-                <span className="sm:hidden">Continue</span>
-                <ArrowRight className="w-4 h-4 ml-2" />
+                <span className="sm:hidden">Next</span>
+                <ArrowRight className="w-3 h-3 ml-1" />
               </Button>
             ) : (
               <Button 
                 onClick={handleSubmit}
                 disabled={!canProceed(currentStep) || createAgentMutation.isPending}
-                className="matrix-glow bg-primary hover:bg-primary/90 text-black font-semibold px-4 sm:px-6"
+                size="sm"
+                className="matrix-glow bg-primary hover:bg-primary/90 text-black font-semibold px-3 sm:px-4 text-xs"
               >
                 {createAgentMutation.isPending ? (
                   <>
-                    <div className="w-4 h-4 border-2 border-black/20 border-t-black rounded-full animate-spin mr-2" />
-                    <span className="hidden sm:inline">Creating your companion...</span>
-                    <span className="sm:hidden">Creating...</span>
+                    <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
+                    <span className="hidden sm:inline">Creating...</span>
+                    <span className="sm:hidden">...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    <span className="hidden sm:inline">Create My Companion</span>
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    <span className="hidden sm:inline">Create</span>
                     <span className="sm:hidden">Create</span>
                   </>
                 )}

@@ -15,30 +15,23 @@ export const StepBasicInfo = ({ wizardState, updateWizardState }: StepBasicInfoP
   return (
     <div className="w-full">
       <Card className="w-full mx-auto matrix-card border-primary/20 backdrop-blur-md">
-        <CardHeader className="text-center pb-6">
-          <div className="flex items-center justify-center mb-4">
+        <CardHeader className="text-center pb-4">
+          {/* Compact Header - Icon and Title Inline */}
+          <div className="flex items-center justify-center gap-2 mb-2">
             <div className="relative matrix-glow">
-              <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center matrix-border">
-                <Bot className="w-6 h-6 text-black" />
+              <div className="w-6 h-6 bg-gradient-to-br from-primary to-primary/80 rounded-md flex items-center justify-center matrix-border">
+                <Bot className="w-3 h-3 text-black" />
               </div>
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse"></div>
+              <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
             </div>
+            <CardTitle className="text-lg sm:text-xl font-bold quantrix-gradient matrix-text-glow">
+              Create Your Companion
+            </CardTitle>
           </div>
-          <CardTitle className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow mb-2">
-            Create Your Companion
-          </CardTitle>
-          <CardDescription className="text-base text-muted-foreground">
+          <CardDescription className="text-sm text-muted-foreground">
             Give your AI assistant a meaningful name that reflects how you&apos;d like to work together
           </CardDescription>
-          <div className="flex justify-center mt-3">
-            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-sm px-3 py-1">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Step 1 of 5
-            </Badge>
-          </div>
         </CardHeader>
-
-        <Separator className="bg-primary/20 mb-6" />
 
         <CardContent className="space-y-6 pb-6">
           <div className="space-y-3">
@@ -92,19 +85,19 @@ export const StepBasicInfo = ({ wizardState, updateWizardState }: StepBasicInfoP
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">→</span>
-                  <span>"Alex - My React Tutor"</span>
+                  <span>&quot;Alex - My React Tutor&quot;</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">→</span>
-                  <span>"Emma - IELTS Study Buddy"</span>
+                  <span>&quot;Emma - IELTS Study Buddy&quot;</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">→</span>
-                  <span>"Mike - Career Coach"</span>
+                  <span>&quot;Mike - Career Coach&quot;</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2 mt-0.5">→</span>
-                  <span>"Code Helper"</span>
+                  <span>&quot;Code Helper&quot;</span>
                 </li>
               </ul>
             </div>
