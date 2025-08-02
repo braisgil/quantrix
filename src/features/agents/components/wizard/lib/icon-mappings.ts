@@ -14,10 +14,9 @@ import {
   // Science & Research
   Microscope, Lightbulb, Rocket, Award, Brain, Wrench,
   // Communication
-  MessageSquare, Mic, FileText, Globe,
+  MessageSquare, Mic, FileText, 
   // Others
-  Star, Sparkles, Zap, Scale, Coffee
-} from "lucide-react";
+  Star, Zap, Scale} from "lucide-react";
 
 import type { IconComponent, MappingRule, IconResolver, IconConfig } from "../types/mappings";
 
@@ -113,7 +112,7 @@ const DEFAULT_ICONS = {
 /**
  * Resolves icon and color based on content matching
  */
-const resolveIconFromContent = (content: string): { icon: IconComponent; colorCategory: string } => {
+const resolveIconFromContent = (content: string, fallbackIcon: IconComponent = DEFAULT_ICONS.subcategory): { icon: IconComponent; colorCategory: string } => {
   const contentLower = content.toLowerCase();
   
   for (const rule of ICON_MAPPING_RULES) {
@@ -124,7 +123,7 @@ const resolveIconFromContent = (content: string): { icon: IconComponent; colorCa
     }
   }
   
-  return { icon: DEFAULT_ICONS.subcategory, colorCategory: "slate" };
+  return { icon: fallbackIcon, colorCategory: "slate" };
 };
 
 /**
@@ -132,7 +131,7 @@ const resolveIconFromContent = (content: string): { icon: IconComponent; colorCa
  */
 export const createIconResolver = (defaultIcon: IconComponent = DEFAULT_ICONS.subcategory): IconResolver => {
   return (id: string, name: string, isSelected: boolean = false): IconConfig => {
-    const { icon, colorCategory } = resolveIconFromContent(name);
+    const { icon, colorCategory } = resolveIconFromContent(name, defaultIcon);
     const colorScheme = COLOR_SCHEMES[colorCategory as keyof typeof COLOR_SCHEMES] || COLOR_SCHEMES.slate;
     
     return {

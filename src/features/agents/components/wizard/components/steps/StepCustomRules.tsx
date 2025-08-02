@@ -1,11 +1,13 @@
 import { Settings, Users, BookOpen, Sparkles } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { CUSTOM_RULE_OPTIONS } from "@/constants/agent-categories";
 import { WizardLayout } from "../shared/WizardLayout";
 import { SelectionGrid } from "../shared/SelectionGrid";
 import { OptionCard } from "../shared/OptionCard";
 import type { StepProps } from "../../types/wizard";
 import { useSelectionState } from "../../hooks/use-selection-state";
-import { MANUAL_ICONS, customRuleIconResolver } from "../../lib/icon-mappings";
+import { MANUAL_ICONS } from "../../lib/icon-mappings";
 import { getAnimationClasses } from "../../lib/wizard-utils";
 import { cn } from "@/lib/utils";
 
@@ -68,7 +70,6 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepProps) =
           <SelectionGrid columns="3">
             {CUSTOM_RULE_OPTIONS.interaction_style.options.map((option) => {
               const selected = isSelected.customRule1(option.id);
-              const iconConfig = customRuleIconResolver(option.id, option.name, selected);
 
               return (
                 <OptionCard
@@ -79,7 +80,7 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepProps) =
                   isSelected={selected}
                   onClick={() => selectCustomRule1(option.id)}
                   icon={getInteractionIcon(option.name)}
-                  iconColor={iconConfig.color}
+                  iconColor={selected ? "text-black" : "text-muted-foreground"}
                   badges={["Communication Style"]}
                 />
               );
@@ -106,7 +107,6 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepProps) =
           <SelectionGrid columns="2">
             {CUSTOM_RULE_OPTIONS.learning_approach.options.map((option) => {
               const selected = isSelected.customRule2(option.id);
-              const iconConfig = customRuleIconResolver(option.id, option.name, selected);
 
               return (
                 <OptionCard
@@ -117,7 +117,7 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepProps) =
                   isSelected={selected}
                   onClick={() => selectCustomRule2(option.id)}
                   icon={getLearningIcon()}
-                  iconColor={iconConfig.color}
+                  iconColor={selected ? "text-black" : "text-muted-foreground"}
                   badges={["Learning Approach"]}
                 />
               );
@@ -125,8 +125,61 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepProps) =
           </SelectionGrid>
         </div>
 
+        {/* ADDITIONAL Custom Instructions Section */}
+        <div>
+          <div className="flex items-center mb-4">
+            <div className="w-8 h-8 bg-primary/20 rounded-lg flex items-center justify-center mr-3">
+              <Settings className="w-4 h-4 text-primary" />
+            </div>
+            <div>
+              <h3 className="text-lg sm:text-xl font-bold text-primary matrix-text-glow">
+                Additional Custom Instructions
+              </h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                Add specific instructions to further personalize your AI companion&apos;s behavior
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <div className="space-y-3">
+              <Label htmlFor="additionalRule1" className="text-base font-semibold text-primary matrix-text-glow">
+                Additional Rule 1 (Optional)
+              </Label>
+              <Input
+                id="additionalRule1"
+                type="text"
+                placeholder="e.g., Focus on practical examples, Use beginner-friendly language, Explain concepts step-by-step..."
+                value={wizardState.additionalRule1 || ""}
+                onChange={(e) => updateWizardState({ additionalRule1: e.target.value || null })}
+                className="text-base p-3 h-12 border-primary/30 focus:border-primary focus:ring-primary/50 bg-background/50 backdrop-blur-sm matrix-border transition-all duration-300"
+              />
+              <p className="text-xs text-muted-foreground">
+                Specify how you want your AI to approach problems and explanations
+              </p>
+            </div>
+            
+            <div className="space-y-3">
+              <Label htmlFor="additionalRule2" className="text-base font-semibold text-primary matrix-text-glow">
+                Additional Rule 2 (Optional)
+              </Label>
+              <Input
+                id="additionalRule2"
+                type="text"
+                placeholder="e.g., Always ask clarifying questions, Provide multiple solutions, Include relevant resources..."
+                value={wizardState.additionalRule2 || ""}
+                onChange={(e) => updateWizardState({ additionalRule2: e.target.value || null })}
+                className="text-base p-3 h-12 border-primary/30 focus:border-primary focus:ring-primary/50 bg-background/50 backdrop-blur-sm matrix-border transition-all duration-300"
+              />
+              <p className="text-xs text-muted-foreground">
+                Define additional communication preferences or specific requirements
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Summary */}
-        {wizardState.customRule1 && wizardState.customRule2 && (
+        {(wizardState.customRule1 || wizardState.customRule2 || wizardState.additionalRule1 || wizardState.additionalRule2) && (
           <div className={cn(
             "mt-6 p-4 bg-primary/10 rounded-lg matrix-border",
             getAnimationClasses("fadeIn")
@@ -139,52 +192,66 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepProps) =
             </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Selected Options */}
+              {/* Predefined Rules */}
               <div className="space-y-3">
-                <div>
-                  <h5 className="font-semibold text-primary mb-2">Communication Style</h5>
-                  <div className="p-3 bg-primary/5 rounded-lg matrix-border">
-                    <div className="font-medium quantrix-gradient text-base break-words">
-                      {getSelectedRule1()?.name}
-                    </div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      {getSelectedRule1()?.description}
+                {getSelectedRule1() && (
+                  <div>
+                    <h5 className="font-semibold text-primary mb-2">Communication Style</h5>
+                    <div className="p-3 bg-primary/5 rounded-lg matrix-border">
+                      <div className="font-medium quantrix-gradient text-base break-words">
+                        {getSelectedRule1()?.name}
+                      </div>
+                      <div className="text-sm text-muted-foreground mt-1">
+                        {getSelectedRule1()?.description}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
                 
-                <div>
-                  <h5 className="font-semibold text-primary mb-2">Learning Approach</h5>
-                  <div className="p-3 bg-primary/5 rounded-lg matrix-border">
-                    <div className="font-medium quantrix-gradient text-base break-words">
-                      {getSelectedRule2()?.name}
-                    </div>
-                    <div className="text-sm text-muted-foreground mt-1">
-                      {getSelectedRule2()?.description}
+                {getSelectedRule2() && (
+                  <div>
+                    <h5 className="font-semibold text-primary mb-2">Learning Approach</h5>
+                    <div className="p-3 bg-primary/5 rounded-lg matrix-border">
+                      <div className="font-medium quantrix-gradient text-base break-words">
+                        {getSelectedRule2()?.name}
+                      </div>
+                      <div className="text-sm text-muted-foreground mt-1">
+                        {getSelectedRule2()?.description}
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
               
-              {/* What This Means */}
-              <div className="matrix-card border-primary/10 p-4 rounded-lg bg-primary/5">
-                <div className="flex items-center mb-3">
-                  <Sparkles className="w-4 h-4 text-primary mr-2" />
-                  <h6 className="font-semibold text-primary">What This Means</h6>
-                </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  {[
-                    "Consistent communication style in all conversations",
-                    "Responses adapted to your preferences and context",
-                    "Support approach tailored to how you learn best",
-                    "Thoughtful integration of knowledge and empathy"
-                  ].map((benefit, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="text-primary mr-2 mt-0.5">•</span>
-                      <span>{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
+              {/* Additional Custom Rules */}
+              <div className="space-y-3">
+                {wizardState.additionalRule1 && (
+                  <div>
+                    <h5 className="font-semibold text-primary mb-2">Additional Rule 1</h5>
+                    <div className="p-3 bg-primary/5 rounded-lg matrix-border">
+                      <div className="font-medium quantrix-gradient text-base break-words mb-1">
+                        Custom Instruction
+                      </div>
+                      <div className="text-sm text-muted-foreground break-words italic">
+                        &quot;{wizardState.additionalRule1}&quot;
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                {wizardState.additionalRule2 && (
+                  <div>
+                    <h5 className="font-semibold text-primary mb-2">Additional Rule 2</h5>
+                    <div className="p-3 bg-primary/5 rounded-lg matrix-border">
+                      <div className="font-medium quantrix-gradient text-base break-words mb-1">
+                        Custom Instruction
+                      </div>
+                      <div className="text-sm text-muted-foreground break-words italic">
+                        &quot;{wizardState.additionalRule2}&quot;
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             

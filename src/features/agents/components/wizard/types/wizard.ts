@@ -12,9 +12,13 @@ export interface WizardState {
   subSubcategory: string | null;
   specificOption: string | null;
   
-  // Custom rules
+  // Predefined custom rules
   customRule1: string | null;
   customRule2: string | null;
+  
+  // Additional free text custom rules
+  additionalRule1: string | null;
+  additionalRule2: string | null;
   
   // Generated instructions
   instructions: string;

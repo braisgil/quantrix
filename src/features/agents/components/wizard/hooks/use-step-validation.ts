@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import type { WizardState, ValidationFunction, StepValidationConfig } from "../types/wizard";
-import { validateStep } from "../lib/wizard-utils";
+import type { WizardState, StepValidationConfig } from "../types/wizard";
 
 /**
  * Hook for step validation logic
@@ -11,7 +10,7 @@ export const useStepValidation = (wizardState: WizardState) => {
     1: (state) => state.category !== null,
     2: (state) => state.subcategory !== null && state.subSubcategory !== null,
     3: (state) => state.specificOption !== null,
-    4: (state) => state.customRule1 !== null && state.customRule2 !== null,
+    4: (state) => state.customRule1 !== null && state.customRule2 !== null, // Predefined rules required, additional rules optional
   }), []);
 
   const canProceed = (step: number): boolean => {
@@ -53,6 +52,7 @@ export const useStepValidation = (wizardState: WizardState) => {
         if (!wizardState.customRule2) {
           errors.push("Please select a learning approach");
         }
+        // Additional rules are optional
         break;
     }
     

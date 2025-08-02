@@ -6,8 +6,10 @@ export const agentsInsertSchema = z.object({
   category: z.string().min(1, { message: "Category is required" }),
   subcategory: z.string().min(1, { message: "Subcategory is required" }),
   subSubcategory: z.string().min(1, { message: "Sub-subcategory is required" }),
-  customRule1: z.string().min(1, { message: "First custom rule is required" }),
-  customRule2: z.string().min(1, { message: "Second custom rule is required" }),
+  customRule1: z.string().min(1, { message: "Communication style is required" }),
+  customRule2: z.string().min(1, { message: "Learning approach is required" }),
+  additionalRule1: z.string().optional(),
+  additionalRule2: z.string().optional(),
 });
 
 export const agentsUpdateSchema = agentsInsertSchema.extend({

@@ -61,6 +61,8 @@ export const agents = pgTable("agents", {
   subSubcategory: text("sub_subcategory").notNull(),
   customRule1: text("custom_rule_1").notNull(),
   customRule2: text("custom_rule_2").notNull(),
+  additionalRule1: text("additional_rule_1"),
+  additionalRule2: text("additional_rule_2"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

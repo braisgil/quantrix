@@ -6,7 +6,6 @@ import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2, Circle, Zap, X } from "l
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
-import type { AgentInsert } from "@/db/validations";
 
 // Import refactored components
 import { useAgentWizard } from "../hooks/use-agent-wizard";
@@ -45,7 +44,6 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
   const createAgentMutation = useMutation(
     trpc.agents.create.mutationOptions({
     onSuccess: async () => {
-      //queryClient.invalidateQueries({ queryKey: ["agents"] });
       await queryClient.invalidateQueries(
         //trpc.agents.getMany.queryOptions({}),
       );
