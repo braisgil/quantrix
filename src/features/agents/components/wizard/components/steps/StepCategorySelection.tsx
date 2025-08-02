@@ -3,7 +3,6 @@ import { AGENT_CATEGORIES } from "@/constants/agent-categories";
 import { WizardLayout } from "../shared/WizardLayout";
 import { SelectionGrid } from "../shared/SelectionGrid";
 import { OptionCard } from "../shared/OptionCard";
-import { ProgressSummary } from "../shared/ProgressSummary";
 import type { StepProps, AgentCategoryId } from "../../types/wizard";
 import { useSelectionState } from "../../hooks/use-selection-state";
 import { categoryIconResolver } from "../../lib/icon-mappings";

@@ -1,13 +1,5 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/lib/utils";
 import type { WizardState } from "../types/wizard";
-
-/**
- * Utility for merging Tailwind classes
- */
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
 
 /**
  * Generate responsive grid classes based on column count
@@ -141,46 +133,4 @@ export const getProgressPercentage = (currentStep: number, totalSteps: number = 
   return ((currentStep + 1) / totalSteps) * 100;
 };
 
-/**
- * Format text for better display
- */
-export const formatText = (text: string, maxLength?: number): string => {
-  if (!maxLength) return text;
-  return text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
-};
 
-/**
- * Debounce function for search and input handling
- */
-export const debounce = <T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): ((...args: Parameters<T>) => void) => {
-  let timeout: NodeJS.Timeout;
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-};
-
-/**
- * Check if we're on mobile device
- */
-export const isMobile = (): boolean => {
-  if (typeof window === 'undefined') return false;
-  return window.innerWidth < 768;
-};
-
-/**
- * Safe array access with fallback
- */
-export const safeArrayAccess = <T>(array: T[], index: number, fallback: T): T => {
-  return array[index] !== undefined ? array[index] : fallback;
-};
-
-/**
- * Generate consistent IDs for form elements
- */
-export const generateId = (prefix: string, ...parts: string[]): string => {
-  return [prefix, ...parts].join('-').toLowerCase().replace(/[^a-z0-9-]/g, '-');
-};

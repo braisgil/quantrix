@@ -47,7 +47,6 @@ export {
 } from './lib/icon-mappings';
 
 export {
-  cn,
   getGridClasses,
   getCardClasses,
   getIconContainerClasses,

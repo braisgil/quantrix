@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2, Circle, Zap, X } from "l
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
+import type { AgentInsert } from "@/db/validations";
 
 // Import refactored components
 import { useAgentWizard } from "../hooks/use-agent-wizard";
@@ -16,7 +17,8 @@ import { StepSubcategorySelection } from "./steps/StepSubcategorySelection";
 import { StepSpecificOption } from "./steps/StepSpecificOption";
 import { StepCustomRules } from "./steps/StepCustomRules";
 import { STEP_CONFIGS, getTotalSteps } from "../lib/step-config";
-import { getProgressPercentage, cn } from "../lib/wizard-utils";
+import { getProgressPercentage } from "../lib/wizard-utils";
+import { cn } from "@/lib/utils";
 
 interface AgentWizardProps {
   onSuccess?: () => void;
@@ -40,18 +42,21 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
 
   const { canProceed } = useStepValidation(wizardState);
 
-  const createAgentMutation = useMutation({
-    mutationFn: (data: any) => trpc.agents.create(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["agents"] });
+  const createAgentMutation = useMutation(
+    trpc.agents.create.mutationOptions({
+    onSuccess: async () => {
+      //queryClient.invalidateQueries({ queryKey: ["agents"] });
+      await queryClient.invalidateQueries(
+        //trpc.agents.getMany.queryOptions({}),
+      );
       toast.success("Your AI companion has been created successfully!");
       resetWizard();
       onSuccess?.();
     },
-    onError: (error: any) => {
+    onError: (error) => {
       toast.error(error.message || "Failed to create your AI companion");
     },
-  });
+  }));
 
   const handleNext = () => {
     if (canProceed(currentStep)) {
@@ -147,9 +152,8 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
 
             {/* Step Navigation Pills */}
             <div className="flex flex-wrap justify-center gap-1.5">
-              {STEP_CONFIGS.map((step, index) => {
-                const IconComponent = step.icon;
-                return (
+                          {STEP_CONFIGS.map((step, index) => {
+              return (
                   <div
                     key={index}
                     className={cn(
@@ -313,7 +317,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
                 Review Your AI Companion
               </h3>
               <p className="text-sm text-muted-foreground">
-                Take a final look at your personalized AI assistant's configuration
+                Take a final look at your personalized AI assistant&apos;s configuration
               </p>
             </div>
 

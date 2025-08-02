@@ -1,4 +1,4 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { StepHeaderProps } from "../../types/wizard";
 
 export const StepHeader = ({ title, description, icon: Icon }: StepHeaderProps) => {

@@ -4,10 +4,10 @@ import { WizardLayout } from "../shared/WizardLayout";
 import { SelectionGrid } from "../shared/SelectionGrid";
 import { OptionCard } from "../shared/OptionCard";
 import { ProgressSummary } from "../shared/ProgressSummary";
-import type { StepProps } from "../../types/wizard";
+import type { StepProps, SubcategoryData, SubSubcategoryData } from "../../types/wizard";
 import { useSelectionState } from "../../hooks/use-selection-state";
 import { subcategoryIconResolver } from "../../lib/icon-mappings";
-import { getAnimationClasses, cn } from "../../lib/wizard-utils";
+import { getAnimationClasses } from "../../lib/wizard-utils";
 
 export const StepSubcategorySelection = ({ wizardState, updateWizardState }: StepProps) => {
   const { selectSubcategory, selectSubSubcategory, isSelected } = useSelectionState({ 
@@ -19,7 +19,7 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
 
   const categoryData = AGENT_CATEGORIES[wizardState.category];
   const subcategoryData = wizardState.subcategory 
-    ? (categoryData.subcategories as any)[wizardState.subcategory] 
+    ? (categoryData.subcategories as Record<string, SubcategoryData>)[wizardState.subcategory]
     : null;
 
   const subcategoryEntries = Object.entries(categoryData.subcategories);
@@ -49,8 +49,8 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
             {subcategoryEntries.map(([subcategoryId, subcategory]) => {
               const selected = isSelected.subcategory(subcategoryId);
               const iconConfig = subcategoryIconResolver(subcategoryId, subcategory.name, selected);
-              const subSubcategoryNames = Object.values(subcategory.subSubcategories).map(
-                (subSub: any) => subSub.name
+              const subSubcategoryNames = (Object.values(subcategory.subSubcategories) as SubSubcategoryData[]).map(
+                (subSub) => subSub.name
               );
 
               return (
@@ -83,7 +83,7 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
             </div>
             
             <SelectionGrid columns="3">
-              {subSubcategoryEntries.map(([subSubcategoryId, subSubcategory]: [string, any]) => {
+              {subSubcategoryEntries.map(([subSubcategoryId, subSubcategory]: [string, SubSubcategoryData]) => {
                 const selected = isSelected.subSubcategory(subSubcategoryId);
                 const iconConfig = subcategoryIconResolver(subSubcategoryId, subSubcategory.name, selected);
 
@@ -116,11 +116,11 @@ export const StepSubcategorySelection = ({ wizardState, updateWizardState }: Ste
               },
               {
                 label: "Focus",
-                value: (categoryData.subcategories as any)[wizardState.subcategory].name
+                value: (categoryData.subcategories as Record<string, SubcategoryData>)[wizardState.subcategory].name
               },
               {
                 label: "Approach",
-                value: (categoryData.subcategories as any)[wizardState.subcategory]
+                value: (categoryData.subcategories as Record<string, SubcategoryData>)[wizardState.subcategory]
                   .subSubcategories[wizardState.subSubcategory].name
               }
             ]}

@@ -79,16 +79,16 @@ export interface CategoryData {
 }
 
 export interface SubcategoryData {
-  id: string;
-  name: string;
-  description: string;
-  subSubcategories: Record<string, SubSubcategoryData>;
+  readonly id: string;
+  readonly name: string;
+  readonly description: string;
+  readonly subSubcategories: Record<string, SubSubcategoryData>;
 }
 
 export interface SubSubcategoryData {
-  id: string;
-  name: string;
-  options: string[];
+  readonly id: string;
+  readonly name: string;
+  readonly options: readonly string[];
 }
 
 export interface CustomRuleOption {

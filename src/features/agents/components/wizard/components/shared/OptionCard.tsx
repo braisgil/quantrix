@@ -8,11 +8,10 @@ import {
   getTitleClasses, 
   getDescriptionClasses,
   getBadgeClasses,
-  cn
 } from "../../lib/wizard-utils";
+import { cn } from "@/lib/utils";
 
 export const OptionCard = ({
-  id,
   name,
   description,
   isSelected,

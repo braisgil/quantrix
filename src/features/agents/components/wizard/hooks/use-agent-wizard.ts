@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { AGENT_CATEGORIES, CUSTOM_RULE_OPTIONS } from "@/constants/agent-categories";
-import type { WizardState, AgentCategoryId } from "../types/wizard";
+import type { WizardState, SubcategoryData } from "../types/wizard";
 import { getTotalSteps } from "../lib/step-config";
-import { validateStep } from "../lib/wizard-utils";
 
 export const useAgentWizard = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -28,8 +27,7 @@ export const useAgentWizard = () => {
     }
 
     const categoryData = AGENT_CATEGORIES[wizardState.category];
-    const subcategoryData = (categoryData.subcategories as any)[wizardState.subcategory];
-    const subSubcategoryData = (subcategoryData.subSubcategories as any)[wizardState.subSubcategory];
+    const subcategoryData = (categoryData.subcategories as Record<string, SubcategoryData>)[wizardState.subcategory];
 
     const rule1 = CUSTOM_RULE_OPTIONS.interaction_style.options.find(opt => opt.id === wizardState.customRule1);
     const rule2 = CUSTOM_RULE_OPTIONS.learning_approach.options.find(opt => opt.id === wizardState.customRule2);
@@ -93,10 +91,6 @@ Remember: You are an expert in ${wizardState.specificOption} and should provide 
     };
   };
 
-  const canProceed = (step: number): boolean => {
-    return validateStep(step, wizardState);
-  };
-
   return {
     currentStep,
     wizardState,
@@ -105,7 +99,6 @@ Remember: You are an expert in ${wizardState.specificOption} and should provide 
     prevStep,
     resetWizard,
     getFormData,
-    canProceed,
     generateInstructions,
   };
 };

@@ -1,13 +1,14 @@
 import { Badge } from "@/components/ui/badge";
-import { Zap, Sparkles } from "lucide-react";
+import { Zap } from "lucide-react";
 import { AGENT_CATEGORIES } from "@/constants/agent-categories";
 import { WizardLayout } from "../shared/WizardLayout";
 import { SelectionGrid } from "../shared/SelectionGrid";
 import { OptionCard } from "../shared/OptionCard";
-import type { StepProps } from "../../types/wizard";
+import type { StepProps, SubcategoryData } from "../../types/wizard";
 import { useSelectionState } from "../../hooks/use-selection-state";
 import { specificOptionIconResolver } from "../../lib/icon-mappings";
-import { getAnimationClasses, cn } from "../../lib/wizard-utils";
+import { getAnimationClasses } from "../../lib/wizard-utils";
+import { cn } from "@/lib/utils";
 
 export const StepSpecificOption = ({ wizardState, updateWizardState }: StepProps) => {
   const { selectSpecificOption, isSelected } = useSelectionState({ wizardState, updateWizardState });
@@ -17,7 +18,7 @@ export const StepSpecificOption = ({ wizardState, updateWizardState }: StepProps
   }
 
   const categoryData = AGENT_CATEGORIES[wizardState.category];
-  const subcategoryData = (categoryData.subcategories as any)[wizardState.subcategory];
+  const subcategoryData = (categoryData.subcategories as Record<string, SubcategoryData>)[wizardState.subcategory];
   const subSubcategoryData = subcategoryData.subSubcategories[wizardState.subSubcategory];
 
   return (

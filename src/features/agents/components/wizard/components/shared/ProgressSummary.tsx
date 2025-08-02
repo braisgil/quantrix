@@ -1,7 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import type { ProgressSummaryProps } from "../../types/wizard";
-import { getAnimationClasses, cn } from "../../lib/wizard-utils";
+import { getAnimationClasses } from "../../lib/wizard-utils";
+import { cn } from "@/lib/utils";
 
 export const ProgressSummary = ({ title, items, className }: ProgressSummaryProps) => {
   return (

@@ -1,5 +1,6 @@
 import type { SelectionGridProps } from "../../types/wizard";
-import { getGridClasses, cn } from "../../lib/wizard-utils";
+import { getGridClasses } from "../../lib/wizard-utils";
+import { cn } from "@/lib/utils"; 
 
 export const SelectionGrid = ({ 
   children, 

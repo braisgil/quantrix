@@ -6,7 +6,8 @@ import { OptionCard } from "../shared/OptionCard";
 import type { StepProps } from "../../types/wizard";
 import { useSelectionState } from "../../hooks/use-selection-state";
 import { MANUAL_ICONS, customRuleIconResolver } from "../../lib/icon-mappings";
-import { getAnimationClasses, cn } from "../../lib/wizard-utils";
+import { getAnimationClasses } from "../../lib/wizard-utils";
+import { cn } from "@/lib/utils";
 
 export const StepCustomRules = ({ wizardState, updateWizardState }: StepProps) => {
   const { selectCustomRule1, selectCustomRule2, isSelected } = useSelectionState({ 
