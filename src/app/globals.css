@@ -51,9 +51,14 @@
   --matrix-green-glow: rgba(0, 255, 65, 0.3);
   --matrix-green-soft: rgba(0, 255, 65, 0.1);
   
+  /* Enhanced colors for better light theme readability */
+  --matrix-green-readable: #00851c;  /* Much darker for better contrast */
+  --matrix-green-readable-glow: rgba(0, 133, 28, 0.2);
+  --matrix-green-readable-soft: rgba(0, 133, 28, 0.08);
+  
   /* Matrix Grid Colors for Light Theme */
-  --matrix-grid-light: rgba(0, 204, 51, 0.15);
-  --matrix-grid-light-strong: rgba(0, 204, 51, 0.25);
+  --matrix-grid-light: rgba(0, 133, 28, 0.12);
+  --matrix-grid-light-strong: rgba(0, 133, 28, 0.18);
   
   /* Matrix Grid Colors for Dark Theme */
   --matrix-grid-dark: rgba(0, 255, 65, 0.1);
@@ -77,31 +82,31 @@
   --card-foreground: oklch(0.15 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0 0);
-  --primary: var(--matrix-green-dark); /* Darker matrix green for light theme */
+  --primary: var(--matrix-green-readable); /* More readable dark green for light theme */
   --primary-foreground: oklch(0.98 0 0); /* Light text on green */
   --secondary: oklch(0.96 0 0); /* Light gray */
   --secondary-foreground: oklch(0.2 0 0);
   --muted: oklch(0.96 0 0);
   --muted-foreground: oklch(0.55 0 0);
   --accent: oklch(0.96 0 0);
-  --accent-foreground: oklch(0.2 0 0);
+  --accent-foreground: var(--matrix-green-readable); /* More readable accent foreground */
   --destructive: oklch(0.58 0.25 27); /* Red for light theme */
   --border: oklch(0.9 0 0); /* Light border */
   --input: oklch(0.9 0 0);
-  --ring: var(--matrix-green-dark);
-  --chart-1: var(--matrix-green-dark);
+  --ring: var(--matrix-green-readable);
+  --chart-1: var(--matrix-green-readable);
   --chart-2: oklch(0.6 0.12 180);
   --chart-3: oklch(0.4 0.07 240);
   --chart-4: oklch(0.8 0.19 60);
   --chart-5: oklch(0.77 0.19 300);
   --sidebar: oklch(0.98 0 0);
   --sidebar-foreground: oklch(0.15 0 0);
-  --sidebar-primary: var(--matrix-green-dark);
+  --sidebar-primary: var(--matrix-green-readable);
   --sidebar-primary-foreground: oklch(0.98 0 0);
   --sidebar-accent: oklch(0.96 0 0);
   --sidebar-accent-foreground: oklch(0.2 0 0);
   --sidebar-border: oklch(0.9 0 0);
-  --sidebar-ring: var(--matrix-green-dark);
+  --sidebar-ring: var(--matrix-green-readable);
 }
 
 /* Dark Theme (when toggled) */
@@ -154,6 +159,24 @@
     text-size-adjust: 100%;
   }
 
+  /* Improve readability for links in light theme */
+  a {
+    color: var(--matrix-green-readable);
+  }
+  
+  .dark a {
+    color: var(--matrix-green);
+  }
+  
+  /* Better hover states for light theme */
+  a:hover {
+    color: #005c14; /* Even darker on hover for better visibility */
+  }
+  
+  .dark a:hover {
+    color: var(--matrix-green-light);
+  }
+
   /* Better touch targets for mobile */
   button, a, [role="button"] {
     touch-action: manipulation;
@@ -186,6 +209,25 @@
 
 @keyframes glow-pulse {
   0%, 100% {
+    box-shadow: 0 0 3px var(--matrix-green-readable-glow);
+  }
+  50% {
+    box-shadow: 0 0 8px var(--matrix-green-readable-glow), 0 0 12px var(--matrix-green-readable-glow);
+  }
+}
+
+@keyframes text-glow {
+  0%, 100% {
+    text-shadow: 0 0 2px var(--matrix-green-readable-glow);
+  }
+  50% {
+    text-shadow: 0 0 6px var(--matrix-green-readable-glow), 0 0 8px var(--matrix-green-readable-glow);
+  }
+}
+
+/* Enhanced glow effects for dark theme */
+@keyframes glow-pulse-dark {
+  0%, 100% {
     box-shadow: 0 0 5px var(--matrix-green-glow);
   }
   50% {
@@ -193,7 +235,7 @@
   }
 }
 
-@keyframes text-glow {
+@keyframes text-glow-dark {
   0%, 100% {
     text-shadow: 0 0 5px var(--matrix-green-glow);
   }
@@ -215,7 +257,22 @@
   animation: text-glow 3s ease-in-out infinite;
 }
 
+/* Dark theme enhanced glow effects */
+.dark .matrix-glow {
+  animation: glow-pulse-dark 2s ease-in-out infinite;
+}
+
+.dark .matrix-text-glow {
+  animation: text-glow-dark 3s ease-in-out infinite;
+}
+
 .matrix-border {
+  border: 1px solid var(--matrix-green-readable);
+  box-shadow: 0 0 5px var(--matrix-green-readable-glow);
+}
+
+/* Enhanced matrix border for dark theme */
+.dark .matrix-border {
   border: 1px solid var(--matrix-green);
   box-shadow: 0 0 10px var(--matrix-green-glow);
 }
@@ -230,14 +287,24 @@
 
 .matrix-card {
   background: linear-gradient(135deg, 
-    var(--matrix-green-soft) 0%, 
+    var(--matrix-green-readable-soft) 0%, 
     rgba(255, 255, 255, 0.9) 50%, 
-    var(--matrix-green-soft) 100%
+    var(--matrix-green-readable-soft) 100%
   );
   border: 1px solid var(--matrix-grid-light-strong);
   backdrop-filter: blur(10px);
   /* Better mobile touch interaction */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced matrix card for dark theme */
+.dark .matrix-card {
+  background: linear-gradient(135deg, 
+    var(--matrix-green-soft) 0%, 
+    rgba(0, 0, 0, 0.9) 50%, 
+    var(--matrix-green-soft) 100%
+  );
+  border: 1px solid var(--matrix-grid-dark-strong);
 }
 
 /* Matrix container with subtle grid background */
@@ -331,6 +398,14 @@
 }
 
 .quantrix-gradient {
+  background: linear-gradient(135deg, var(--matrix-green-readable) 0%, #005c14 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Enhanced gradient for dark theme */
+.dark .quantrix-gradient {
   background: linear-gradient(135deg, var(--matrix-green) 0%, #00cc33 100%);
   -webkit-background-clip: text;
   background-clip: text;

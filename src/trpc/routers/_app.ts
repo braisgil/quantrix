@@ -1,22 +1,8 @@
-//import { meetingsRouter } from '@/modules/meetings/server/procedures';
+import { agentsRouter } from '@/features/agents/server/procedures';
 import { createTRPCRouter } from '../init';
-//import { agentsRouter } from '@/modules/agents/server/procedures';
 
 export const appRouter = createTRPCRouter({
-  /*
-  hello: baseProcedure
-    .input(
-      z.object({
-        text: z.string(),
-      }),
-    )
-    .query((opts) => {
-      return {
-        greeting: `hello ${opts.input.text}`,
-      };
-    }),
-  */
-  //agents: agentsRouter,
+  agents: agentsRouter,
   //meetings: meetingsRouter,
 });
 // export type definition of API

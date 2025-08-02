@@ -55,7 +55,7 @@ export const Navbar = () => {
             <div className="p-1 bg-primary/10 rounded">
               <Search className="size-4 text-primary" />
             </div>
-            <span className="flex-1 text-left">Search Neural Network...</span>
+            <span className="flex-1 text-left">Search companions...</span>
             <kbd className="ml-auto pointer-events-none inline-flex h-6 select-none items-center gap-1 rounded border border-primary/30 bg-primary/10 px-2 font-mono text-[10px] font-medium text-primary">
               <span className="text-xs">⌘</span>K
             </kbd>

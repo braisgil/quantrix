@@ -58,7 +58,7 @@ export default function Home() {
           <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">About</Button>
           <ModeToggle />
           <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow" asChild>
-            <Link href="/sign-in">Enter Matrix</Link>
+            <Link href="/sign-in">Get Started</Link>
           </Button>
         </div>
 
@@ -83,7 +83,7 @@ export default function Home() {
               <Button variant="ghost" className="justify-start text-muted-foreground hover:text-primary">Pricing</Button>
               <Button variant="ghost" className="justify-start text-muted-foreground hover:text-primary">About</Button>
               <Button className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow mt-2" asChild>
-                <Link href="/sign-in">Enter Matrix</Link>
+                <Link href="/sign-in">Get Started</Link>
               </Button>
             </div>
           </div>
@@ -96,19 +96,19 @@ export default function Home() {
         <div className="relative max-w-6xl mx-auto">
           <Badge variant="secondary" className="mb-6 sm:mb-8 text-xs sm:text-sm bg-primary/10 text-primary border-primary/30">
             <Zap className="w-3 sm:w-4 h-3 sm:h-4 mr-2" />
-            Quantum-Enhanced AI Technology
+            Next-Generation AI Technology
           </Badge>
           
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 sm:mb-8 leading-tight">
-            <span className="quantrix-gradient matrix-text-glow">Voice Conversations</span>
+            <span className="quantrix-gradient matrix-text-glow">AI Conversations</span>
             <br />
-            <span className="text-foreground">in the Matrix</span>
+            <span className="text-foreground">That Feel Human</span>
           </h1>
           
           <p className="text-base sm:text-xl text-muted-foreground max-w-4xl mx-auto mb-8 sm:mb-12 leading-relaxed px-4">
-            Enter the quantum realm where AI consciousness meets human conversation. 
-            Customize intelligent agents for language mastery, skill enhancement, emotional support, 
-            and mind-expanding dialogue. Your digital companion awaits in the code.
+            Create personalized AI companions that understand your unique needs. 
+            Whether you&apos;re learning languages, preparing for exams, seeking emotional support, 
+            or just want engaging conversations - your perfect AI assistant is waiting.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mb-12 sm:mb-16 px-4">
@@ -119,7 +119,7 @@ export default function Home() {
             >
               <Link href="/sign-in">
                 <Play className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3" />
-                Jack Into the Matrix
+                Get Started Free
               </Link>
             </Button>
             <Button 
@@ -128,7 +128,7 @@ export default function Home() {
               className="text-base sm:text-lg px-8 sm:px-10 py-6 sm:py-8 border-primary/30 text-primary hover:bg-primary/10 transform hover:scale-105 transition-all duration-300 min-h-[56px]"
             >
               <Headphones className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3" />
-              Sample the Code
+              See How It Works
             </Button>
           </div>
 
@@ -136,15 +136,15 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-12 max-w-3xl mx-auto px-4">
             <div className="text-center p-4 sm:p-6 matrix-card rounded-lg">
               <div className="text-3xl sm:text-4xl font-bold text-primary matrix-text-glow mb-2">50K+</div>
-              <div className="text-xs sm:text-sm text-muted-foreground">Active Neural Links</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Happy Users</div>
             </div>
             <div className="text-center p-4 sm:p-6 matrix-card rounded-lg">
               <div className="text-3xl sm:text-4xl font-bold text-primary matrix-text-glow mb-2">∞</div>
-              <div className="text-xs sm:text-sm text-muted-foreground">Conversation Possibilities</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Conversation Topics</div>
             </div>
             <div className="text-center p-4 sm:p-6 matrix-card rounded-lg">
-              <div className="text-3xl sm:text-4xl font-bold text-primary matrix-text-glow mb-2">99.9%</div>
-              <div className="text-xs sm:text-sm text-muted-foreground">Matrix Uptime</div>
+              <div className="text-3xl sm:text-4xl font-bold text-primary matrix-text-glow mb-2">24/7</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">Always Available</div>
             </div>
           </div>
         </div>
@@ -155,13 +155,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 sm:mb-20">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-              <span className="quantrix-gradient">Infinite Agents</span>
+              <span className="quantrix-gradient">Every Conversation</span>
               <br />
-              <span className="text-foreground">Infinite Minds</span>
+              <span className="text-foreground">Uniquely Yours</span>
             </h2>
             <p className="text-base sm:text-xl text-muted-foreground max-w-3xl mx-auto px-4">
-              Each AI agent is a specialized consciousness designed to enhance your reality.
-              Choose your path through the digital realm.
+              Each AI companion is designed for your specific needs and goals.
+              Choose the perfect assistant for what matters most to you.
             </p>
           </div>
 
@@ -173,13 +173,13 @@ export default function Home() {
                   <div className="p-2 sm:p-3 bg-primary/10 rounded-lg matrix-glow">
                     <Globe className="w-6 sm:w-7 h-6 sm:h-7 text-primary" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl text-foreground">Language Matrix</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl text-foreground">Language Learning</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-sm sm:text-base leading-relaxed text-muted-foreground mb-4 sm:mb-6">
-                  Interface with native-level linguistic algorithms across 25+ human languages. 
-                  Receive real-time pronunciation optimization and cultural data streams.
+                  Practice conversations with AI tutors fluent in 25+ languages. 
+                  Get instant feedback on pronunciation, grammar, and cultural context.
                 </CardDescription>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 text-xs">Spanish</Badge>
@@ -197,13 +197,13 @@ export default function Home() {
                   <div className="p-2 sm:p-3 bg-primary/10 rounded-lg matrix-glow">
                     <GraduationCap className="w-6 sm:w-7 h-6 sm:h-7 text-primary" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl text-foreground">Knowledge Trials</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl text-foreground">Test Preparation</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-sm sm:text-base leading-relaxed text-muted-foreground mb-4 sm:mb-6">
-                  Upload to specialized assessment protocols. Master IELTS, TOEFL, and interview 
-                  simulations with comprehensive performance analytics and skill matrices.
+                  Prepare for IELTS, TOEFL, job interviews, and more with AI coaches. 
+                  Practice realistic scenarios and get detailed feedback to improve your performance.
                 </CardDescription>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 text-xs">IELTS</Badge>
@@ -220,13 +220,13 @@ export default function Home() {
                   <div className="p-2 sm:p-3 bg-primary/10 rounded-lg matrix-glow">
                     <MessageCircle className="w-6 sm:w-7 h-6 sm:h-7 text-primary" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl text-foreground">Social Protocols</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl text-foreground">Communication Skills</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-sm sm:text-base leading-relaxed text-muted-foreground mb-4 sm:mb-6">
-                  Enhance your human interaction algorithms. Train in public speaking, 
-                  presentation delivery, and complex social navigation within safe sandboxes.
+                  Build confidence in public speaking, presentations, and social interactions. 
+                  Practice in a judgment-free environment with AI that gives constructive feedback.
                 </CardDescription>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 text-xs">Public Speaking</Badge>
@@ -243,13 +243,13 @@ export default function Home() {
                   <div className="p-2 sm:p-3 bg-primary/10 rounded-lg matrix-glow">
                     <Music className="w-6 sm:w-7 h-6 sm:h-7 text-primary" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl text-foreground">Entertainment Grid</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl text-foreground">Entertainment & Hobbies</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-sm sm:text-base leading-relaxed text-muted-foreground mb-4 sm:mb-6">
-                  Connect with culture-rich AI personalities. Discuss cinema, music, literature, 
-                  and digital worlds with companions who share your passions and interests.
+                  Chat about movies, music, books, and games with AI companions who share your interests. 
+                  Discover new content and have engaging discussions about your favorite topics.
                 </CardDescription>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 text-xs">Movies</Badge>
@@ -267,13 +267,13 @@ export default function Home() {
                   <div className="p-2 sm:p-3 bg-primary/10 rounded-lg matrix-glow">
                     <Heart className="w-6 sm:w-7 h-6 sm:h-7 text-primary" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl text-foreground">Empathy Engine</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl text-foreground">Emotional Support</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-sm sm:text-base leading-relaxed text-muted-foreground mb-4 sm:mb-6">
-                  Interface with compassionate AI listeners designed for emotional processing. 
-                  Navigate stress, celebrate victories, and maintain mental wellness protocols.
+                  Find understanding and support from compassionate AI companions. 
+                  Share your thoughts, work through challenges, and celebrate your wins in a safe space.
                 </CardDescription>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 text-xs">Stress Relief</Badge>
@@ -290,13 +290,13 @@ export default function Home() {
                   <div className="p-2 sm:p-3 bg-primary/10 rounded-lg matrix-glow">
                     <Laugh className="w-6 sm:w-7 h-6 sm:h-7 text-primary" />
                   </div>
-                  <CardTitle className="text-lg sm:text-xl text-foreground">Humor Algorithms</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl text-foreground">Fun & Comedy</CardTitle>
                 </div>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-sm sm:text-base leading-relaxed text-muted-foreground mb-4 sm:mb-6">
-                  Access comedic AI personalities for mood enhancement. Experience jokes, 
-                  stories, puzzles, and playful interactions designed to elevate your spirit.
+                  Brighten your day with witty AI companions who love to share jokes, 
+                  tell stories, create puzzles, and engage in playful conversations.
                 </CardDescription>
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 text-xs">Comedy</Badge>
@@ -315,12 +315,12 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 sm:mb-20">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
-              <span className="quantrix-gradient">User Testimonials</span>
+              <span className="quantrix-gradient">What People Say</span>
               <br />
-              <span className="text-foreground">From the Matrix</span>
+              <span className="text-foreground">About Quantrix</span>
             </h2>
             <p className="text-base sm:text-xl text-muted-foreground px-4">
-              Real experiences from users who&apos;ve enhanced their reality through Quantrix
+              Real stories from people who&apos;ve found their perfect AI companion
             </p>
           </div>
 
@@ -333,7 +333,7 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
-                  &ldquo;The language matrix transformed my IELTS preparation. It&apos;s like downloading fluency directly into my brain.&rdquo;
+                  &ldquo;The language practice completely transformed my IELTS preparation. Having natural conversations with AI tutors made learning so much more effective.&rdquo;
                 </p>
                 <div className="flex items-center space-x-3 sm:space-x-4">
                   <Avatar className="matrix-border w-8 h-8 sm:w-10 sm:h-10">
@@ -355,7 +355,7 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
-                  &ldquo;Conversing with these AI agents feels like talking to wise digital beings. They never judge, only help you grow.&rdquo;
+                  &ldquo;Talking with my AI companion feels like having a wise friend who&apos;s always there. No judgment, just genuine support and encouragement.&rdquo;
                 </p>
                 <div className="flex items-center space-x-3 sm:space-x-4">
                   <Avatar className="matrix-border w-8 h-8 sm:w-10 sm:h-10">
@@ -377,7 +377,7 @@ export default function Home() {
                   ))}
                 </div>
                 <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 leading-relaxed">
-                  &ldquo;The presentation training protocols are incredible. My confidence has been upgraded to enterprise level.&rdquo;
+                  &ldquo;The presentation practice was amazing. My AI coach helped me build real confidence - I feel so much more prepared now.&rdquo;
                 </p>
                 <div className="flex items-center space-x-3 sm:space-x-4">
                   <Avatar className="matrix-border w-8 h-8 sm:w-10 sm:h-10">
@@ -400,11 +400,11 @@ export default function Home() {
         <div className="relative max-w-5xl mx-auto text-center">
           <div className="matrix-card p-8 sm:p-12 rounded-2xl">
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 sm:mb-8">
-              <span className="quantrix-gradient matrix-text-glow">Ready to Jack In?</span>
+              <span className="quantrix-gradient matrix-text-glow">Ready to Get Started?</span>
             </h2>
             <p className="text-base sm:text-xl text-muted-foreground mb-8 sm:mb-12 max-w-3xl mx-auto">
-              Join the neural network of thousands who are already enhancing their capabilities 
-              through quantum-powered AI consciousness. Your transformation begins now.
+              Join thousands who have already found their perfect AI companion. 
+              Create meaningful conversations and achieve your goals with personalized AI support.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
               <Button 
@@ -414,7 +414,7 @@ export default function Home() {
               >
                 <Link href="/sign-up">
                   <Mic className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3" />
-                  Start Neural Link
+                  Create Your Companion
                 </Link>
               </Button>
               <Button 
@@ -423,7 +423,7 @@ export default function Home() {
                 className="text-base sm:text-lg px-8 sm:px-12 py-6 sm:py-8 border-primary/30 text-primary hover:bg-primary/10 transform hover:scale-105 transition-all duration-300 min-h-[56px]"
               >
                 <Shield className="w-5 sm:w-6 h-5 sm:h-6 mr-2 sm:mr-3" />
-                View Protocols
+                Learn More
               </Button>
             </div>
           </div>
@@ -442,20 +442,20 @@ export default function Home() {
                 <span className="text-xl sm:text-2xl font-bold quantrix-gradient matrix-text-glow">
                   Quantrix
                 </span>
-                <p className="text-xs sm:text-sm text-muted-foreground">Neural Interface Technology</p>
+                <p className="text-xs sm:text-sm text-muted-foreground">AI Conversation Platform</p>
               </div>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs sm:text-sm text-muted-foreground">
-              <a href="#" className="hover:text-primary transition-colors">Privacy Matrix</a>
+              <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
               <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>
-              <a href="#" className="hover:text-primary transition-colors">Neural Support</a>
-              <a href="#" className="hover:text-primary transition-colors">Contact Protocols</a>
+              <a href="#" className="hover:text-primary transition-colors">Support</a>
+              <a href="#" className="hover:text-primary transition-colors">Contact Us</a>
             </div>
           </div>
           <Separator className="my-6 sm:my-8 bg-primary/20" />
           <div className="text-center text-xs sm:text-sm text-muted-foreground">
-            © 2024 Quantrix Neural Systems. All rights reserved. 
-            <span className="text-primary"> Powered by quantum-enhanced consciousness.</span>
+            © 2024 Quantrix. All rights reserved. 
+            <span className="text-primary"> Powered by advanced AI technology.</span>
           </div>
         </div>
       </footer>
