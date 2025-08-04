@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import type { Agent } from '../types';
+import type { Agent } from '../../types';
 import AgentListItem from './agent-list-item';
 
 interface AgentsListProps {

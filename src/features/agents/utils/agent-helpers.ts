@@ -1,4 +1,5 @@
 import { getIconConfig } from '../components/wizard/lib/icon-mappings';
+import { formatCategoryName } from './category-helpers';
 import type { Agent } from '../types';
 
 /**
@@ -18,16 +19,7 @@ export const getAgentDescription = (agent: Agent) => {
     const description = agent.instructions.substring(0, 60);
     return description.length < agent.instructions.length ? `${description}...` : description;
   }
-  return `${agent.subcategory} specialist in ${agent.category}`;
-};
-
-/**
- * Formats a dash-separated category name to proper case
- */
-export const formatCategoryName = (category: string) => {
-  return category.split('-').map(word => 
-    word.charAt(0).toUpperCase() + word.slice(1)
-  ).join(' ');
+  return `${formatCategoryName(agent.subcategory)} specialist in ${formatCategoryName(agent.category)}`;
 };
 
 /**

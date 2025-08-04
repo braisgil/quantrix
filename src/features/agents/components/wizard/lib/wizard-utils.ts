@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import type { WizardState } from "../types/wizard";
 
 /**
  * Generate responsive grid classes based on column count
@@ -110,20 +109,6 @@ export const getAnimationClasses = (type: "fadeIn" | "slideIn" | "zoomIn" = "fad
   };
   
   return animations[type];
-};
-
-/**
- * Check if a step can proceed based on validation rules
- */
-export const validateStep = (step: number, state: WizardState): boolean => {
-  switch (step) {
-    case 0: return state.name.trim().length > 0;
-    case 1: return state.category !== null;
-    case 2: return state.subcategory !== null && state.subSubcategory !== null;
-    case 3: return state.specificOption !== null;
-    case 4: return state.customRule1 !== null && state.customRule2 !== null;
-    default: return false;
-  }
 };
 
 /**

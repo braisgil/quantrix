@@ -1,34 +1,27 @@
-'use client';
+import { Suspense } from 'react';
+import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { getQueryClient } from '@/trpc/server';
+import { trpc } from '@/trpc/server';
+import { AgentListView } from '@/features/agents/components';
+import { AgentSkeleton } from '@/features/agents/components/shared/agent-skeleton';
 
-import React, { Suspense } from 'react';
-import AgentsListHeader from '@/features/agents/components/agents-list-header';
-import { AgentWizard } from '@/features/agents/components/wizard';
-import { useWizardState } from '@/features/agents/hooks/use-wizard-state';
-import AgentsPageView from '@/features/agents/views/agents-page-view';
-import { AgentsListSkeleton } from '@/features/agents/components/agents-list-skeleton';
+export default async function AgentsPage() {
+  const queryClient = getQueryClient();
 
-const Page: React.FC = () => {
-  const { showWizard, openWizard, closeWizard } = useWizardState();
-
-  if (showWizard) {
-    return (
-      <div className="space-y-0">
-        <AgentWizard 
-          onSuccess={closeWizard}
-          onCancel={closeWizard}
-        />
-      </div>
+  // Try to prefetch agents data on the server for optimal performance
+  try {
+    await queryClient.prefetchQuery(
+      trpc.agents.getMany.queryOptions({})
     );
+  } catch {
+    // Prefetch failed - client will handle it gracefully
   }
 
   return (
-    <div className="space-y-8">
-      <AgentsListHeader onCreateAgent={openWizard} />
-      <Suspense fallback={<AgentsListSkeleton />}>
-        <AgentsPageView />
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense fallback={<AgentSkeleton variant="list" />}>
+        <AgentListView />
       </Suspense>
-    </div>
+    </HydrationBoundary>
   );
-};
-
-export default Page;
+}

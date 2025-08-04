@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2, Circle, Zap, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2, Circle, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
@@ -18,6 +18,7 @@ import { StepCustomRules } from "./steps/StepCustomRules";
 import { STEP_CONFIGS, getTotalSteps } from "../lib/step-config";
 import { getProgressPercentage } from "../lib/wizard-utils";
 import { cn } from "@/lib/utils";
+import { AgentNavigationHeader } from "../../shared/agent-navigation-header";
 
 interface AgentWizardProps {
   onSuccess?: () => void;
@@ -45,7 +46,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
     trpc.agents.create.mutationOptions({
     onSuccess: async () => {
       await queryClient.invalidateQueries(
-        //trpc.agents.getMany.queryOptions({}),
+        trpc.agents.getMany.queryOptions({})
       );
       toast.success("Your AI companion has been created successfully!");
       resetWizard();
@@ -88,24 +89,7 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Navigation Header */}
-      <div className="flex items-center justify-between">
-        <Button 
-          variant="ghost" 
-          onClick={onCancel}
-          className="text-muted-foreground hover:text-foreground flex items-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Agents
-        </Button>
-        <Button 
-          variant="ghost"
-          size="sm" 
-          onClick={onCancel}
-          className="text-muted-foreground hover:text-foreground lg:hidden"
-        >
-          <X className="w-4 h-4" />
-        </Button>
-      </div>
+      <AgentNavigationHeader onCancel={onCancel} />
 
       {/* Enhanced Progress Header */}
       <Card className="matrix-card border-primary/20 backdrop-blur-md">

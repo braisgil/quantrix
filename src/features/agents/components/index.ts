@@ -1,5 +1,27 @@
-// Export main agent components
+// Stats components
 export { default as AgentStatsCards } from './agents-stats-cards';
-export { default as AgentsList } from './agents-list';
-export { default as AgentListItem } from './agent-list-item';
-export { default as AgentsEmptyState } from './agents-empty-state';
+
+// List view components
+export { default as AgentsList } from './list-view/agents-list';
+export { default as AgentsListHeader } from './list-view/agents-list-header';
+export { default as AgentListItem } from './list-view/agent-list-item';
+export { default as AgentsEmptyState } from './list-view/agents-empty-state';
+
+// Detail view components
+export { AgentHeader } from './detail-view/agent-header';
+export { AgentDetailsCard } from './detail-view/agent-details-card';
+export { AgentSpecializationCard } from './detail-view/agent-specialization-card';
+export { AgentCustomConfigCard } from './detail-view/agent-custom-config-card';
+export { AgentActionButtons } from './detail-view/agent-action-buttons';
+
+// Shared components  
+export { 
+  AgentSkeleton, 
+  ErrorBoundary, 
+  AgentNavigationHeader,
+  type AgentSkeletonVariant 
+} from './shared';
+
+// Views
+export { AgentListView } from '../views/agent-list-view';
+export { AgentDetailView } from '../views/agent-detail-view';

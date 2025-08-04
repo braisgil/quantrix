@@ -2,8 +2,9 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Settings } from 'lucide-react';
-import type { Agent } from '../types';
-import { getAgentIcon, getAgentDescription, formatCategoryName } from '../utils';
+import type { Agent } from '../../types';
+import { getAgentIcon, getAgentDescription } from '../../utils/agent-helpers';
+import { formatCategoryName } from '../../utils/category-helpers';
 
 interface AgentListItemProps {
   agent: Agent;
