@@ -1,46 +1,27 @@
-'use client';
+import { Suspense } from 'react';
+import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { getQueryClient } from '@/trpc/server';
+import { trpc } from '@/trpc/server';
+import { AgentListView } from '@/features/agents/components';
+import { AgentSkeleton } from '@/features/agents/components/shared/agent-skeleton';
 
-import React, { useState } from 'react';
-import AgentsListHeader from '@/features/agents/components/agents-list-header';
-import { AgentWizard } from '@/features/agents/components/wizard';
+export default async function AgentsPage() {
+  const queryClient = getQueryClient();
 
-const Page: React.FC = () => {
-  const [showWizard, setShowWizard] = useState(false);
-
-  const handleCreateAgent = () => {
-    setShowWizard(true);
-  };
-
-  const handleWizardSuccess = () => {
-    setShowWizard(false);
-  };
-
-  const handleWizardCancel = () => {
-    setShowWizard(false);
-  };
-
-  if (showWizard) {
-    return (
-      <div className="space-y-0">
-        <AgentWizard 
-          onSuccess={handleWizardSuccess}
-          onCancel={handleWizardCancel}
-        />
-      </div>
+  // Try to prefetch agents data on the server for optimal performance
+  try {
+    await queryClient.prefetchQuery(
+      trpc.agents.getMany.queryOptions({})
     );
+  } catch {
+    // Prefetch failed - client will handle it gracefully
   }
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <AgentsListHeader onCreateAgent={handleCreateAgent} />
-      
-      {/* Agents List - TODO: Add actual agents list here */}
-      <div className="matrix-card p-8 text-center text-muted-foreground">
-        <p>No agents created yet. Start by creating your first neural companion!</p>
-      </div>
-    </div>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense fallback={<AgentSkeleton variant="list" />}>
+        <AgentListView />
+      </Suspense>
+    </HydrationBoundary>
   );
-};
-
-export default Page;
+}

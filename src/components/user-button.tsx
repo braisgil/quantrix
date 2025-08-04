@@ -3,8 +3,7 @@ import { ChevronDownIcon, CreditCardIcon, LogOutIcon, User } from "lucide-react"
 
 import { authClient } from "@/lib/auth-client";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-// import { GeneratedAvatar } from "@/components/generated-avatar";
+
 import {
   DropdownMenu,
   DropdownMenuContent,

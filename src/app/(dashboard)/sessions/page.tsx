@@ -1,8 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Plus, Code, Brain, Zap } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 const Page: React.FC = () => {
   return (
