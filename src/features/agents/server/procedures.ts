@@ -1,7 +1,8 @@
 import { agents } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { agentsInsertSchema } from "../schema";
-import { and, getTableColumns, desc, eq } from "drizzle-orm";
+import { and, getTableColumns, desc, eq, ilike } from "drizzle-orm";
+import z from "zod";
 
 export const agentsRouter = createTRPCRouter({
   create: protectedProcedure
@@ -18,7 +19,12 @@ export const agentsRouter = createTRPCRouter({
     return createdAgent;
   }),
   getMany: protectedProcedure
-  .query(async ({ ctx }) => {
+  .input(
+    z.object({
+      search: z.string().nullish()
+    })
+  )
+  .query(async ({ ctx, input }) => {
     const data = await ctx.db
       .select({
         ...getTableColumns(agents),
@@ -27,6 +33,7 @@ export const agentsRouter = createTRPCRouter({
       .where(
         and(
           eq(agents.userId, ctx.auth.user.id),
+          input.search ? ilike(agents.name, `%${input.search}%`) : undefined,
         )
       )
       .orderBy(desc(agents.createdAt), desc(agents.id))

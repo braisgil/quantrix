@@ -1,14 +1,12 @@
+'use client'
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { 
-  Search, 
-  Users, 
   Code, 
-  MessageSquare, 
   Zap,
-  Brain,
-  Terminal
+  Search,
+  Terminal,
+  Loader2
 } from "lucide-react";
 
 import { 
@@ -19,7 +17,8 @@ import {
   CommandEmpty,
   CommandDialog
 } from "@/components/ui/command";
-import { useTRPC } from "@/trpc/client";
+import { useQueryAgents } from "@/features/agents/api/use-query-agents";
+import { useDebouncedSearch } from "@/hooks/use-debounced-search";
 
 interface Props {
   open: boolean;
@@ -28,28 +27,8 @@ interface Props {
 
 export const DashboardCommand = ({ open, setOpen }: Props) => {
   const router = useRouter();
-  const [search, setSearch] = useState("");
-
-  // Placeholder data for demonstration - replace with actual TRPC queries
-  const mockSessions = [
-    { id: "1", name: "Spanish Practice Session", type: "session" },
-    { id: "2", name: "IELTS Writing Help", type: "session" },
-    { id: "3", name: "Career Planning Chat", type: "session" },
-  ];
-
-  const mockAgents = [
-    { id: "1", name: "Alex - Language Tutor", type: "agent", avatar: "A" },
-    { id: "2", name: "Emma - Study Coach", type: "agent", avatar: "E" },
-    { id: "3", name: "Sam - Career Guide", type: "agent", avatar: "S" },
-  ];
-
-  const filteredSessions = mockSessions.filter(session =>
-    session.name.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const filteredAgents = mockAgents.filter(agent =>
-    agent.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const { search, debouncedSearch, setSearch, isSearching } = useDebouncedSearch();
+  const agents = useQueryAgents(debouncedSearch);
 
   return (
     <CommandDialog 
@@ -58,7 +37,11 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
       className="matrix-card border-primary/30"
     >
       <div className="flex items-center border-b border-primary/20 px-3">
-        <Terminal className="mr-2 h-4 w-4 shrink-0 text-primary" />
+        {isSearching ? (
+          <Loader2 className="mr-2 h-4 w-4 shrink-0 text-primary animate-spin" />
+        ) : (
+          <Terminal className="mr-2 h-4 w-4 shrink-0 text-primary" />
+        )}
         <CommandInput
           placeholder="Search companions, sessions..."
           value={search}
@@ -70,7 +53,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
         <CommandEmpty className="py-6 text-center text-sm">
           <div className="flex flex-col items-center space-y-2">
             <div className="p-2 bg-primary/10 rounded-lg matrix-glow">
-              <Brain className="h-6 w-6 text-primary" />
+              <Search className="h-6 w-6 text-primary" />
             </div>
             <span className="text-muted-foreground">
               No results found
@@ -81,7 +64,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
           </div>
         </CommandEmpty>
         
-        {filteredSessions.length > 0 && (
+        {/*filteredSessions.length > 0 && (
           <CommandGroup heading="Recent Sessions">
             {filteredSessions.map((session) => (
               <CommandItem
@@ -99,11 +82,11 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
               </CommandItem>
             ))}
           </CommandGroup>
-        )}
+        ) */}
 
-        {filteredAgents.length > 0 && (
+        {agents.data?.items && agents.data?.items.length > 0 && (
           <CommandGroup heading="AI Companions">
-            {filteredAgents.map((agent) => (
+            {agents.data?.items.map((agent) => (
               <CommandItem
                 onSelect={() => {
                   router.push(`/agents/${agent.id}`);
@@ -117,7 +100,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="w-6 h-6 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center text-xs font-bold text-black">
-                    {agent.avatar}
+                    {agent.name.charAt(0).toUpperCase()}
                   </div>
                   <span className="text-sm font-medium">{agent.name}</span>
                 </div>
@@ -126,7 +109,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
           </CommandGroup>
         )}
 
-        {search && filteredSessions.length === 0 && filteredAgents.length === 0 && (
+        {search && agents.data?.items.length === 0 && (
           <CommandGroup heading="Quick Actions">
             <CommandItem
               onSelect={() => {
