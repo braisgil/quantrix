@@ -1,5 +1,8 @@
 import React from 'react';
 import { useQueryAgents } from '../api/use-query-agents';
+import type { Agent } from '../types';
+import { calculateAgentStats } from '../utils';
+import { AgentStatsCards, AgentsList, AgentsEmptyState } from '../components';
 
 const AgentsPageView: React.FC = () => {
   // With useSuspenseQuery, data is guaranteed to be defined
@@ -7,20 +10,32 @@ const AgentsPageView: React.FC = () => {
   // Errors bubble up to error boundaries automatically
   const { data: agentsData } = useQueryAgents();
 
+  const agents = agentsData.items || [];
+  const { activeAgents, totalSessions, totalUptime } = calculateAgentStats(agents);
+
+  const handleConfigureAgent = (agent: Agent) => {
+    // TODO: Implement agent configuration
+    console.log('Configure agent:', agent.name);
+  };
+
   return (
-    <div className="matrix-card p-8">
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Agents Data:</h3>
-        {agentsData.items && agentsData.items.length > 0 ? (
-          <pre className="bg-muted p-4 rounded-lg overflow-auto text-sm">
-            {JSON.stringify(agentsData.items, null, 2)}
-          </pre>
-        ) : (
-          <div className="text-center text-muted-foreground py-8">
-            <p>No agents created yet. Start by creating your first neural companion!</p>
-          </div>
-        )}
-      </div>
+    <div className="space-y-8">
+      {/* Stats Cards */}
+      <AgentStatsCards
+        activeAgents={activeAgents}
+        totalSessions={totalSessions}
+        totalUptime={totalUptime}
+      />
+
+      {/* Agents List or Empty State */}
+      {agents.length > 0 ? (
+        <AgentsList 
+          agents={agents}
+          onConfigureAgent={handleConfigureAgent}
+        />
+      ) : (
+        <AgentsEmptyState />
+      )}
     </div>
   );
 };
