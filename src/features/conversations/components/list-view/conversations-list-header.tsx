@@ -10,7 +10,7 @@ interface ConversationsListHeaderProps {
 
 const ConversationsListHeader: React.FC<ConversationsListHeaderProps> = ({ onCreateConversation }) => {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
       <div>
         <h1 className="text-3xl font-bold quantrix-gradient matrix-text-glow">
           My Conversations
@@ -20,11 +20,11 @@ const ConversationsListHeader: React.FC<ConversationsListHeaderProps> = ({ onCre
         </p>
       </div>
       <Button 
-        className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow" 
+        className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow w-full md:w-auto" 
         onClick={onCreateConversation}
       >
         <Plus className="w-4 h-4 mr-2" />
-        Start Conversation
+        Create Conversation
       </Button> 
     </div>
   );

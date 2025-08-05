@@ -8,8 +8,14 @@ export { useQueryConversation } from './api/use-query-conversation';
 export { useQueryConversations } from './api/use-query-conversations';
 export { useSearchConversations } from './api/use-search-conversations';
 
+// Wizard hooks
+export { useWizardState } from './hooks/use-wizard-state';
+
 // Main view components
 export { ConversationListView, ConversationDetailView } from './views';
+
+// Wizard components
+export { ConversationWizard } from './components/wizard';
 
 // Individual components for custom layouts
 export {
