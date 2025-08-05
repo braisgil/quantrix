@@ -10,11 +10,11 @@ import { useTRPC } from "@/trpc/client";
 // Import refactored components
 import { useAgentWizard } from "../hooks/use-agent-wizard";
 import { useStepValidation } from "../hooks/use-step-validation";
-import { StepBasicInfo } from "./steps/StepBasicInfo";
-import { StepCategorySelection } from "./steps/StepCategorySelection";
-import { StepSubcategorySelection } from "./steps/StepSubcategorySelection";
-import { StepSpecificOption } from "./steps/StepSpecificOption";
-import { StepCustomRules } from "./steps/StepCustomRules";
+import { StepBasicInfo } from "./steps/step-basic-info";
+import { StepCategorySelection } from "./steps/step-category-selection";
+import { StepSubcategorySelection } from "./steps/step-subcategory-selection";
+import { StepSpecificOption } from "./steps/step-specific-option";
+import { StepCustomRules } from "./steps/step-custom-rules";
 import { STEP_CONFIGS, getTotalSteps } from "../lib/step-config";
 import { getProgressPercentage } from "../lib/wizard-utils";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,6 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
     prevStep,
     resetWizard,
     getFormData,
-    generateInstructions
   } = useAgentWizard();
 
   const { canProceed } = useStepValidation(wizardState);
@@ -281,71 +280,6 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
           </div>
         </CardFooter>
       </Card>
-
-      {/* Enhanced Preview Section (only on final step) */}
-      {isLastStep && canProceed(currentStep) && (
-        <Card className="matrix-card border-primary/20 backdrop-blur-md">
-          <CardContent className="pt-6 pb-4">
-            <div className="text-center mb-6">
-              <div className="flex items-center justify-center mb-3">
-                <div className="relative matrix-glow">
-                  <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center matrix-border">
-                    <Sparkles className="w-6 h-6 text-black" />
-                  </div>
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse"></div>
-                </div>
-              </div>
-              <h3 className="text-lg sm:text-xl font-bold quantrix-gradient matrix-text-glow mb-2">
-                Review Your AI Companion
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Take a final look at your personalized AI assistant&apos;s configuration
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Companion Name</h4>
-                  <div className="p-3 bg-primary/10 rounded-lg matrix-border">
-                    <div className="text-base sm:text-lg font-bold quantrix-gradient break-words">
-                      {wizardState.name}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-primary mb-2">Area of Focus</h4>
-                  <div className="p-3 bg-primary/10 rounded-lg matrix-border">
-                    <div className="font-medium break-words">
-                      {wizardState.specificOption}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold text-primary mb-2">Instructions & Guidelines</h4>
-                <div className="p-3 bg-primary/5 rounded-lg matrix-border max-h-48 overflow-y-auto">
-                  <pre className="text-xs text-muted-foreground whitespace-pre-wrap font-mono break-words">
-                    {generateInstructions()}
-                  </pre>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 p-4 bg-gradient-to-r from-primary/20 to-primary/10 rounded-lg border border-primary/30">
-              <div className="flex items-center justify-center space-x-2 text-center">
-                <Sparkles className="w-4 h-4 text-primary animate-pulse flex-shrink-0" />
-                <span className="text-sm font-medium text-primary">
-                  Configuration complete • Personality settings applied • Ready to create your companion
-                </span>
-                <Sparkles className="w-4 h-4 text-primary animate-pulse flex-shrink-0" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };

@@ -1,9 +1,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Zap } from "lucide-react";
 import { AGENT_CATEGORIES } from "@/constants/agent-categories";
-import { WizardLayout } from "../shared/WizardLayout";
-import { SelectionGrid } from "../shared/SelectionGrid";
-import { OptionCard } from "../shared/OptionCard";
+import { WizardLayout } from "../shared/wizard-layout";
+import { SelectionGrid } from "../shared/selection-grid";
+import { OptionCard } from "../shared/option-card";
 import type { StepProps, SubcategoryData } from "../../types/wizard";
 import { useSelectionState } from "../../hooks/use-selection-state";
 import { specificOptionIconResolver } from "../../lib/icon-mappings";

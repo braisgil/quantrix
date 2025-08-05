@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { StepHeader } from "./StepHeader";
+import { StepHeader } from "./step-header";
 import type { StepHeaderProps } from "../../types/wizard";
 
 interface WizardLayoutProps extends StepHeaderProps {

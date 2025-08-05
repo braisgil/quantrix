@@ -9,7 +9,7 @@ import { useTRPC } from "@/trpc/client";
 // Import refactored components
 import { useConversationWizard } from "../hooks/use-conversation-wizard";
 import { useStepValidation } from "../hooks/use-step-validation";
-import { StepConversationDetails } from "./steps/StepConversationDetails";
+import { StepConversationDetails } from "./steps/step-conversation-details";
 import { STEP_CONFIGS } from "../lib/step-config";
 import { cn } from "@/lib/utils";
 import { ConversationNavigationHeader } from "../../shared/conversation-navigation-header";

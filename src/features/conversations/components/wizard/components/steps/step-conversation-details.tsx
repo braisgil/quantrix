@@ -7,11 +7,12 @@ import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { format } from "date-fns";
-import { WizardLayout } from "../shared/WizardLayout";
+import { WizardLayout } from "../shared/wizard-layout";
 import { useSearchAgents } from "@/features/agents/api/use-search-agents";
 import { useDebouncedSearch } from "@/hooks/use-debounced-search";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { StepProps } from "../../types/wizard";
+import { formatCategoryName } from "@/features/agents/utils/category-helpers";
 
 export const StepConversationDetails = ({ wizardState, updateWizardState }: StepProps) => {
   const [isAgentPopoverOpen, setIsAgentPopoverOpen] = useState(false);
@@ -166,7 +167,7 @@ export const StepConversationDetails = ({ wizardState, updateWizardState }: Step
                                   {agent.name}
                                 </p>
                                 <p className="text-xs text-muted-foreground group-hover:text-muted-foreground/80 transition-colors duration-200">
-                                  {agent.category}
+                                  {formatCategoryName(agent.category)}
                                 </p>
                               </div>
                             </div>

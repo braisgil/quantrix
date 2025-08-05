@@ -5,7 +5,7 @@ import type { AgentsGetMany } from '../types';
 import { calculateAgentStats } from '../utils/agent-helpers';
 import { AgentStatsCards, AgentsList, AgentsEmptyState, AgentsListHeader } from '../components';
 import { useWizardState } from '../hooks/use-wizard-state';
-import { AgentWizard } from '../components/wizard/components/AgentWizard';
+import { AgentWizard } from '../components/wizard/components/agent-wizard';
 
 export const AgentListView = () => {
   const { showWizard, openWizard, closeWizard } = useWizardState();
