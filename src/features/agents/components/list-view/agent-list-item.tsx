@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Settings } from 'lucide-react';
+import { Settings, Clock, MessageSquare } from 'lucide-react';
 import type { AgentsGetMany } from '../../types';
-import { getAgentIcon, getAgentDescription } from '../../utils/agent-helpers';
+import { getAgentIcon, formatAgentTotalDuration } from '../../utils/agent-helpers';
 import { formatCategoryName } from '../../utils/category-helpers';
 
 interface AgentListItemProps {
@@ -29,9 +29,6 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
         </div>
         <div className="flex-1">
           <h3 className="font-semibold text-foreground">{agent.name}</h3>
-          <p className="text-sm text-muted-foreground">
-            {getAgentDescription(agent)}
-          </p>
           <div className="flex items-center gap-2 mt-1">
             <Badge variant="outline" className="text-xs">
               {formatCategoryName(agent.category)}
@@ -40,12 +37,19 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
               {formatCategoryName(agent.subcategory)}
             </Badge>
           </div>
+          <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <MessageSquare className="w-3 h-3" />
+              <span>{agent.conversationCount} conversation{agent.conversationCount !== 1 ? 's' : ''}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Clock className="w-3 h-3" />
+              <span>{formatAgentTotalDuration(agent.totalDuration)}</span>
+            </div>
+          </div>
         </div>
       </div>
       <div className="flex items-center space-x-3">
-        <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30">
-          Active
-        </Badge>
         <Button 
           size="sm" 
           variant="outline" 

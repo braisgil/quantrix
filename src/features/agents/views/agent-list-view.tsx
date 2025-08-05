@@ -11,7 +11,7 @@ export const AgentListView = () => {
   const { showWizard, openWizard, closeWizard } = useWizardState();
   const { data: agentsData } = useQueryAgents();
   const agents = agentsData.items || [];
-  const { activeAgents, totalSessions, totalUptime } = calculateAgentStats(agents);
+  const { activeAgents, totalConversations, totalDurationFormatted } = calculateAgentStats(agents);
 
   if (showWizard) {
     return (
@@ -35,8 +35,8 @@ export const AgentListView = () => {
       <div className="space-y-8">
         <AgentStatsCards
           activeAgents={activeAgents}
-          totalSessions={totalSessions}
-          totalUptime={totalUptime}
+          totalConversations={totalConversations}
+          totalDurationFormatted={totalDurationFormatted}
         />
 
         {agents.length > 0 ? (
