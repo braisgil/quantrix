@@ -22,6 +22,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { DashboardTrial } from "../../features/dashboard/components/dashboard-trial";
 import { DashboardUserButton } from "../user-button";
@@ -34,8 +35,8 @@ const neuralSections = [
   },
   {
     icon: Users,
-    label: "Neural Sessions",
-    href: "/sessions",
+    label: "Conversations",
+    href: "/conversations",
   },
   {
     icon: Code,
@@ -52,13 +53,29 @@ const quantumSections = [
   },
 ];
 
+// Custom Link component that closes mobile sidebar on click
+const MobileAwareLink = ({ href, children, className, ...props }: React.ComponentProps<typeof Link>) => {
+  const { setOpenMobile } = useSidebar();
+  
+  const handleClick = () => {
+    // Close mobile sidebar when link is clicked
+    setOpenMobile(false);
+  };
+
+  return (
+    <Link href={href} onClick={handleClick} className={className} {...props}>
+      {children}
+    </Link>
+  );
+};
+
 export const SidebarCustom = () => {
   const pathname = usePathname();
 
   return (
     <Sidebar className="border-r border-primary/20 bg-background/95 backdrop-blur-md">
       <SidebarHeader className="text-sidebar-accent-foreground p-4">
-        <Link href="/" className="flex items-center space-x-3">
+        <MobileAwareLink href="/" className="flex items-center space-x-3">
           <div className="relative matrix-glow">
             <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center matrix-border">
               <Code className="w-6 h-6 text-black" />
@@ -71,7 +88,7 @@ export const SidebarCustom = () => {
           <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
             BETA
           </Badge>
-        </Link>
+        </MobileAwareLink>
       </SidebarHeader>
       
       <div className="px-4">
@@ -92,7 +109,7 @@ export const SidebarCustom = () => {
                     )}
                     isActive={pathname === item.href}
                   >
-                    <Link href={item.href} className="flex items-center space-x-3 p-3">
+                    <MobileAwareLink href={item.href} className="flex items-center space-x-3 p-3">
                       <div className={cn(
                         "p-2 rounded-lg transition-all duration-300",
                         pathname === item.href 
@@ -112,7 +129,7 @@ export const SidebarCustom = () => {
                       )}>
                         {item.label}
                       </span>
-                    </Link>
+                    </MobileAwareLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -137,7 +154,7 @@ export const SidebarCustom = () => {
                     )}
                     isActive={pathname === item.href}
                   >
-                    <Link href={item.href} className="flex items-center space-x-3 p-3">
+                    <MobileAwareLink href={item.href} className="flex items-center space-x-3 p-3">
                       <div className={cn(
                         "p-2 rounded-lg transition-all duration-300",
                         pathname === item.href 
@@ -157,7 +174,7 @@ export const SidebarCustom = () => {
                       )}>
                         {item.label}
                       </span>
-                    </Link>
+                    </MobileAwareLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

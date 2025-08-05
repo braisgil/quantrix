@@ -1,9 +1,9 @@
 import { Network } from "lucide-react";
 import { AGENT_CATEGORIES } from "@/constants/agent-categories";
-import { WizardLayout } from "../shared/WizardLayout";
-import { SelectionGrid } from "../shared/SelectionGrid";
-import { OptionCard } from "../shared/OptionCard";
-import { ProgressSummary } from "../shared/ProgressSummary";
+import { WizardLayout } from "../shared/wizard-layout";
+import { SelectionGrid } from "../shared/selection-grid";
+import { OptionCard } from "../shared/option-card";
+import { ProgressSummary } from "../shared/progress-summary";
 import type { StepProps, SubcategoryData, SubSubcategoryData } from "../../types/wizard";
 import { useSelectionState } from "../../hooks/use-selection-state";
 import { subcategoryIconResolver } from "../../lib/icon-mappings";

@@ -2,13 +2,13 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Settings } from 'lucide-react';
-import type { Agent } from '../../types';
+import type { AgentsGetMany } from '../../types';
 import { getAgentIcon, getAgentDescription } from '../../utils/agent-helpers';
 import { formatCategoryName } from '../../utils/category-helpers';
 
 interface AgentListItemProps {
-  agent: Agent;
-  onConfigure?: (agent: Agent) => void;
+  agent: AgentsGetMany[number];
+  onConfigure?: (agent: AgentsGetMany[number]) => void;
 }
 
 const AgentListItem: React.FC<AgentListItemProps> = ({ 

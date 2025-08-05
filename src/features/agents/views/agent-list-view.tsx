@@ -1,11 +1,11 @@
 'use client';
 
 import { useQueryAgents } from '../api/use-query-agents';
-import type { Agent } from '../types';
+import type { AgentsGetMany } from '../types';
 import { calculateAgentStats } from '../utils/agent-helpers';
 import { AgentStatsCards, AgentsList, AgentsEmptyState, AgentsListHeader } from '../components';
 import { useWizardState } from '../hooks/use-wizard-state';
-import { AgentWizard } from '../components/wizard/components/AgentWizard';
+import { AgentWizard } from '../components/wizard/components/agent-wizard';
 
 export const AgentListView = () => {
   const { showWizard, openWizard, closeWizard } = useWizardState();
@@ -24,7 +24,7 @@ export const AgentListView = () => {
     );
   }
 
-  const handleConfigureAgent = (agent: Agent) => {
+  const handleConfigureAgent = (agent: AgentsGetMany[number]) => {
     // TODO: Implement agent configuration
     console.log('Configure agent:', agent.name);
   };

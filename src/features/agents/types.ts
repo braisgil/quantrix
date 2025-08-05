@@ -1,3 +1,6 @@
+import { AppRouter } from "@/trpc/routers/_app";
+import { inferRouterOutputs } from "@trpc/server";
+
 // Type for agent data from the database
 export interface Agent {
   id: string;
@@ -14,3 +17,6 @@ export interface Agent {
   createdAt: string;
   updatedAt: string;
 }
+
+export type AgentsGetMany = inferRouterOutputs<AppRouter>["agents"]["getMany"]["items"];
+export type AgentsGetOne = inferRouterOutputs<AppRouter>["agents"]["getOne"];

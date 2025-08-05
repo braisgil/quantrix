@@ -1,11 +1,11 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import type { Agent } from '../../types';
+import type { AgentsGetMany } from '../../types';
 import AgentListItem from './agent-list-item';
 
 interface AgentsListProps {
-  agents: Agent[];
-  onConfigureAgent?: (agent: Agent) => void;
+  agents: AgentsGetMany;
+  onConfigureAgent?: (agent: AgentsGetMany[number]) => void;
 }
 
 const AgentsList: React.FC<AgentsListProps> = ({ 

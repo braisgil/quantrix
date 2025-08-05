@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Bot, Zap } from "lucide-react";
-import { WizardLayout } from "../shared/WizardLayout";
+import { WizardLayout } from "../shared/wizard-layout";
 import type { StepProps } from "../../types/wizard";
 import { useSelectionState } from "../../hooks/use-selection-state";
 
