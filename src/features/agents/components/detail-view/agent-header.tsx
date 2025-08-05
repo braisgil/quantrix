@@ -36,11 +36,11 @@ export const AgentHeader = ({ agent }: AgentHeaderProps) => {
           <Brain className="h-3 w-3 mr-1" />
           {formatCategoryName(agent.category)}
         </Badge>
-        <Badge variant="outline" className="border-primary/30">
+        <Badge variant="secondary" className="matrix-border matrix-glow">
           <Target className="h-3 w-3 mr-1" />
           {formatCategoryName(agent.subcategory)}
         </Badge>
-        <Badge variant="outline" className="border-primary/20">
+        <Badge variant="secondary" className="matrix-border matrix-glow">
           <Sparkles className="h-3 w-3 mr-1" />
           {getSubSubcategoryName(agent.category, agent.subcategory, agent.subSubcategory)}
         </Badge>

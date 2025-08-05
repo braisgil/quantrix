@@ -7,6 +7,7 @@ export const useAgentWizard = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [wizardState, setWizardState] = useState<WizardState>({
     name: "",
+    description: "",
     category: null,
     subcategory: null,
     subSubcategory: null,
@@ -41,6 +42,8 @@ export const useAgentWizard = () => {
 
 ## Core Identity & Purpose
 You are ${wizardState.name}, an AI companion specialized in **${categoryData.name}** with a specific focus on **${subcategoryData.name}**.
+
+${wizardState.description ? `**Purpose**: ${wizardState.description}` : ''}
 
 Your primary expertise and responsibility is helping users with: **${wizardState.specificOption}**
 
@@ -174,6 +177,7 @@ Your effectiveness will be measured by:
     setCurrentStep(0);
     setWizardState({
       name: "",
+      description: "",
       category: null,
       subcategory: null,
       subSubcategory: null,
@@ -190,6 +194,7 @@ Your effectiveness will be measured by:
     const instructions = generateInstructions();
     return {
       name: wizardState.name,
+      description: wizardState.description || "",
       instructions,
       category: wizardState.category || "",
       subcategory: wizardState.subcategory || "",

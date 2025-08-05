@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const agentsInsertSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
+  description: z.string().max(75, { message: "Description must be 75 characters or less" }).optional(),
   instructions: z.string().min(1, { message: "Instructions are required" }),
   category: z.string().min(1, { message: "Category is required" }),
   subcategory: z.string().min(1, { message: "Subcategory is required" }),

@@ -6,7 +6,7 @@ import type { StepProps } from "../../types/wizard";
 import { useSelectionState } from "../../hooks/use-selection-state";
 
 export const StepBasicInfo = ({ wizardState, updateWizardState }: StepProps) => {
-  const { updateName } = useSelectionState({ wizardState, updateWizardState });
+  const { updateName, updateDescription } = useSelectionState({ wizardState, updateWizardState });
 
   return (
     <WizardLayout
@@ -33,9 +33,33 @@ export const StepBasicInfo = ({ wizardState, updateWizardState }: StepProps) => 
           </p>
         </div>
 
+        {/* Description Input Section */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="agent-description" className="text-base font-semibold text-primary matrix-text-glow">
+              Agent Purpose
+            </Label>
+            <span className={`text-xs ${wizardState.description.length > 70 ? 'text-destructive' : 'text-muted-foreground'}`}>
+              {wizardState.description.length}/70
+            </span>
+          </div>
+            <Input
+              id="agent-description"
+              type="text"
+              placeholder="Define the specific purpose this AI companion serves..."
+              value={wizardState.description}
+              onChange={(e) => updateDescription(e.target.value)}
+              maxLength={70}
+              className="text-base p-3 h-12 border-primary/30 focus:border-primary focus:ring-primary/50 bg-background/50 backdrop-blur-sm matrix-border transition-all duration-300"
+            />
+            <p className="text-sm text-muted-foreground">
+              Define their purpose clearly - this appears in your agent list to help you identify your companions
+            </p>
+        </div>
+
         {/* Guidelines and Examples */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Guidelines */}
+          {/* Left Side - Naming Guidelines */}
           <div className="matrix-card border-primary/10 p-4 rounded-lg bg-primary/5">
             <div className="flex items-center mb-3">
               <Zap className="w-4 h-4 text-primary mr-2" />
@@ -54,27 +78,61 @@ export const StepBasicInfo = ({ wizardState, updateWizardState }: StepProps) => 
                 </li>
               ))}
             </ul>
+            
+            <div className="mt-4 p-3 bg-background/30 rounded border border-primary/20">
+              <h5 className="font-medium text-primary mb-2">Example Names:</h5>
+              <ul className="space-y-1 text-xs text-muted-foreground">
+                {[
+                  "Alex - My React Tutor",
+                  "Emma - IELTS Study Buddy",
+                  "Mike - Career Coach",
+                  "Code Helper"
+                ].map((example, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="text-primary mr-2 mt-0.5">→</span>
+                    <span>&quot;{example}&quot;</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          {/* Examples */}
+          {/* Right Side - Description Guidelines */}
           <div className="matrix-card border-primary/10 p-4 rounded-lg bg-primary/5">
             <div className="flex items-center mb-3">
-              <Bot className="w-4 h-4 text-primary mr-2" />
-              <h4 className="font-semibold text-primary">Example Names</h4>
+              <Zap className="w-4 h-4 text-primary mr-2" />
+              <h4 className="font-semibold text-primary">Description Guidelines</h4>
             </div>
             <ul className="space-y-2 text-sm text-muted-foreground">
               {[
-                "Alex - My React Tutor",
-                "Emma - IELTS Study Buddy",
-                "Mike - Career Coach",
-                "Code Helper"
-              ].map((example, index) => (
+                "Define the specific purpose this agent serves",
+                "Focus on what problems or tasks they'll help solve",
+                "Use action words to describe their core function",
+                "Keep it concise but clear and specific"
+              ].map((guideline, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="text-primary mr-2 mt-0.5">→</span>
-                  <span>&quot;{example}&quot;</span>
+                  <span className="text-primary mr-2 mt-0.5">•</span>
+                  <span>{guideline}</span>
                 </li>
               ))}
             </ul>
+            
+            <div className="mt-4 p-3 bg-background/30 rounded border border-primary/20">
+              <h5 className="font-medium text-primary mb-2">Example Descriptions:</h5>
+              <ul className="space-y-1 text-xs text-muted-foreground">
+                {[
+                  "Solves React development problems and debugging issues",
+                  "Prepares students for IELTS exams with targeted practice",
+                  "Guides career transitions and interview success",
+                  "Teaches programming concepts through code review"
+                ].map((example, index) => (
+                  <li key={index} className="flex items-start">
+                    <span className="text-primary mr-2 mt-0.5">→</span>
+                    <span>&quot;{example}&quot;</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

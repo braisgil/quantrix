@@ -51,6 +51,10 @@ export const useSelectionState = ({ wizardState, updateWizardState }: UseSelecti
     updateWizardState({ name });
   }, [updateWizardState]);
 
+  const updateDescription = useCallback((description: string) => {
+    updateWizardState({ description });
+  }, [updateWizardState]);
+
   return {
     selectCategory,
     selectSubcategory,
@@ -59,6 +63,7 @@ export const useSelectionState = ({ wizardState, updateWizardState }: UseSelecti
     selectCustomRule1,
     selectCustomRule2,
     updateName,
+    updateDescription,
     
     // Selection checks
     isSelected: {
