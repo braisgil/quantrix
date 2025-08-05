@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Settings, Clock, MessageSquare, Sparkles, Brain, Target } from 'lucide-react';
+import { Settings, Clock, MessageSquare, Sparkles, Brain, Target, ExternalLink } from 'lucide-react';
 import type { AgentsGetMany } from '../../types';
 import { getAgentIcon, formatAgentTotalDuration } from '../../utils/agent-helpers';
 import { formatCategoryName, getSubSubcategoryName } from '../../utils/category-helpers';
@@ -79,8 +79,8 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
           className="matrix-border hover:matrix-glow w-full sm:w-auto"
           onClick={handleConfigure}
         >
-          <Settings className="w-4 h-4" />
-          <span className="ml-2 sm:hidden">Configure</span>
+          <ExternalLink className="w-4 h-4" />
+          <span className="ml-2 sm:hidden">View</span>
         </Button>
       </div>
     </div>

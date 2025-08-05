@@ -40,7 +40,7 @@ const neuralSections = [
   },
   {
     icon: Code,
-    label: "AI Agents",
+    label: "Agents",
     href: "/agents",
   },
 ];
@@ -48,7 +48,7 @@ const neuralSections = [
 const quantumSections = [
   {
     icon: Zap,
-    label: "Quantum Upgrade",
+    label: "Upgrade",
     href: "/upgrade",
   },
 ];

@@ -15,9 +15,9 @@ const AgentsList: React.FC<AgentsListProps> = ({
   return (
     <Card className="matrix-card">
       <CardHeader>
-        <CardTitle className="text-xl">Your Neural Network</CardTitle>
+        <CardTitle className="text-xl">Agent Network</CardTitle>
         <CardDescription>
-          AI agents ready to enhance your digital experience
+          AI companions ready to enhance your digital experience
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
