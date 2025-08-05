@@ -1,7 +1,7 @@
 // Main feature exports - provides clean public API for agents feature
 
 // Core types
-export type { Agent } from './types';
+export type { Agent, AgentsGetMany, AgentsGetOne } from './types';
 
 // API hooks
 export { useQueryAgent } from './api/use-query-agent';

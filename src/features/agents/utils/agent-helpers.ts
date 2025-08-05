@@ -1,11 +1,11 @@
 import { getIconConfig } from '../components/wizard/lib/icon-mappings';
 import { formatCategoryName } from './category-helpers';
-import type { Agent } from '../types';
+import type { AgentsGetMany } from '../types';
 
 /**
  * Gets the appropriate icon component for an agent based on its category
  */
-export const getAgentIcon = (agent: Agent) => {
+export const getAgentIcon = (agent: AgentsGetMany[number]) => {
   const iconConfig = getIconConfig('subcategory', agent.category, agent.name);
   return iconConfig.component;
 };
@@ -13,7 +13,7 @@ export const getAgentIcon = (agent: Agent) => {
 /**
  * Generates a short description for an agent from its instructions or category
  */
-export const getAgentDescription = (agent: Agent) => {
+export const getAgentDescription = (agent: AgentsGetMany[number]) => {
   // Try to extract meaningful description from instructions or use category/subcategory
   if (agent.instructions && agent.instructions.length > 0) {
     const description = agent.instructions.substring(0, 60);
@@ -25,7 +25,7 @@ export const getAgentDescription = (agent: Agent) => {
 /**
  * Calculates agent statistics for dashboard display
  */
-export const calculateAgentStats = (agents: Agent[]) => {
+export const calculateAgentStats = (agents: AgentsGetMany) => {
   const activeAgents = agents.length; // For now, consider all agents as active
   const totalSessions = agents.length * 15; // Mock calculation - could be enhanced with real data
   const totalUptime = "99.9%"; // Mock uptime - could be calculated from real metrics

@@ -34,8 +34,8 @@ const neuralSections = [
   },
   {
     icon: Users,
-    label: "Neural Sessions",
-    href: "/sessions",
+    label: "Conversations",
+    href: "/conversations",
   },
   {
     icon: Code,
