@@ -5,6 +5,7 @@ import { inferRouterOutputs } from "@trpc/server";
 export interface Agent {
   id: string;
   name: string;
+  description: string | null;
   userId: string;
   instructions: string;
   category: string;

@@ -3,6 +3,7 @@
 import React from 'react';
 import type { ConversationGetMany } from '../../types';
 import ConversationListItem from './conversation-list-item';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 
 interface ConversationsListProps {
   conversations: ConversationGetMany;
@@ -14,7 +15,14 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
   onViewConversation,
 }) => {
   return (
-    <div className="space-y-4">
+    <Card className="matrix-card">
+      <CardHeader>
+        <CardTitle className="text-xl">Conversation List</CardTitle>
+        <CardDescription>
+          View your conversations with AI companions
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
       {conversations.map((conversation) => (
         <ConversationListItem
           key={conversation.id}
@@ -22,7 +30,8 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
           onViewConversation={onViewConversation}
         />
       ))}
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

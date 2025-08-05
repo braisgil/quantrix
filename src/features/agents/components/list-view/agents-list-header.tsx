@@ -16,7 +16,7 @@ const AgentsListHeader: React.FC<AgentsListHeaderProps> = ({ onCreateAgent }) =>
           My Agents
         </h1>
         <p className="text-muted-foreground mt-2">
-          Manage your neural network companions
+          Manage your network of AI companions
         </p>
       </div>
       <Button 

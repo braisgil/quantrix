@@ -81,9 +81,9 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
           {handleRetry && (
             <Button 
               onClick={handleRetry} 
-              variant="outline" 
+              variant="default" 
               size="sm"
-              className="matrix-glow"
+              className="matrix-button"
             >
               <RotateCcw className="h-4 w-4 mr-2" />
               Try Again

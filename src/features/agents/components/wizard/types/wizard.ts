@@ -5,6 +5,7 @@ export type { AgentCategoryId };
 export interface WizardState {
   // Basic info
   name: string;
+  description: string;
   
   // Category selection
   category: AgentCategoryId | null;

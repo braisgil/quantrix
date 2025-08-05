@@ -51,6 +51,11 @@
   --matrix-green-glow: rgba(0, 255, 65, 0.3);
   --matrix-green-soft: rgba(0, 255, 65, 0.1);
   
+  /* Line clamp utilities */
+  --line-clamp-1: 1;
+  --line-clamp-2: 2;
+  --line-clamp-3: 3;
+  
   /* Enhanced colors for better light theme readability */
   --matrix-green-readable: #00851c;  /* Much darker for better contrast */
   --matrix-green-readable-glow: rgba(0, 133, 28, 0.2);
@@ -428,6 +433,24 @@
     transform: scale(0.98);
   }
 
+  /* Matrix button mobile optimizations */
+  .matrix-button {
+    box-shadow: 0 0 5px var(--matrix-green-readable-glow);
+  }
+  
+  .matrix-button:hover {
+    box-shadow: 0 0 8px var(--matrix-green-readable-glow);
+    transform: none; /* Disable transform on mobile for better performance */
+  }
+  
+  .dark .matrix-button {
+    box-shadow: 0 0 6px var(--matrix-green-glow);
+  }
+  
+  .dark .matrix-button:hover {
+    box-shadow: 0 0 10px var(--matrix-green-glow);
+  }
+
   /* Reduce blur effects on mobile for better performance */
   .matrix-card {
     backdrop-filter: blur(5px);
@@ -446,6 +469,16 @@
     transition: none;
   }
 
+  /* Matrix button reduced motion */
+  .matrix-button::before {
+    animation: none;
+    transition: none;
+  }
+  
+  .matrix-button:hover {
+    transform: none;
+  }
+
   /* Only disable decorative animations, keep essential UI feedback like loading spinners */
   .matrix-glow,
   .matrix-text-glow,
@@ -458,6 +491,67 @@
   *:not([class*="animate-"]) {
     transition-duration: 0.15s !important;
   }
+}
+
+/* Matrix Button Styles */
+.matrix-button {
+  background: linear-gradient(135deg, var(--matrix-green-readable) 0%, #005c14 100%);
+  color: white;
+  border: 1px solid var(--matrix-green-readable);
+  box-shadow: 0 0 8px var(--matrix-green-readable-glow);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.matrix-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.matrix-button:hover {
+  background: linear-gradient(135deg, #005c14 0%, var(--matrix-green-readable) 100%);
+  box-shadow: 0 0 15px var(--matrix-green-readable-glow), 0 0 25px var(--matrix-green-readable-glow);
+  transform: translateY(-1px);
+}
+
+.matrix-button:hover::before {
+  left: 100%;
+}
+
+.matrix-button:active {
+  transform: translateY(0);
+  box-shadow: 0 0 5px var(--matrix-green-readable-glow);
+}
+
+.matrix-button:focus-visible {
+  outline: 2px solid var(--matrix-green-readable);
+  outline-offset: 2px;
+  box-shadow: 0 0 10px var(--matrix-green-readable-glow), 0 0 20px var(--matrix-green-readable-glow);
+}
+
+/* Dark theme matrix button */
+.dark .matrix-button {
+  background: linear-gradient(135deg, var(--matrix-green) 0%, var(--matrix-green-dark) 100%);
+  border: 1px solid var(--matrix-green);
+  box-shadow: 0 0 10px var(--matrix-green-glow);
+}
+
+.dark .matrix-button:hover {
+  background: linear-gradient(135deg, var(--matrix-green-dark) 0%, var(--matrix-green) 100%);
+  box-shadow: 0 0 20px var(--matrix-green-glow), 0 0 35px var(--matrix-green-glow);
+}
+
+.dark .matrix-button:focus-visible {
+  outline: 2px solid var(--matrix-green);
+  outline-offset: 2px;
+  box-shadow: 0 0 15px var(--matrix-green-glow), 0 0 30px var(--matrix-green-glow);
 }
 
 /* Enhanced focus states for accessibility */
@@ -531,4 +625,33 @@
     linear-gradient(var(--matrix-grid-dark) 1px, transparent 1px),
     linear-gradient(90deg, var(--matrix-grid-dark) 1px, transparent 1px);
   opacity: 0.5;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--line-clamp-1);
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--line-clamp-2);
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--line-clamp-3);
+}
+
+@layer base {
+  button:not([disabled]),
+  [role="button"]:not([disabled]) {
+    cursor: pointer;
+  }
 }

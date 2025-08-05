@@ -1,17 +1,17 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Brain, Zap, Activity } from 'lucide-react';
+import { Brain, Clock, MessageSquare } from 'lucide-react';
 
 interface AgentStatsCardsProps {
   activeAgents: number;
-  totalSessions: number;
-  totalUptime: string;
+  totalConversations: number;
+  totalDurationFormatted: string;
 }
 
 const AgentStatsCards: React.FC<AgentStatsCardsProps> = ({
   activeAgents,
-  totalSessions,
-  totalUptime,
+  totalConversations,
+  totalDurationFormatted,
 }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -34,14 +34,14 @@ const AgentStatsCards: React.FC<AgentStatsCardsProps> = ({
         <CardHeader className="pb-3">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-primary/10 rounded-lg matrix-glow">
-              <Activity className="w-5 h-5 text-primary" />
+              <MessageSquare className="w-5 h-5 text-primary" />
             </div>
-            <CardTitle className="text-lg">Total Sessions</CardTitle>
+            <CardTitle className="text-lg">Total Conversations</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-primary matrix-text-glow">{totalSessions}</div>
-          <p className="text-sm text-muted-foreground">Interactions completed</p>
+          <div className="text-2xl font-bold text-primary matrix-text-glow">{totalConversations}</div>
+          <p className="text-sm text-muted-foreground">Conversations completed</p>
         </CardContent>
       </Card>
 
@@ -49,14 +49,14 @@ const AgentStatsCards: React.FC<AgentStatsCardsProps> = ({
         <CardHeader className="pb-3">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-primary/10 rounded-lg matrix-glow">
-              <Zap className="w-5 h-5 text-primary" />
+              <Clock className="w-5 h-5 text-primary" />
             </div>
-            <CardTitle className="text-lg">System Uptime</CardTitle>
+            <CardTitle className="text-lg">Total Duration</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-primary matrix-text-glow">{totalUptime}</div>
-          <p className="text-sm text-muted-foreground">Matrix stability</p>
+          <div className="text-2xl font-bold text-primary matrix-text-glow">{totalDurationFormatted}</div>
+          <p className="text-sm text-muted-foreground">Time spent with agents</p>
         </CardContent>
       </Card>
     </div>

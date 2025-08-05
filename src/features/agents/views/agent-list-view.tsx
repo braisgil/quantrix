@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useQueryAgents } from '../api/use-query-agents';
 import type { AgentsGetMany } from '../types';
 import { calculateAgentStats } from '../utils/agent-helpers';
@@ -8,10 +9,11 @@ import { useWizardState } from '../hooks/use-wizard-state';
 import { AgentWizard } from '../components/wizard/components/agent-wizard';
 
 export const AgentListView = () => {
+  const router = useRouter();
   const { showWizard, openWizard, closeWizard } = useWizardState();
   const { data: agentsData } = useQueryAgents();
   const agents = agentsData.items || [];
-  const { activeAgents, totalSessions, totalUptime } = calculateAgentStats(agents);
+  const { activeAgents, totalConversations, totalDurationFormatted } = calculateAgentStats(agents);
 
   if (showWizard) {
     return (
@@ -25,8 +27,7 @@ export const AgentListView = () => {
   }
 
   const handleConfigureAgent = (agent: AgentsGetMany[number]) => {
-    // TODO: Implement agent configuration
-    console.log('Configure agent:', agent.name);
+    router.push(`/agents/${agent.id}`);
   };
 
   return (
@@ -35,8 +36,8 @@ export const AgentListView = () => {
       <div className="space-y-8">
         <AgentStatsCards
           activeAgents={activeAgents}
-          totalSessions={totalSessions}
-          totalUptime={totalUptime}
+          totalConversations={totalConversations}
+          totalDurationFormatted={totalDurationFormatted}
         />
 
         {agents.length > 0 ? (

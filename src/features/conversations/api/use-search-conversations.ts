@@ -1,19 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTRPC } from '@/trpc/client';
-import { useDebouncedSearch } from '@/hooks/use-debounced-search';
 
-export const useSearchConversations = () => {
+export const useSearchConversations = (search: string) => {
   const trpc = useTRPC();
-  const { search, setSearch, debouncedSearch } = useDebouncedSearch();
   
-  const query = useQuery({
-    ...trpc.conversations.getMany.queryOptions({ search: debouncedSearch }),
-    enabled: debouncedSearch.length > 0,
+  return useQuery({
+    ...trpc.conversations.getMany.queryOptions({ search }),
+    enabled: Boolean(search && search.trim().length > 0), // Only fetch when there's a search term
+    staleTime: 2 * 60 * 1000, // 2 minutes (shorter for search results)
+    gcTime: 5 * 60 * 1000, // 5 minutes garbage collection
   });
-
-  return {
-    search,
-    setSearch,
-    ...query,
-  };
 }; 

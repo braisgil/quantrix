@@ -8,7 +8,8 @@ import {
   Search,
   Terminal,
   Loader2,
-  Sparkles
+  Sparkles,
+  MessageSquare
 } from "lucide-react";
 
 import { 
@@ -21,6 +22,7 @@ import {
 } from "@/components/ui/command";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useSearchAgents } from "@/features/agents/api/use-search-agents";
+import { useSearchConversations } from "@/features/conversations/api/use-search-conversations";
 import { useDebouncedSearch } from "@/hooks/use-debounced-search";
 
 interface Props {
@@ -31,11 +33,13 @@ interface Props {
 export const DashboardCommand = ({ open, setOpen }: Props) => {
   const router = useRouter();
   const { search, debouncedSearch, setSearch, isSearching } = useDebouncedSearch();
-  const { data: agents, isLoading } = useSearchAgents(debouncedSearch);
+  const { data: agents, isLoading: agentsLoading } = useSearchAgents(debouncedSearch);
+  const { data: conversations, isLoading: conversationsLoading } = useSearchConversations(debouncedSearch);
 
-  const hasResults = agents && agents.items.length > 0;
+  const hasAgentResults = agents && agents.items.length > 0;
+  const hasConversationResults = conversations && conversations.items.length > 0;
   const isSearchActive = search && search.trim().length > 0;
-  const showLoading = isSearchActive && (isSearching || isLoading);
+  const showLoading = isSearchActive && (isSearching || agentsLoading || conversationsLoading);
 
 
 
@@ -50,7 +54,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
         <Sparkles className="h-8 w-8 text-primary animate-bounce" />
       </div>
       <div className="mt-4 text-center">
-        <p className="text-sm font-medium text-foreground animate-pulse">Searching companions...</p>
+        <p className="text-sm font-medium text-foreground animate-pulse">Searching...</p>
         <p className="text-xs text-muted-foreground mt-1">AI is analyzing your query</p>
       </div>
     </div>
@@ -63,7 +67,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
           <Search className="h-8 w-8 text-muted-foreground animate-pulse" />
         </div>
         <div className="space-y-1">
-          <p className="text-sm font-medium text-foreground">No companions found</p>
+          <p className="text-sm font-medium text-foreground">No results found</p>
           <p className="text-xs text-muted-foreground">
             Try searching for different keywords or create a new companion
           </p>
@@ -77,7 +81,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
       <DialogContent className="border-border bg-gradient-to-b from-background/95 to-background/90 backdrop-blur-md overflow-hidden p-0 max-w-2xl shadow-2xl ring-1 ring-primary/10">
         <DialogTitle className="sr-only">Search Command</DialogTitle>
         <DialogDescription className="sr-only">
-          Search for AI companions, start conversations, or access quick actions
+          Search for AI companions, conversations, or access quick actions
         </DialogDescription>
         <Command shouldFilter={false} className="bg-transparent">
           {/* Search Header */}
@@ -92,7 +96,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                 <Terminal className="h-5 w-5 text-primary drop-shadow-sm" />
               )}
               <CommandInput
-                placeholder="Search AI companions, start conversations..."
+                placeholder="Search AI companions, conversations..."
                 value={search}
                 onValueChange={setSearch}
                 className="border-0 focus:ring-0 bg-transparent text-foreground placeholder:text-muted-foreground text-base transition-all duration-200 focus:placeholder:text-muted-foreground/60"
@@ -106,10 +110,12 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
               <LoadingState />
             ) : (
               <>
-                <EmptyState />
+                {!hasAgentResults && !hasConversationResults && isSearchActive && (
+                  <EmptyState />
+                )}
 
                 {/* AI Companions Results */}
-                {hasResults && (
+                {hasAgentResults && (
                   <CommandGroup heading="AI Companions" className="px-2 py-3">
                     {agents?.items.map((agent) => (
                       <CommandItem
@@ -141,11 +147,44 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                   </CommandGroup>
                 )}
 
+                {/* Conversations Results */}
+                {hasConversationResults && (
+                  <CommandGroup heading="Conversations" className="px-2 py-3">
+                    {conversations?.items.map((conversation) => (
+                      <CommandItem
+                        key={conversation.id}
+                        onSelect={() => handleNavigation(`/conversations/${conversation.id}`)}
+                        className="group flex items-center space-x-4 px-4 py-3 mx-2 rounded-lg hover:bg-accent/50 hover:shadow-md hover:scale-[1.01] transition-all duration-300 cursor-pointer border border-transparent hover:border-border/50"
+                      >
+                        <div className="p-2 bg-muted/50 rounded-lg group-hover:bg-accent group-hover:shadow-sm transition-all duration-200 border border-border/50">
+                          <MessageSquare className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
+                        </div>
+                        <div className="flex items-center space-x-3 flex-1">
+                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-200">
+                            {conversation.name.charAt(0).toUpperCase()}
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200">
+                              {conversation.name}
+                            </p>
+                            <p className="text-xs text-muted-foreground group-hover:text-muted-foreground/80 transition-colors duration-200">
+                              with {conversation.agent.name} • {conversation.status}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="opacity-0 group-hover:opacity-100 transition-all duration-200 group-hover:translate-x-0 translate-x-2">
+                          <div className="text-xs text-primary font-medium">Enter →</div>
+                        </div>
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                )}
+
                 {/* Quick Actions - Only show when no search */}
                 {!isSearchActive && (
                   <CommandGroup heading="Quick Actions" className="px-2 py-3">
                     <CommandItem
-                      onSelect={() => handleNavigation("/sessions")}
+                      onSelect={() => handleNavigation("/conversations")}
                       className="group flex items-center space-x-4 px-4 py-3 mx-2 rounded-lg hover:bg-accent/50 hover:shadow-md hover:scale-[1.01] transition-all duration-300 cursor-pointer border border-transparent hover:border-border/50"
                     >
                       <div className="p-2 bg-muted/50 rounded-lg group-hover:bg-accent group-hover:shadow-sm transition-all duration-200 border border-border/50">
