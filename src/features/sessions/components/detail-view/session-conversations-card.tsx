@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Plus } from "lucide-react";
@@ -23,19 +23,18 @@ export const SessionConversationsCard = ({
   };
 
   return (
-    <Card className="matrix-card border-primary/20 backdrop-blur-md">
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <MessageSquare className="w-4 h-4 text-primary" />
+    <div>
+      <CardHeader className="pb-4 px-0">
+        <div className="flex items-center gap-3 mb-2">
+          <CardTitle className="text-lg font-bold quantrix-gradient matrix-text-glow">
             Conversations
           </CardTitle>
-          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
-            {conversations.length} total
-          </Badge>
-        </div>
+        </div>  
+        <CardDescription>
+          Conversations within this session
+        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0">
         {conversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="relative mb-4">
@@ -81,6 +80,6 @@ export const SessionConversationsCard = ({
           </div>
         )}
       </CardContent>
-    </Card>
+    </div>
   );
 };

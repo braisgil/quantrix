@@ -26,7 +26,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
   const duration = formatConversationDuration(conversation.startedAt, conversation.endedAt);
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between p-4 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
+    <div className="matrix-card flex flex-col sm:flex-row sm:items-start sm:justify-between p-5 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
       <div className="flex-1 w-full">
         {/* Group 1: Icon, Name, and Badges */}
         <div className="flex items-start space-x-3 sm:space-x-4">
@@ -35,7 +35,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="font-semibold text-foreground text-sm sm:text-base">{conversation.name}</h3>
+              <h3 className="font-semibold text-foreground text-sm sm:text-base mb-1">{conversation.name}</h3>
               <Badge 
                 variant="secondary" 
                 className={`${statusColor} ${

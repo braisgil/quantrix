@@ -49,20 +49,20 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-6">
+    <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Navigation Header */}
       <SessionNavigationHeader />
 
       {/* Main Session Detail Card */}
-      <Card className="w-full mx-auto matrix-card border-primary/20 backdrop-blur-md">
+      <div className="px-0">
         <SessionHeader session={session} />
 
-        <CardContent className="pb-4 sm:pb-6">
+        <CardContent className="pb-4 sm:pb-6 px-0">
           {/* 
           Session Information Grid
           <SessionDetailsCard session={session} />
           */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 gap-6 mb-8">
 
               <SessionConversationsCard
                 conversations={conversations}
@@ -80,7 +80,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
             onStartChat={handleStartChat}
           />
         </CardContent>
-      </Card>
+      </div>
     </div>
   );
 };

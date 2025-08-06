@@ -15,7 +15,7 @@ export const AgentHeader = ({ agent }: AgentHeaderProps) => {
   const IconComponent = getAgentIcon(agent);
   
   return (
-    <CardHeader className="text-center pb-0 sm:pb-0">
+    <CardHeader className="text-center pb-0 sm:pb-0 px-0">
       {/* Header with Icon and Title */}
       <div className="flex items-center justify-center gap-3 mb-4">
         <div className="relative matrix-glow">

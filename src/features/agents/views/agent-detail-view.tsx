@@ -1,7 +1,7 @@
 'use client';
 
 import { useQueryAgent } from '../api/use-query-agent';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import {
   AgentNavigationHeader,
   AgentHeader,
@@ -34,10 +34,10 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
       <AgentNavigationHeader />
 
       {/* Main Agent Detail Card */}
-      <Card className="w-full mx-auto matrix-card border-primary/20 backdrop-blur-md">
+      <div>
         <AgentHeader agent={agent} />
 
-        <CardContent className="pb-4 sm:pb-6">
+        <CardContent className="pb-4 sm:pb-6 px-0">
           {/* Agent Information Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <AgentDetailsCard agent={agent} />
@@ -53,7 +53,7 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
             onConfigureAgent={handleConfigureAgent}
           />
         </CardContent>
-      </Card>
+      </div>
     </div>
   );
 };

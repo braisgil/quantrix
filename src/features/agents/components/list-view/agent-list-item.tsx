@@ -22,7 +22,7 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between p-4 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
+    <div className="matrix-card flex flex-col sm:flex-row sm:items-start sm:justify-between p-5 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
       <div className="flex-1 w-full">
         {/* Group 1: Icon, Name, and Badges */}
         <div className="flex items-start space-x-3 sm:space-x-4">
@@ -30,8 +30,8 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
             <IconComponent className="w-7 h-7 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-foreground text-sm sm:text-base">{agent.name}</h3>
-            <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-1">
+            <h3 className="font-semibold text-foreground text-sm sm:text-base mb-1">{agent.name}</h3> 
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 text-xs">
                 <Brain className="h-3 w-3 mr-1" />
                 <span className="hidden sm:inline">{formatCategoryName(agent.category)}</span>
@@ -52,19 +52,19 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
         </div>
 
         {/* Group 2: Description and Stats */}
-        <div className="mt-3 sm:mt-4">
+        <div className="mt-4 sm:mt-5">
           {agent.description && (
-            <p className="text-xs sm:text-sm text-muted-foreground mb-3 line-clamp-2">
+            <p className="text-xs sm:text-sm text-muted-foreground mb-4 line-clamp-2">
               {agent.description}
             </p>
           )}
           {/* Enhanced stats - always on same line */}
-          <div className="flex items-center gap-2 sm:gap-6 text-xs text-muted-foreground">
-            <div className="flex items-center gap-2 bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/50">
+          <div className="flex items-center gap-3 sm:gap-6 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-lg border border-border/50">
               <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
               <span>{agent.conversationCount} conversation{agent.conversationCount !== 1 ? 's' : ''}</span>
             </div>
-            <div className="flex items-center gap-2 bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/50">
+            <div className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-lg border border-border/50">
               <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
               <span>{formatAgentTotalDuration(agent.totalDuration)} conversation time</span>
             </div>
@@ -72,7 +72,7 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
         </div>
       </div>
       
-      <div className="flex items-center justify-end sm:justify-start space-x-3 mt-3 sm:mt-0 sm:ml-4">
+      <div className="flex items-center justify-end sm:justify-start space-x-3 mt-4 sm:mt-0 sm:ml-6">
         <Button 
           size="sm" 
           variant="outline" 
