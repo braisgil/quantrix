@@ -5,17 +5,25 @@ import { ArrowLeft, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface ConversationNavigationHeaderProps {
+  /** The session ID to navigate back to */
+  sessionId?: string;
+  /** Custom cancel handler, takes precedence over sessionId navigation */
   onCancel?: () => void;
 }
 
-export const ConversationNavigationHeader: React.FC<ConversationNavigationHeaderProps> = ({ onCancel }) => {
+export const ConversationNavigationHeader: React.FC<ConversationNavigationHeaderProps> = ({ 
+  sessionId,
+  onCancel 
+}) => {
   const router = useRouter();
 
   const handleBackClick = () => {
     if (onCancel) {
       onCancel();
+    } else if (sessionId) {
+      router.push(`/sessions/${sessionId}`);
     } else {
-      router.push('/agents');
+      router.push('/sessions');
     }
   };
 
@@ -27,7 +35,7 @@ export const ConversationNavigationHeader: React.FC<ConversationNavigationHeader
         className="text-muted-foreground hover:text-foreground flex items-center gap-2"
       >
         <ArrowLeft className="w-4 h-4" />
-        Back to Conversations
+        {sessionId ? 'Back to Session' : 'Back to Sessions'}
       </Button>
       <Button 
         variant="ghost"

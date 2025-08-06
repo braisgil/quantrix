@@ -10,6 +10,8 @@ export enum SessionStatus {
   Completed = "completed",
 }
 
+
+
 // Type for session data from the database
 export interface Session {
   id: string;

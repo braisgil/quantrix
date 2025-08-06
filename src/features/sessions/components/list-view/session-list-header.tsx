@@ -9,7 +9,7 @@ interface SessionsListHeaderProps {
   hasAgents: boolean;
 }
 
-const SessionsListHeader: React.FC<SessionsListHeaderProps> = ({ onCreateSession, hasAgents }) => {
+export const SessionsListHeader: React.FC<SessionsListHeaderProps> = ({ onCreateSession, hasAgents }) => {
   return (
     <>
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
@@ -43,5 +43,3 @@ const SessionsListHeader: React.FC<SessionsListHeaderProps> = ({ onCreateSession
     </>
   );
 };
-
-export default SessionsListHeader; 

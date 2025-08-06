@@ -8,8 +8,7 @@ export { useQueryConversation } from './api/use-query-conversation';
 export { useQueryConversations } from './api/use-query-conversations';
 export { useSearchConversations } from './api/use-search-conversations';
 
-// Wizard hooks
-export { useWizardState } from './hooks/use-wizard-state';
+// Note: Conversation wizard is now strictly session-scoped and managed within session contexts
 
 // Main view components
 export { ConversationListView, ConversationDetailView } from './views';

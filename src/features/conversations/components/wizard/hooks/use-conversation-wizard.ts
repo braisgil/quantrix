@@ -5,12 +5,14 @@ import { getFormData } from "../lib/wizard-utils";
 
 interface UseConversationWizardProps {
   agentId: string;
+  sessionId: string;
 }
 
-export const useConversationWizard = ({ agentId }: UseConversationWizardProps) => {
+export const useConversationWizard = ({ agentId, sessionId }: UseConversationWizardProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [wizardState, setWizardState] = useState<ConversationWizardState>({
     name: "",
+    sessionId: sessionId,
     agentId: agentId,
     scheduledDate: null,
     scheduledTime: null,
@@ -37,7 +39,8 @@ export const useConversationWizard = ({ agentId }: UseConversationWizardProps) =
     setCurrentStep(0);
     setWizardState({
       name: "",
-      agentId: null,
+      sessionId: sessionId,
+      agentId: agentId,
       scheduledDate: null,
       scheduledTime: null,
     });

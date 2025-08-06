@@ -15,10 +15,15 @@ import { cn } from "@/lib/utils";
 import { ConversationNavigationHeader } from "../../shared/conversation-navigation-header";
 
 interface ConversationWizardProps {
+  /** The session ID where the conversation will be created */
   sessionId: string;
+  /** The session name for display purposes */
   sessionName: string;
+  /** The agent ID associated with the session */
   agentId: string;
+  /** Callback when conversation is successfully created */
   onSuccess?: () => void;
+  /** Callback when user cancels the wizard */
   onCancel?: () => void;
 }
 
@@ -61,10 +66,7 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
 
   const handleSubmit = () => {
     const formData = getFormData();
-    createConversationMutation.mutate({
-      ...formData,
-      sessionId,
-    });
+    createConversationMutation.mutate(formData);
   };
 
   const renderCurrentStep = () => {
@@ -88,7 +90,7 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Navigation Header */}
-      <ConversationNavigationHeader onCancel={onCancel} />
+      <ConversationNavigationHeader sessionId={sessionId} onCancel={onCancel} />
       {/* Enhanced Progress Header */}
       <Card className="matrix-card border-primary/20 backdrop-blur-md">
         <CardContent className="pt-3 pb-2">

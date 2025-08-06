@@ -1,13 +1,25 @@
 import { SessionStatus } from "../types";
+import { Archive, CheckCircle } from "lucide-react";
+
+export const getSessionStatusIcon = (status: SessionStatus) => {
+  switch (status) {
+    case SessionStatus.Archived:
+      return Archive;
+    case SessionStatus.Completed:
+      return CheckCircle;
+    default:
+      return null;
+  }
+};
 
 export const getSessionStatusColor = (status: SessionStatus) => {
   switch (status) {
     case SessionStatus.Active:
       return "bg-primary/10 text-primary border-primary/30";
     case SessionStatus.Archived:
-      return "bg-gray-500/10 text-gray-500 border-gray-500/30";
+      return "bg-gray-500/10 text-gray-700 border-gray-500/40 dark:text-gray-500 dark:bg-gray-500/10 dark:border-gray-500/30";
     case SessionStatus.Completed:
-      return "bg-green-500/10 text-green-500 border-green-500/30";
+      return "bg-green-500/10 text-green-700 border-green-500/40 dark:text-green-500 dark:bg-green-500/10 dark:border-green-500/30";
     default:
       return "bg-primary/10 text-primary border-primary/30";
   }
@@ -45,4 +57,9 @@ export const canArchiveSession = (status: SessionStatus) => {
 
 export const canCompleteSession = (status: SessionStatus) => {
   return status === SessionStatus.Active;
+};
+
+export const formatConversationCount = (count: number) => {
+  const conversationText = count === 1 ? 'conversation' : 'conversations';
+  return `${count} ${conversationText}`;
 };

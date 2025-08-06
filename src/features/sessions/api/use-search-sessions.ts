@@ -1,7 +1,7 @@
-import { useTRPC } from "@/trpc/client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
+import { useTRPC } from '@/trpc/client';
 
-export const useSearchSessions = (search?: string) => {
+export const useSearchSessions = (search: string) => {
   const trpc = useTRPC();
   
   return useQuery({

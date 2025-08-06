@@ -2,7 +2,8 @@ export interface ConversationWizardState {
   // Basic info
   name: string;
   
-  // Agent selection
+  // Session and agent selection
+  sessionId: string | null;
   agentId: string | null;
   
   // Date and time

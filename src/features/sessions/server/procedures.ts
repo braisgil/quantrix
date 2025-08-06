@@ -213,8 +213,14 @@ export const sessionsRouter = createTRPCRouter({
       }
 
       const data = await ctx.db
-        .select()
+        .select({
+          ...getTableColumns(conversations),
+          session: sessions,
+          agent: agents,
+        })
         .from(conversations)
+        .innerJoin(sessions, eq(conversations.sessionId, sessions.id))
+        .innerJoin(agents, eq(sessions.agentId, agents.id))
         .where(
           and(
             eq(conversations.sessionId, sessionId),

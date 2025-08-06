@@ -16,7 +16,7 @@ export const formatDateTime = (date: Date, time: string) => {
 };
 
 export const getFormData = (wizardState: ConversationWizardState) => {
-  const { name, agentId, scheduledDate, scheduledTime } = wizardState;
+  const { name, sessionId, agentId, scheduledDate, scheduledTime } = wizardState;
   
   // Combine date and time into a single datetime
   let scheduledDateTime: Date | undefined = undefined;
@@ -28,6 +28,7 @@ export const getFormData = (wizardState: ConversationWizardState) => {
   
   return {
     name,
+    sessionId: sessionId!,
     agentId: agentId!,
     scheduledDateTime,
   };

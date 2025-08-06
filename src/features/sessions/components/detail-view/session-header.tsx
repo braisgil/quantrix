@@ -1,109 +1,63 @@
-import { Button } from "@/components/ui/button";
+'use client';
+
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, FolderOpen, Plus, Bot, Calendar, Archive, CheckCircle } from "lucide-react";
+import { CardHeader } from "@/components/ui/card";
+import { FolderOpen, Bot, Calendar, Archive, CheckCircle } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { useRouter } from "next/navigation";
 import type { SessionGetOne } from "../../types";
+import { SessionStatus } from "../../types";
+import { 
+  getSessionStatusIcon, 
+  getSessionStatusColor, 
+  getSessionStatusLabel
+} from "../../utils";
 
 interface SessionHeaderProps {
   session: SessionGetOne;
-  onCreateConversation: () => void;
 }
 
-export const SessionHeader = ({ session, onCreateConversation }: SessionHeaderProps) => {
-  const router = useRouter();
-
-  const handleBack = () => {
-    router.push("/sessions");
-  };
-
-  const getStatusIcon = () => {
-    switch (session.status) {
-      case "archived":
-        return <Archive className="w-3 h-3" />;
-      case "completed":
-        return <CheckCircle className="w-3 h-3" />;
-      default:
-        return null;
-    }
-  };
-
-  const getStatusColor = () => {
-    switch (session.status) {
-      case "archived":
-        return "bg-gray-500/10 text-gray-500 border-gray-500/30";
-      case "completed":
-        return "bg-green-500/10 text-green-500 border-green-500/30";
-      default:
-        return "bg-primary/10 text-primary border-primary/30";
-    }
-  };
-
+export const SessionHeader = ({ session }: SessionHeaderProps) => {
+  const StatusIcon = getSessionStatusIcon(session.status as SessionStatus);
+  const statusColor = getSessionStatusColor(session.status as SessionStatus);
+  const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
+  
   return (
-    <div className="space-y-6">
-      {/* Navigation */}
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={handleBack}
-        className="text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="w-4 h-4 mr-2" />
-        Back to Sessions
-      </Button>
-
-      {/* Header Card */}
-      <Card className="matrix-card border-primary/20 backdrop-blur-md">
-        <CardContent className="p-6">
-          <div className="flex items-start justify-between">
-            <div className="flex items-start gap-4">
-              {/* Icon */}
-              <div className="p-3 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl matrix-border matrix-glow">
-                <FolderOpen className="w-6 h-6 text-primary" />
-              </div>
-              
-              {/* Content */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold">{session.name}</h1>
-                  {session.status !== "active" && (
-                    <Badge variant="outline" className={`text-xs ${getStatusColor()}`}>
-                      {getStatusIcon()}
-                      <span className="ml-1">{session.status}</span>
-                    </Badge>
-                  )}
-                </div>
-                
-                {session.description && (
-                  <p className="text-muted-foreground">{session.description}</p>
-                )}
-                
-                <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Bot className="w-4 h-4" />
-                    <span>{session.agent.name}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    <span>Created {formatDistanceToNow(new Date(session.createdAt), { addSuffix: true })}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Action Button */}
-            <Button
-              onClick={onCreateConversation}
-              className="matrix-glow bg-primary hover:bg-primary/90 text-black"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              New Conversation
-            </Button>
+    <CardHeader className="text-center pb-0 sm:pb-0">
+      {/* Header with Icon and Title */}
+      <div className="flex items-center justify-center gap-3 mb-4">
+        <div className="relative matrix-glow">
+          <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center matrix-border">
+            <FolderOpen className="w-4 h-4 text-black" />
           </div>
-        </CardContent>
-      </Card>
-    </div>
+          <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow">
+          {session.name}
+        </h1>
+      </div>
+      
+      {/* Status and Info Badges */}
+      <div className="flex flex-wrap gap-2 justify-center mb-2">
+        <Badge variant="secondary" className="matrix-border matrix-glow">
+          {StatusIcon && <StatusIcon className="h-3 w-3 mr-1" />}
+          {statusLabel}
+        </Badge>
+        <Badge variant="secondary" className="matrix-border matrix-glow">
+          <Bot className="h-3 w-3 mr-1" />
+          {session.agent.name}
+        </Badge>
+        <Badge variant="secondary" className="matrix-border matrix-glow">
+          <Calendar className="h-3 w-3 mr-1" />
+          {formatDistanceToNow(new Date(session.createdAt), { addSuffix: true })}
+        </Badge>
+      </div>
+      
+      {/* Description */}
+      {session.description && (
+        <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+          {session.description}
+        </p>
+      )}
+    </CardHeader>
   );
 };

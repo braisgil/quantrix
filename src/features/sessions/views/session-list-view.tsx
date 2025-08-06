@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useQuerySessions } from "../api/use-query-sessions";
 import { useQueryAgents } from "@/features/agents/api/use-query-agents";
-import SessionsListHeader from "../components/list-view/session-list-header";
+import { SessionsListHeader } from "../components/list-view/session-list-header";
 import { SessionsList } from "../components/list-view/sessions-list";
 import { SessionWizard } from "../components/wizard/components/session-wizard";
 import { SessionsEmptyState } from "../components/list-view/sessions-empty-state";

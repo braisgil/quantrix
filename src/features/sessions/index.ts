@@ -5,13 +5,17 @@ export { SessionDetailView } from "./views/session-detail-view";
 // Components - List View
 export { SessionsList } from "./components/list-view/sessions-list";
 export { SessionListItem } from "./components/list-view/session-list-item";
-export { SessionsListHeader } from "./components/list-view/sessions-list-header";
+export { SessionsListHeader } from "./components/list-view/session-list-header";
 export { SessionsEmptyState } from "./components/list-view/sessions-empty-state";
 
 // Components - Detail View
-export { SessionHeader } from "./components/detail-view/session-header";
-export { SessionDetailsCard } from "./components/detail-view/session-details-card";
-export { SessionConversationsCard } from "./components/detail-view/session-conversations-card";
+export { 
+  SessionHeader,
+  SessionDetailsCard,
+  SessionConversationsCard,
+  SessionChatCard,
+  SessionActionButtons
+} from "./components/detail-view";
 
 // Components - Wizard
 export { SessionWizard } from "./components/wizard/components/session-wizard";
@@ -40,3 +44,16 @@ export {
   type SessionsInsertSchema,
   type SessionsUpdateSchema
 } from "./schema";
+
+// Utilities
+export {
+  getSessionStatusIcon,
+  getSessionStatusColor,
+  getSessionStatusLabel,
+  formatSessionName,
+  formatConversationCount,
+  canCreateConversation,
+  canEditSession,
+  canArchiveSession,
+  canCompleteSession,
+} from "./utils";

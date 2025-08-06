@@ -6,7 +6,6 @@ const PUBLIC_ROUTES = ['/', '/sign-in', '/sign-up']
 const AUTH_ROUTES = ['/sign-in', '/sign-up']
 const PROTECTED_ROUTE_PREFIXES = [
   '/agents',
-  '/conversations',
   '/sessions',
   '/overview',
   '/call'

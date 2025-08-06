@@ -68,7 +68,6 @@ export const calculateAgentStats = (agents: AgentsGetMany) => {
     const count = typeof agent.conversationCount === 'string' 
       ? parseInt(agent.conversationCount, 10) 
       : agent.conversationCount;
-    console.log(`Agent ${agent.name}: conversationCount = ${agent.conversationCount} (${typeof agent.conversationCount}) -> parsed = ${count}`);
     return sum + (count || 0);
   }, 0);
   

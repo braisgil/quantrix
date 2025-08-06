@@ -1,35 +1,23 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Info, Bot, Calendar, MessageSquare, Archive, CheckCircle } from "lucide-react";
+import { Info, Bot, Calendar, MessageSquare } from "lucide-react";
 import { format } from "date-fns";
 import type { SessionGetOne } from "../../types";
+import { SessionStatus } from "../../types";
+import { 
+  getSessionStatusIcon, 
+  getSessionStatusColor, 
+  getSessionStatusLabel
+} from "../../utils";
 
 interface SessionDetailsCardProps {
   session: SessionGetOne;
 }
 
 export const SessionDetailsCard = ({ session }: SessionDetailsCardProps) => {
-  const getStatusIcon = () => {
-    switch (session.status) {
-      case "archived":
-        return <Archive className="w-4 h-4" />;
-      case "completed":
-        return <CheckCircle className="w-4 h-4" />;
-      default:
-        return null;
-    }
-  };
-
-  const getStatusColor = () => {
-    switch (session.status) {
-      case "archived":
-        return "bg-gray-500/10 text-gray-500 border-gray-500/30";
-      case "completed":
-        return "bg-green-500/10 text-green-500 border-green-500/30";
-      default:
-        return "bg-primary/10 text-primary border-primary/30";
-    }
-  };
+  const StatusIcon = getSessionStatusIcon(session.status as SessionStatus);
+  const statusColor = getSessionStatusColor(session.status as SessionStatus);
+  const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
 
   return (
     <Card className="matrix-card border-primary/20 backdrop-blur-md">
@@ -43,10 +31,10 @@ export const SessionDetailsCard = ({ session }: SessionDetailsCardProps) => {
         {/* Status */}
         <div className="space-y-2">
           <p className="text-xs text-muted-foreground font-medium">Status</p>
-          <Badge variant="outline" className={getStatusColor()}>
-            {getStatusIcon()}
-            <span className={getStatusIcon() ? "ml-1" : ""}>
-              {session.status.charAt(0).toUpperCase() + session.status.slice(1)}
+          <Badge variant="outline" className={statusColor}>
+            {StatusIcon && <StatusIcon className="w-4 h-4" />}
+            <span className={StatusIcon ? "ml-1" : ""}>
+              {statusLabel}
             </span>
           </Badge>
         </div>

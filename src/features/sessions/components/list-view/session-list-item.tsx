@@ -2,48 +2,26 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FolderOpen, MessageSquare, Calendar, Bot, Archive, CheckCircle, ExternalLink } from "lucide-react";
+import { FolderOpen, MessageSquare, Calendar, Bot, ExternalLink } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import type { SessionGetMany } from "../../types";
+import { SessionStatus } from "../../types";
+import { 
+  getSessionStatusIcon, 
+  getSessionStatusColor, 
+  getSessionStatusLabel,
+  formatConversationCount
+} from "../../utils";
 
 interface SessionListItemProps {
   session: SessionGetMany[0];
 }
 
 export const SessionListItem = ({ session }: SessionListItemProps) => {
-  const getStatusIcon = () => {
-    switch (session.status) {
-      case "archived":
-        return <Archive className="w-3 h-3" />;
-      case "completed":
-        return <CheckCircle className="w-3 h-3" />;
-      default:
-        return null;
-    }
-  };
-
-  const getStatusColor = () => {
-    switch (session.status) {
-      case "archived":
-        return "bg-gray-500/10 text-gray-700 border-gray-500/40 dark:text-gray-500 dark:bg-gray-500/10 dark:border-gray-500/30";
-      case "completed":
-        return "bg-green-500/10 text-green-700 border-green-500/40 dark:text-green-500 dark:bg-green-500/10 dark:border-green-500/30";
-      default:
-        return "bg-primary/10 text-primary border-primary/30";
-    }
-  };
-
-  const getStatusLabel = () => {
-    switch (session.status) {
-      case "archived":
-        return "Archived";
-      case "completed":
-        return "Completed";
-      default:
-        return "Active";
-    }
-  };
+  const StatusIcon = getSessionStatusIcon(session.status as SessionStatus);
+  const statusColor = getSessionStatusColor(session.status as SessionStatus);
+  const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
 
   return (
     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between p-4 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
@@ -56,13 +34,13 @@ export const SessionListItem = ({ session }: SessionListItemProps) => {
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2 mb-1">
               <h3 className="font-semibold text-foreground text-sm sm:text-base">{session.name}</h3>
-              {session.status !== "active" && (
+              {session.status !== SessionStatus.Active && (
                 <Badge 
                   variant="secondary" 
-                  className={`${getStatusColor()} text-xs font-medium`}
+                  className={`${statusColor} text-xs font-medium`}
                 >
-                  {getStatusIcon()}
-                  <span className="ml-1">{getStatusLabel()}</span>
+                  {StatusIcon && <StatusIcon className="w-3 h-3" />}
+                  <span className="ml-1">{statusLabel}</span>
                 </Badge>
               )}
             </div>
@@ -84,14 +62,11 @@ export const SessionListItem = ({ session }: SessionListItemProps) => {
           <div className="flex items-center gap-2 sm:gap-6 text-xs text-muted-foreground">
             <div className="flex items-center gap-2 bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/50">
               <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
-              <span>{session.conversationCount || 0} conversation{(session.conversationCount || 0) !== 1 ? 's' : ''}</span>
+              <span>{formatConversationCount(session.conversationCount || 0)}</span>
             </div>
             <div className="flex items-center gap-2 bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/50">
               <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
-              <span className="hidden sm:inline">
-                {formatDistanceToNow(new Date(session.createdAt), { addSuffix: true })}
-              </span>
-              <span className="sm:hidden">
+              <span>
                 {formatDistanceToNow(new Date(session.createdAt), { addSuffix: true })}
               </span>
             </div>
