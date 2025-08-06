@@ -64,9 +64,22 @@ export const formatAgentTotalDuration = (totalDurationSeconds: number | string) 
  */
 export const calculateAgentStats = (agents: AgentsGetMany) => {
   const activeAgents = agents.length;
-  const totalConversations = agents.reduce((sum, agent) => sum + agent.conversationCount, 0);
-  const totalDuration = agents.reduce((sum, agent) => sum + agent.totalDuration, 0);
+  const totalConversations = agents.reduce((sum, agent) => {
+    const count = typeof agent.conversationCount === 'string' 
+      ? parseInt(agent.conversationCount, 10) 
+      : agent.conversationCount;
+    console.log(`Agent ${agent.name}: conversationCount = ${agent.conversationCount} (${typeof agent.conversationCount}) -> parsed = ${count}`);
+    return sum + (count || 0);
+  }, 0);
+  
+  const totalDuration = agents.reduce((sum, agent) => {
+    const duration = typeof agent.totalDuration === 'string' 
+      ? parseFloat(agent.totalDuration) 
+      : agent.totalDuration;
+    return sum + (duration || 0);
+  }, 0);
   const totalDurationFormatted = formatAgentTotalDuration(totalDuration);
+  
 
   return {
     activeAgents,

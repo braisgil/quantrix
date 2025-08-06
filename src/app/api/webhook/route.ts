@@ -12,7 +12,7 @@ import {
 } from "@stream-io/node-sdk";
 
 import { db } from "@/db";
-import { agents, conversations } from "@/db/schema";
+import { agents, conversations, sessions } from "@/db/schema";
 import { streamVideo } from "@/lib/stream-video";
 
 import { inngest } from "@/inngest/client";
@@ -84,10 +84,20 @@ export async function POST(req: NextRequest) {
       })
       .where(eq(conversations.id, existingConversation.id));
 
+    // Get the session first, then the agent
+    const [existingSession] = await db
+      .select()
+      .from(sessions)
+      .where(eq(sessions.id, existingConversation.sessionId));
+
+    if (!existingSession) {
+      return NextResponse.json({ error: "Session not found" }, { status: 404 });
+    }
+
     const [existingAgent] = await db
       .select()
       .from(agents)
-      .where(eq(agents.id, existingConversation.agentId));
+      .where(eq(agents.id, existingSession.agentId));
 
     if (!existingAgent) {
       return NextResponse.json({ error: "Agent not found" }, { status: 404 });
@@ -184,10 +194,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
     }
 
+    // Get the session first, then the agent
+    const [existingSession] = await db
+      .select()
+      .from(sessions)
+      .where(eq(sessions.id, existingConversation.sessionId));
+
+    if (!existingSession) {
+      return NextResponse.json({ error: "Session not found" }, { status: 404 });
+    }
+
     const [existingAgent] = await db
       .select()
       .from(agents)
-      .where(eq(agents.id, existingConversation.agentId));
+      .where(eq(agents.id, existingSession.agentId));
 
     if (!existingAgent) {
       return NextResponse.json({ error: "Agent not found" }, { status: 404 });

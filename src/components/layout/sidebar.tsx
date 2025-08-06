@@ -7,7 +7,7 @@ import {
   Bot, 
   Zap,
   LayoutDashboard,
-  Phone,
+  FolderOpen,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -35,14 +35,14 @@ const neuralSections = [
     href: "/overview",
   },
   {
-    icon: Phone,
-    label: "Conversations",
-    href: "/conversations",
-  },
-  {
     icon: Bot,
     label: "Agents",
     href: "/agents",
+  },
+  {
+    icon: FolderOpen,
+    label: "Sessions",
+    href: "/sessions",
   },
 ];
 

@@ -1,28 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Sparkles, MessageSquare } from "lucide-react";
+import { ArrowLeft, Sparkles, FolderOpen } from "lucide-react";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 
 // Import refactored components
-import { useConversationWizard } from "../hooks/use-conversation-wizard";
+import { useSessionWizard } from "../hooks/use-session-wizard";
 import { useStepValidation } from "../hooks/use-step-validation";
-import { StepConversationDetailsSession } from "./steps/step-conversation-details-session";
-import { STEP_CONFIGS } from "../lib/step-config";
+import { StepSessionDetails } from "./steps/step-session-details";
+import { SessionNavigationHeader } from "../../shared/session-navigation-header";
 import { cn } from "@/lib/utils";
-import { ConversationNavigationHeader } from "../../shared/conversation-navigation-header";
 
-interface ConversationWizardProps {
-  sessionId: string;
-  sessionName: string;
-  agentId: string;
+interface SessionWizardProps {
   onSuccess?: () => void;
   onCancel?: () => void;
 }
 
-export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess, onCancel }: ConversationWizardProps) => {
+export const SessionWizard = ({ onSuccess, onCancel }: SessionWizardProps) => {
   const queryClient = useQueryClient();
   const trpc = useTRPC();
   
@@ -34,24 +30,25 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
     prevStep,
     resetWizard,
     getFormData,
-  } = useConversationWizard({ sessionId, agentId });
+  } = useSessionWizard();
 
   const { canProceed } = useStepValidation(wizardState);
 
-  const createConversationMutation = useMutation(
-    trpc.conversations.create.mutationOptions({
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(
-        trpc.conversations.getMany.queryOptions({})
-      );
-      toast.success("Your conversation has been scheduled successfully!");
-      resetWizard();
-      onSuccess?.();
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to schedule your conversation");
-    },
-  }));
+  const createSessionMutation = useMutation(
+    trpc.sessions.create.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(
+          trpc.sessions.getMany.queryOptions({})
+        );
+        toast.success("Your session has been created successfully!");
+        resetWizard();
+        onSuccess?.();
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to create your session");
+      },
+    })
+  );
 
   const handleNext = () => {
     if (canProceed(currentStep)) {
@@ -61,23 +58,14 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
 
   const handleSubmit = () => {
     const formData = getFormData();
-    createConversationMutation.mutate({
-      ...formData,
-      sessionId,
-    });
+    createSessionMutation.mutate(formData);
   };
 
   const renderCurrentStep = () => {
-    const stepProps = { 
-      wizardState, 
-      updateWizardState,
-      sessionId,
-      sessionName,
-      agentId,
-    };
+    const stepProps = { wizardState, updateWizardState };
     
     switch (currentStep) {
-      case 0: return <StepConversationDetailsSession {...stepProps} />;
+      case 0: return <StepSessionDetails {...stepProps} />;
       default: return null;
     }
   };
@@ -88,7 +76,8 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Navigation Header */}
-      <ConversationNavigationHeader onCancel={onCancel} />
+      <SessionNavigationHeader onCancel={onCancel} />
+      
       {/* Enhanced Progress Header */}
       <Card className="matrix-card border-primary/20 backdrop-blur-md">
         <CardContent className="pt-3 pb-2">
@@ -97,12 +86,12 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
             <div className="flex items-center justify-center gap-2">
               <div className="relative matrix-glow">
                 <div className="w-6 h-6 bg-gradient-to-br from-primary to-primary/80 rounded-md flex items-center justify-center matrix-border">
-                  <MessageSquare className="w-3 h-3 text-black" />
+                  <FolderOpen className="w-3 h-3 text-black" />
                 </div>
                 <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
               </div>
               <h1 className="text-base sm:text-lg font-bold quantrix-gradient matrix-text-glow">
-                Add Conversation to {sessionName}
+                Create New Session
               </h1>
             </div>
 
@@ -111,13 +100,13 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
               <div className="flex items-center justify-center">
                 <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-xs">
                   <Sparkles className="w-2.5 h-2.5 mr-1" />
-                  {STEP_CONFIGS[currentStep].name}
+                  Session Configuration
                 </Badge>
               </div>
               
               <div className="text-center">
                 <p className="text-xs text-muted-foreground">
-                  {STEP_CONFIGS[currentStep].description}
+                  Set up a new session to organize your AI conversations by topic
                 </p>
               </div>
             </div>
@@ -178,19 +167,19 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
               ) : (
                 <Button 
                   onClick={handleSubmit}
-                  disabled={!canSubmit || createConversationMutation.isPending}
+                  disabled={!canSubmit || createSessionMutation.isPending}
                   size="sm"
                   className="matrix-glow bg-primary hover:bg-primary/90 text-black font-semibold px-4 text-xs"
                 >
-                  {createConversationMutation.isPending ? (
+                  {createSessionMutation.isPending ? (
                     <>
                       <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
-                      <span>Scheduling...</span>
+                      <span>Creating...</span>
                     </>
                   ) : (
                     <>
                       <Sparkles className="w-3 h-3 mr-1" />
-                      <span>Schedule</span>
+                      <span>Create</span>
                     </>
                   )}
                 </Button>
@@ -218,19 +207,19 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
             ) : (
               <Button 
                 onClick={handleSubmit}
-                disabled={!canSubmit || createConversationMutation.isPending}
+                disabled={!canSubmit || createSessionMutation.isPending}
                 size="sm"
                 className="matrix-glow bg-primary hover:bg-primary/90 text-black font-semibold px-4 text-xs"
               >
-                {createConversationMutation.isPending ? (
+                {createSessionMutation.isPending ? (
                   <>
                     <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
-                    <span>Scheduling...</span>
+                    <span>Creating...</span>
                   </>
                 ) : (
                   <>
                     <Sparkles className="w-3 h-3 mr-1" />
-                    <span>Schedule Conversation</span>
+                    <span>Create Session</span>
                   </>
                 )}
               </Button>
@@ -240,4 +229,4 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
       </Card>
     </div>
   );
-}; 
+};

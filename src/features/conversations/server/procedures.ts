@@ -1,4 +1,4 @@
-import { agents, conversations, user } from "@/db/schema";
+import { agents, conversations, sessions, user } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { eq, and, getTableColumns, sql, ilike, desc, inArray } from "drizzle-orm";
@@ -42,6 +42,28 @@ export const conversationRouter = createTRPCRouter({
   create: protectedProcedure
     .input(conversationsInsertSchema)
     .mutation(async ({ input, ctx }) => {
+      // First verify the session exists and belongs to the user
+      const [existingSession] = await ctx.db
+        .select({
+          ...getTableColumns(sessions),
+          agent: agents,
+        })
+        .from(sessions)
+        .innerJoin(agents, eq(sessions.agentId, agents.id))
+        .where(
+          and(
+            eq(sessions.id, input.sessionId),
+            eq(sessions.userId, ctx.auth.user.id)
+          )
+        );
+
+      if (!existingSession) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Session not found or you don't have permission",
+        });
+      }
+
       const [createdConversation] = await ctx.db
         .insert(conversations)
         .values({
@@ -73,22 +95,10 @@ export const conversationRouter = createTRPCRouter({
         },
       });
 
-      const [existingAgent] = await ctx.db
-        .select()
-        .from(agents)
-        .where(eq(agents.id, createdConversation.agentId));
-
-      if (!existingAgent) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Conversation not found",
-        });
-      }
-
       await streamVideo.upsertUsers([
         {
-          id: existingAgent.id,
-          name: existingAgent.name,
+          id: existingSession.agent.id,
+          name: existingSession.agent.name,
           role: "user"
         },
       ]);
@@ -101,11 +111,13 @@ export const conversationRouter = createTRPCRouter({
     const [existingConversation] = await ctx.db
       .select({
         ...getTableColumns(conversations),
+        session: sessions,
         agent: agents,
         duration: sql<number>`EXTRACT(EPOCH FROM (ended_at - started_at))`.as("duration"),
       })
       .from(conversations)
-      .innerJoin(agents, eq(conversations.agentId, agents.id))
+      .innerJoin(sessions, eq(conversations.sessionId, sessions.id))
+      .innerJoin(agents, eq(sessions.agentId, agents.id))
       .where(
         and(
           eq(conversations.id, input.id),
@@ -123,7 +135,7 @@ export const conversationRouter = createTRPCRouter({
     .input(
       z.object({
         search: z.string().nullish(),
-        agentId: z.string().nullish(),
+        sessionId: z.string().nullish(),
         status: z
           .enum([
             ConversationStatus.Upcoming,
@@ -136,21 +148,23 @@ export const conversationRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { search, status, agentId } = input;
+      const { search, status, sessionId } = input;
 
       const data = await ctx.db
         .select({
           ...getTableColumns(conversations),
+          session: sessions,
           agent: agents,
         })
         .from(conversations)
-        .innerJoin(agents, eq(conversations.agentId, agents.id))
+        .innerJoin(sessions, eq(conversations.sessionId, sessions.id))
+        .innerJoin(agents, eq(sessions.agentId, agents.id))
         .where(
           and(
             eq(conversations.userId, ctx.auth.user.id),
             search ? ilike(conversations.name, `%${search}%`) : undefined,
             status ? eq(conversations.status, status) : undefined,
-            agentId ? eq(conversations.agentId, agentId) : undefined,
+            sessionId ? eq(conversations.sessionId, sessionId) : undefined,
           )
         )
         .orderBy(desc(conversations.createdAt), desc(conversations.id))

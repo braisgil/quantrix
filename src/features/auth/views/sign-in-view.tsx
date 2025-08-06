@@ -176,7 +176,7 @@ const SignInView: React.FC = () => {
                   />
                 </div>
 
-                {/* Error Alert */}
+                {/* Error Alert TODO: Add a better error message styling */}
                 {!!error && (
                   <Alert className="bg-destructive/10 border-destructive/30 matrix-border">
                     <OctagonAlertIcon className="h-4 w-4 text-destructive" />

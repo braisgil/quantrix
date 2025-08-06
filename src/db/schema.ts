@@ -77,6 +77,34 @@ export const agents = pgTable("agents", {
   createdAtIdx: index('agents_created_at_idx').on(table.createdAt),
 }));
 
+export const sessionStatus = pgEnum("session_status", [
+  "active",
+  "archived",
+  "completed"
+]);
+
+export const sessions = pgTable("sessions", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  name: text("name").notNull(),
+  description: text("description"),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  agentId: text("agent_id")
+    .notNull()
+    .references(() => agents.id, { onDelete: "cascade" }),
+  status: sessionStatus("status").notNull().default("active"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  userIdIdx: index('sessions_user_id_idx').on(table.userId),
+  agentIdIdx: index('sessions_agent_id_idx').on(table.agentId),
+  statusIdx: index('sessions_status_idx').on(table.status),
+  createdAtIdx: index('sessions_created_at_idx').on(table.createdAt),
+}));
+
 export const conversationStatus = pgEnum("conversation_status", [
   "upcoming",
   "active",
@@ -93,9 +121,9 @@ export const conversations = pgTable("conversations", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  agentId: text("agent_id")
+  sessionId: text("session_id")
     .notNull()
-    .references(() => agents.id, { onDelete: "cascade" }),
+    .references(() => sessions.id, { onDelete: "cascade" }),
   status: conversationStatus("status").notNull().default("upcoming"),
   scheduledDateTime: timestamp("scheduled_date_time"),
   startedAt: timestamp("started_at"),
@@ -107,7 +135,7 @@ export const conversations = pgTable("conversations", {
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (table) => ({
   userIdIdx: index('conversations_user_id_idx').on(table.userId),
-  agentIdIdx: index('conversations_agent_id_idx').on(table.agentId),
+  sessionIdIdx: index('conversations_session_id_idx').on(table.sessionId),
   statusIdx: index('conversations_status_idx').on(table.status),
   createdAtIdx: index('conversations_created_at_idx').on(table.createdAt),
 }));

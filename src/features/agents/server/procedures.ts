@@ -1,4 +1,4 @@
-import { agents, conversations } from "@/db/schema";
+import { agents, conversations, sessions } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { agentsInsertSchema } from "../schema";
 import { and, getTableColumns, desc, eq, ilike, sql } from "drizzle-orm";
@@ -29,7 +29,9 @@ export const agentsRouter = createTRPCRouter({
     const data = await ctx.db
       .select({
         ...getTableColumns(agents),
-        conversationCount: ctx.db.$count(conversations, eq(agents.id, conversations.agentId)),
+        conversationCount: sql<number>`
+          COUNT(DISTINCT ${conversations.id})
+        `.as("conversationCount"),
         totalDuration: sql<number>`
           COALESCE(
             NULLIF(
@@ -47,7 +49,8 @@ export const agentsRouter = createTRPCRouter({
         `.as("totalDuration"),
       })
       .from(agents)
-      .leftJoin(conversations, eq(agents.id, conversations.agentId))
+      .leftJoin(sessions, eq(agents.id, sessions.agentId))
+      .leftJoin(conversations, eq(sessions.id, conversations.sessionId))
       .where(
         and(
           eq(agents.userId, ctx.auth.user.id),
@@ -64,7 +67,9 @@ export const agentsRouter = createTRPCRouter({
     const [existingAgent] = await ctx.db
       .select({
         ...getTableColumns(agents),
-        conversationCount: ctx.db.$count(conversations, eq(agents.id, conversations.agentId)),
+        conversationCount: sql<number>`
+          COUNT(DISTINCT ${conversations.id})
+        `.as("conversationCount"),
         totalDuration: sql<number>`
           COALESCE(
             NULLIF(
@@ -82,7 +87,8 @@ export const agentsRouter = createTRPCRouter({
         `.as("totalDuration"),
       })
       .from(agents)
-      .leftJoin(conversations, eq(agents.id, conversations.agentId))
+      .leftJoin(sessions, eq(agents.id, sessions.agentId))
+      .leftJoin(conversations, eq(sessions.id, conversations.sessionId))
       .where(
         and(
           eq(agents.id, input.id),

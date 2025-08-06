@@ -3,11 +3,15 @@ import type { ConversationWizardState } from "../types/wizard";
 import { getTotalSteps } from "../lib/step-config";
 import { getFormData } from "../lib/wizard-utils";
 
-export const useConversationWizard = () => {
+interface UseConversationWizardProps {
+  agentId: string;
+}
+
+export const useConversationWizard = ({ agentId }: UseConversationWizardProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [wizardState, setWizardState] = useState<ConversationWizardState>({
     name: "",
-    agentId: null,
+    agentId: agentId,
     scheduledDate: null,
     scheduledTime: null,
   });
