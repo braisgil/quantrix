@@ -1,4 +1,4 @@
-import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, pgEnum, pgTable, text, timestamp, index } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
 
 export const user = pgTable("user", {
@@ -20,7 +20,10 @@ export const session = pgTable("session", {
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
   userId: text('user_id').notNull().references(()=> user.id, { onDelete: 'cascade' })
-});
+}, (table) => ({
+  userIdIdx: index('session_user_id_idx').on(table.userId),
+  expiresAtIdx: index('session_expires_at_idx').on(table.expiresAt),
+}));
 
 export const account = pgTable("account", {
   id: text('id').primaryKey(),
@@ -36,7 +39,10 @@ export const account = pgTable("account", {
   password: text('password'),
   createdAt: timestamp('created_at').notNull(),
   updatedAt: timestamp('updated_at').notNull()
-});
+}, (table) => ({
+  userIdIdx: index('account_user_id_idx').on(table.userId),
+  providerIdx: index('account_provider_idx').on(table.providerId),
+}));
 
 export const verification = pgTable("verification", {
   id: text('id').primaryKey(),
@@ -66,7 +72,10 @@ export const agents = pgTable("agents", {
   additionalRule2: text("additional_rule_2"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
+}, (table) => ({
+  userIdIdx: index('agents_user_id_idx').on(table.userId),
+  createdAtIdx: index('agents_created_at_idx').on(table.createdAt),
+}));
 
 export const conversationStatus = pgEnum("conversation_status", [
   "upcoming",
@@ -96,4 +105,9 @@ export const conversations = pgTable("conversations", {
   summary: text("summary"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
-});
+}, (table) => ({
+  userIdIdx: index('conversations_user_id_idx').on(table.userId),
+  agentIdIdx: index('conversations_agent_id_idx').on(table.agentId),
+  statusIdx: index('conversations_status_idx').on(table.status),
+  createdAtIdx: index('conversations_created_at_idx').on(table.createdAt),
+}));

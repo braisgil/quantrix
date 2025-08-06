@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 
+// Define route patterns for better organization
+const PUBLIC_ROUTES = ['/', '/sign-in', '/sign-up']
+const AUTH_ROUTES = ['/sign-in', '/sign-up']
+const PROTECTED_ROUTE_PREFIXES = [
+  '/agents',
+  '/conversations',
+  '/sessions',
+  '/overview',
+  '/call'
+]
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
@@ -11,26 +22,31 @@ export async function middleware(request: NextRequest) {
 
   const isAuthenticated = !!session?.user
   
-  // Define route patterns
-  const isHomePage = pathname === '/'
-  const isAuthRoute = pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up')
-  const isDashboardRoute = pathname.startsWith('/agents') || 
-                          pathname.startsWith('/sessions') ||
-                          pathname.match(/^\/[^\/]*$/) === null && !isAuthRoute && !isHomePage // Any nested route that's not auth or home
+  // Check route types
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname)
+  const isAuthRoute = AUTH_ROUTES.includes(pathname)
+  const isProtectedRoute = PROTECTED_ROUTE_PREFIXES.some(prefix => 
+    pathname.startsWith(prefix)
+  )
 
-  // Home page is accessible to everyone
-  if (isHomePage) {
+  // Public routes are accessible to everyone
+  if (isPublicRoute && !isAuthRoute) {
     return NextResponse.next()
   }
 
   // Redirect authenticated users away from auth pages
   if (isAuthenticated && isAuthRoute) {
-    return NextResponse.redirect(new URL('/agents', request.url))
+    // Get the redirect URL from query params or default to /agents
+    const redirectTo = request.nextUrl.searchParams.get('redirect') || '/agents'
+    return NextResponse.redirect(new URL(redirectTo, request.url))
   }
 
-  // Redirect unauthenticated users away from protected pages
-  if (!isAuthenticated && isDashboardRoute) {
-    return NextResponse.redirect(new URL('/sign-in', request.url))
+  // Redirect unauthenticated users to sign-in for protected routes
+  if (!isAuthenticated && isProtectedRoute) {
+    const signInUrl = new URL('/sign-in', request.url)
+    // Save the original URL they were trying to access
+    signInUrl.searchParams.set('redirect', pathname)
+    return NextResponse.redirect(signInUrl)
   }
 
   return NextResponse.next()
@@ -43,9 +59,9 @@ export const config = {
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
+     * - public folder assets
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|public).*)',
   ],
-} 
+}
