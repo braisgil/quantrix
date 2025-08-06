@@ -49,7 +49,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-6">
+    <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Navigation Header */}
       <SessionNavigationHeader />
 
@@ -62,7 +62,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
           Session Information Grid
           <SessionDetailsCard session={session} />
           */}
-          <div className="grid grid-cols-1 gap-6 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
               <SessionConversationsCard
                 conversations={conversations}

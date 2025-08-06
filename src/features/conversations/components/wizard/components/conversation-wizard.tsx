@@ -47,7 +47,7 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
     trpc.conversations.create.mutationOptions({
     onSuccess: async () => {
       await queryClient.invalidateQueries(
-        trpc.conversations.getMany.queryOptions({})
+        trpc.sessions.getSessionConversations.queryOptions({ sessionId })
       );
       toast.success("Your conversation has been scheduled successfully!");
       resetWizard();
