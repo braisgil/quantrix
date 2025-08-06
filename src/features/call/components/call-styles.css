@@ -1,0 +1,143 @@
+/* Stream Video SDK Override Styles - Matrix Theme */
+
+/* Video Preview Wrapper */
+.stream-video-preview-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stream-video-preview-wrapper .str-video__preview {
+  background: linear-gradient(135deg, 
+    rgba(0, 255, 65, 0.05) 0%, 
+    rgba(0, 0, 0, 0.95) 50%, 
+    rgba(0, 255, 65, 0.05) 100%
+  ) !important;
+  border: 1px solid rgba(0, 255, 65, 0.2) !important;
+  border-radius: 0.75rem !important;
+  backdrop-filter: blur(10px) !important;
+  width: 100% !important;
+  max-width: 350px !important;
+  aspect-ratio: 16/9 !important;
+  max-height: 200px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.stream-video-preview-wrapper .str-video__preview video {
+  border-radius: 0.75rem !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+/* Video Placeholder */
+.str-video__participant-view__placeholder {
+  background: linear-gradient(135deg, 
+    rgba(0, 255, 65, 0.1) 0%, 
+    rgba(0, 0, 0, 0.9) 50%, 
+    rgba(0, 255, 65, 0.1) 100%
+  ) !important;
+  border: 1px solid rgba(0, 255, 65, 0.3) !important;
+  border-radius: 0.75rem !important;
+  color: rgba(0, 255, 65, 0.9) !important;
+}
+
+.str-video__participant-view__placeholder .str-video__avatar {
+  background: rgba(0, 255, 65, 0.2) !important;
+  color: #00ff41 !important;
+  font-weight: 600;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.3);
+}
+
+/* Remove custom styling for call controls to keep original SDK appearance */
+
+/* Remove custom styling for preview controls to keep original SDK appearance */
+
+/* Video Layout */
+.stream-video-layout-wrapper .str-video__speaker-layout {
+  background: transparent !important;
+}
+
+.stream-video-layout-wrapper .str-video__participant-view {
+  background: linear-gradient(135deg, 
+    rgba(0, 255, 65, 0.05) 0%, 
+    rgba(0, 0, 0, 0.95) 50%, 
+    rgba(0, 255, 65, 0.05) 100%
+  ) !important;
+  border: 1px solid rgba(0, 255, 65, 0.2) !important;
+  border-radius: 1rem !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.stream-video-layout-wrapper .str-video__participant-view video {
+  border-radius: 1rem !important;
+}
+
+.stream-video-layout-wrapper .str-video__participant-view__name-tag {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid rgba(0, 255, 65, 0.3) !important;
+  border-radius: 0.5rem !important;
+  color: #00ff41 !important;
+  font-weight: 500 !important;
+  text-shadow: 0 0 4px rgba(0, 255, 65, 0.3) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Audio/Video indicators */
+.str-video__participant-view__audio-indicator,
+.str-video__participant-view__video-indicator {
+  background: rgba(0, 0, 0, 0.8) !important;
+  border: 1px solid rgba(0, 255, 65, 0.3) !important;
+  border-radius: 0.375rem !important;
+  color: #00ff41 !important;
+}
+
+/* Muted states */
+.str-video__participant-view--muted .str-video__participant-view__audio-indicator {
+  background: rgba(239, 68, 68, 0.2) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+  color: #ef4444 !important;
+}
+
+/* Dark theme overrides */
+.dark .stream-video-preview-wrapper .str-video__preview {
+  background: linear-gradient(135deg, 
+    rgba(0, 255, 65, 0.1) 0%, 
+    rgba(0, 0, 0, 0.98) 50%, 
+    rgba(0, 255, 65, 0.1) 100%
+  ) !important;
+  border: 1px solid rgba(0, 255, 65, 0.4) !important;
+}
+
+.dark .str-video__participant-view__placeholder {
+  background: linear-gradient(135deg, 
+    rgba(0, 255, 65, 0.15) 0%, 
+    rgba(0, 0, 0, 0.95) 50%, 
+    rgba(0, 255, 65, 0.15) 100%
+  ) !important;
+  border: 1px solid rgba(0, 255, 65, 0.5) !important;
+}
+
+
+
+/* Mobile specific styles */
+@media (max-width: 640px) {
+  .stream-video-layout-wrapper .str-video__participant-view__name-tag {
+    font-size: 0.875rem !important;
+    padding: 0.375rem 0.75rem !important;
+  }
+}
+
+/* Animations */
+@keyframes matrix-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.6), 0 0 30px rgba(0, 255, 65, 0.4);
+  }
+}

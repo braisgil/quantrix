@@ -1,12 +1,44 @@
-import { agents, conversations } from "@/db/schema";
+import { agents, conversations, user } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { eq, and, getTableColumns, sql, ilike, desc } from "drizzle-orm";
+import { eq, and, getTableColumns, sql, ilike, desc, inArray } from "drizzle-orm";
 import { conversationsInsertSchema } from "../schema";
 import z from "zod";
-import { ConversationStatus } from "../types";
+import { ConversationStatus, StreamTranscriptItem } from "../types";
+import { streamVideo } from "@/lib/stream-video";
+import { streamChat } from "@/lib/stream-chat";
+import JSONL from "jsonl-parse-stringify";
 
 export const conversationRouter = createTRPCRouter({
+  generateChatToken: protectedProcedure.mutation(async ({ ctx }) => {
+    const token = streamChat.createToken(ctx.auth.user.id);
+    await streamChat.upsertUser({
+      id: ctx.auth.user.id,
+      role: "admin",
+    });
+
+    return token;
+  }),
+  generateToken: protectedProcedure.mutation(async ({ ctx }) => {
+    await streamVideo.upsertUsers([
+      {
+        id: ctx.auth.user.id,
+        name: ctx.auth.user.name,
+        role: "admin",
+      },
+    ]);
+
+    const expirationTime = Math.floor(Date.now() / 1000) + 3600; // 1 hour
+    const issuedAt = Math.floor(Date.now() / 1000) - 60;
+
+    const token = streamVideo.generateUserToken({
+      user_id: ctx.auth.user.id,
+      exp: expirationTime,
+      validity_in_seconds: issuedAt,
+    });
+
+    return token;
+  }),
   create: protectedProcedure
     .input(conversationsInsertSchema)
     .mutation(async ({ input, ctx }) => {
@@ -17,15 +49,15 @@ export const conversationRouter = createTRPCRouter({
           userId: ctx.auth.user.id,
         })
         .returning();
-/*
-      const call = streamVideo.video.call("default", createdMeeting.id);
+
+      const call = streamVideo.video.call("default", createdConversation.id);
       
       await call.create({
         data: {
           created_by_id: ctx.auth.user.id,
           custom: {
-            meetingId: createdMeeting.id,
-            meetingName: createdMeeting.name
+            conversationId: createdConversation.id,
+            conversationName: createdConversation.name
           },
           settings_override: {
             transcription: {
@@ -40,7 +72,7 @@ export const conversationRouter = createTRPCRouter({
           },
         },
       });
-*/
+
       const [existingAgent] = await ctx.db
         .select()
         .from(agents)
@@ -52,19 +84,15 @@ export const conversationRouter = createTRPCRouter({
           message: "Conversation not found",
         });
       }
-/*
+
       await streamVideo.upsertUsers([
         {
           id: existingAgent.id,
           name: existingAgent.name,
-          role: "user",
-          image: generateAvatarUri({
-            seed: existingAgent.name,
-            variant: "botttsNeutral",
-          }),
+          role: "user"
         },
       ]);
-*/
+
       return createdConversation;
     }),
   getOne: protectedProcedure
@@ -130,5 +158,83 @@ export const conversationRouter = createTRPCRouter({
       return {
         items: data
       };
+    }),
+  getTranscript: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const [existingConversation] = await ctx.db
+        .select()
+        .from(conversations)
+        .where(
+          and(eq(conversations.id, input.id), eq(conversations.userId, ctx.auth.user.id))
+        );
+  
+      if (!existingConversation) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Conversation not found",
+        });
+      }
+  
+      if (!existingConversation.transcriptUrl) {
+        return [];
+      }
+  
+      const transcript = await fetch(existingConversation.transcriptUrl)
+        .then((res) => res.text())
+        .then((text) => JSONL.parse<StreamTranscriptItem>(text))
+        .catch(() => {
+          return [];
+        });
+  
+      const speakerIds = [
+        ...new Set(transcript.map((item) => item.speaker_id)),
+      ];
+  
+      const userSpeakers = await ctx.db
+        .select()
+        .from(user)
+        .where(inArray(user.id, speakerIds))
+        .then((users) =>
+          users.map((user) => ({
+            ...user,
+          }))
+        );
+  
+      const agentSpeakers = await ctx.db
+        .select()
+        .from(agents)
+        .where(inArray(agents.id, speakerIds))
+        .then((agents) =>
+          agents.map((agent) => ({
+            ...agent,
+          }))
+        );
+  
+      const speakers = [...userSpeakers, ...agentSpeakers];
+  
+      const transcriptWithSpeakers = transcript.map((item) => {
+        const speaker = speakers.find(
+          (speaker) => speaker.id === item.speaker_id
+        );
+  
+        if (!speaker) {
+          return {
+            ...item,
+            user: {
+              name: "Unknown",
+            },
+          };
+        }
+  
+        return {
+          ...item,
+          user: {
+            name: speaker.name,
+          },
+        };
+      })
+  
+      return transcriptWithSpeakers;
     }),
 }); 
