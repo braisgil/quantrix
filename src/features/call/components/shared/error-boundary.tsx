@@ -43,7 +43,7 @@ export const CallErrorBoundary: React.FC<CallErrorBoundaryProps> = ({
           </CardHeader>
           <CardContent className="text-center space-y-6">
             <p className="text-muted-foreground">
-              The conversation you're trying to join doesn't exist or may have been deleted.
+              The conversation you&apos;re trying to join doesn&apos;t exist or may have been deleted.
             </p>
             
             <div className="flex flex-col gap-3">

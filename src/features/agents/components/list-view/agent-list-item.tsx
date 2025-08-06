@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Settings, Clock, MessageSquare, Sparkles, Brain, Target, ExternalLink } from 'lucide-react';
+import { Clock, MessageSquare, Sparkles, Brain, Target, ExternalLink } from 'lucide-react';
 import type { AgentsGetMany } from '../../types';
 import { getAgentIcon, formatAgentTotalDuration } from '../../utils/agent-helpers';
 import { formatCategoryName, getSubSubcategoryName } from '../../utils/category-helpers';
@@ -66,7 +66,7 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
             </div>
             <div className="flex items-center gap-2 bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/50">
               <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
-              <span>{formatAgentTotalDuration(agent.totalDuration)}</span>
+              <span>{formatAgentTotalDuration(agent.totalDuration)} conversation time</span>
             </div>
           </div>
         </div>

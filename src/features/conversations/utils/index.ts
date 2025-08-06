@@ -5,5 +5,4 @@ export {
   getConversationStatusColor,
   formatConversationDuration,
   calculateConversationStats,
-  getConversationDescription,
 } from './conversation-helpers'; 

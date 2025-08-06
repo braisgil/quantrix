@@ -51,7 +51,6 @@ export {
   getConversationStatusColor,
   formatConversationDuration,
   calculateConversationStats,
-  getConversationDescription,
 } from './utils';
 
 // Server-side exports (for app router)

@@ -1,11 +1,11 @@
 import { getIconConfig } from '../components/wizard/lib/icon-mappings';
 import { formatCategoryName } from './category-helpers';
-import type { AgentsGetMany } from '../types';
+import type { AgentsGetMany, AgentsGetOne } from '../types';
 
 /**
  * Gets the appropriate icon component for an agent based on its category
  */
-export const getAgentIcon = (agent: AgentsGetMany[number]) => {
+export const getAgentIcon = (agent: AgentsGetMany[number] | AgentsGetOne) => {
   const iconConfig = getIconConfig('subcategory', agent.category, agent.name);
   return iconConfig.component;
 };
@@ -13,7 +13,7 @@ export const getAgentIcon = (agent: AgentsGetMany[number]) => {
 /**
  * Generates a short description for an agent from its instructions or category
  */
-export const getAgentDescription = (agent: AgentsGetMany[number]) => {
+export const getAgentDescription = (agent: AgentsGetMany[number] | AgentsGetOne) => {
   // Try to extract meaningful description from instructions or use category/subcategory
   if (agent.instructions && agent.instructions.length > 0) {
     const description = agent.instructions.substring(0, 60);

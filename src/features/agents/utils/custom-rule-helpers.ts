@@ -74,7 +74,11 @@ export const getAgentCustomRules = (agent: {
     rules.push({
       type: 'Additional Rule',
       ruleId: agent.additionalRule1,
-      option: getCustomRuleOption(agent.additionalRule1)
+      option: {
+        name: '',
+        description: agent.additionalRule1,
+        category: 'Additional Rule'
+      }
     });
   }
   
@@ -82,7 +86,11 @@ export const getAgentCustomRules = (agent: {
     rules.push({
       type: 'Additional Rule',
       ruleId: agent.additionalRule2,
-      option: getCustomRuleOption(agent.additionalRule2)
+      option: {
+        name: '',
+        description: agent.additionalRule2,
+        category: 'Additional Rule'
+      }
     });
   }
   

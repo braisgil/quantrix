@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Brain, Clock, MessageSquare } from 'lucide-react';
+import { Bot, Clock, Phone } from 'lucide-react';
 
 interface AgentStatsCardsProps {
   activeAgents: number;
@@ -19,14 +19,14 @@ const AgentStatsCards: React.FC<AgentStatsCardsProps> = ({
         <CardHeader className="pb-3">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-primary/10 rounded-lg matrix-glow">
-              <Brain className="w-5 h-5 text-primary" />
+              <Bot className="w-5 h-5 text-primary" />
             </div>
             <CardTitle className="text-lg">Active Agents</CardTitle>
           </div>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-primary matrix-text-glow">{activeAgents}</div>
-          <p className="text-sm text-muted-foreground">Neural companions online</p>
+          <p className="text-sm text-muted-foreground">AI agents online</p>
         </CardContent>
       </Card>
 
@@ -34,7 +34,7 @@ const AgentStatsCards: React.FC<AgentStatsCardsProps> = ({
         <CardHeader className="pb-3">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-primary/10 rounded-lg matrix-glow">
-              <MessageSquare className="w-5 h-5 text-primary" />
+              <Phone className="w-5 h-5 text-primary" />
             </div>
             <CardTitle className="text-lg">Total Conversations</CardTitle>
           </div>

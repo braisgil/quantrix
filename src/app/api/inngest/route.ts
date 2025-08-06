@@ -9,5 +9,4 @@ export const { GET, POST, PUT } = serve({
   functions: [
     conversationsProcessing,
   ],
-  streaming: false, // Disable streaming to avoid body parsing issues
 });
