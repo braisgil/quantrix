@@ -95,8 +95,7 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 sm:ml-6">
         <Button 
           size="sm" 
-          variant="outline" 
-          className="matrix-border hover:matrix-glow w-full sm:w-auto"
+          className="bg-blue-500 hover:bg-blue-500/90 text-white dark:text-black font-semibold w-full sm:w-auto"
           onClick={handleConfigure}
         >
           <ExternalLink className="w-4 h-4 mr-2" />
@@ -107,13 +106,12 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
           <AlertDialogTrigger asChild>
             <Button 
               size="sm" 
-              variant="outline" 
-              className="matrix-border hover:matrix-glow hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 w-full sm:w-auto"
+              className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
               disabled={deleteAgentMutation.isPending}
             >
               {deleteAgentMutation.isPending ? (
                 <>
-                  <div className="w-3 h-3 border-2 border-destructive/20 border-t-destructive rounded-full animate-spin mr-2" />
+                  <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
                   <span>Deleting...</span>
                 </>
               ) : (
@@ -131,20 +129,23 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
                 Are you sure you want to delete &ldquo;{agent.name}&rdquo;? This action cannot be undone and will also delete all associated sessions and conversations.
               </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+                        <AlertDialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
-                          <AlertDialogAction 
-              onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 w-full sm:w-auto"
-              disabled={deleteAgentMutation.isPending}
-            >
+              <AlertDialogAction 
+                onClick={handleDelete}
+                className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+                disabled={deleteAgentMutation.isPending}
+              >
               {deleteAgentMutation.isPending ? (
                 <>
                   <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
                   <span>Deleting...</span>
                 </>
               ) : (
-                <span>Delete</span>
+                <>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  <span>Delete</span>
+                </>
               )}
             </AlertDialogAction>
             </AlertDialogFooter>

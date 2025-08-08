@@ -1,8 +1,20 @@
 'use client';
 
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, Clock, Play, ExternalLink, Calendar, Bot } from 'lucide-react';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { MessageSquare, Clock, Play, ExternalLink, Calendar, Bot, Trash2, PhoneCall } from 'lucide-react';
 import { format } from 'date-fns';
 import type { ConversationGetMany } from '../../types';
 import { ConversationStatus } from '../../types';
@@ -11,6 +23,7 @@ import {
   getConversationStatusColor,
   formatConversationDuration,
 } from '../../utils/conversation-helpers';
+import { useDeleteConversation } from '../../api/use-delete-conversation';
 
 interface ConversationListItemProps {
   conversation: ConversationGetMany[number];
@@ -24,18 +37,27 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
   const statusLabel = getConversationStatusLabel(conversation.status as ConversationStatus);
   const statusColor = getConversationStatusColor(conversation.status as ConversationStatus);
   const duration = formatConversationDuration(conversation.startedAt, conversation.endedAt);
+  const deleteConversationMutation = useDeleteConversation({ sessionId: conversation.sessionId });
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const handleDelete = () => {
+    deleteConversationMutation.mutate({ id: conversation.id });
+    setIsDeleteDialogOpen(false);
+  };
+
+  const canDelete = conversation.status === ConversationStatus.Upcoming;
 
   return (
-    <div className="matrix-card flex flex-col sm:flex-row sm:items-start sm:justify-between p-5 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
+    <div className="matrix-card flex flex-col sm:flex-row sm:items-start sm:justify-between p-4 sm:p-5 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
       <div className="flex-1 w-full">
         {/* Group 1: Icon, Name, and Badges */}
         <div className="flex items-start space-x-3 sm:space-x-4">
-          <div className="hidden sm:block p-3 bg-primary/10 rounded-lg matrix-glow flex-shrink-0">
-            <MessageSquare className="w-7 h-7 text-primary" />
+          <div className="p-2 sm:p-3 bg-primary/10 rounded-lg matrix-glow flex-shrink-0">
+            <MessageSquare className="w-5 h-5 sm:w-7 sm:h-7 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="font-semibold text-foreground text-sm sm:text-base mb-1">{conversation.name}</h3>
+              <h3 className="font-semibold text-foreground text-base sm:text-lg mb-0">{conversation.name}</h3>
               <Badge 
                 variant="secondary" 
                 className={`${statusColor} ${
@@ -56,15 +78,15 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
 
         {/* Group 2: Stats */}
         <div className="mt-3 sm:mt-4">
-          {/* Enhanced stats - always on same line */}
-          <div className="flex items-center gap-2 sm:gap-6 text-xs text-muted-foreground">
-            <div className="flex items-center gap-2 bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/50">
-              <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
+          {/* Enhanced stats - responsive layout */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-xs text-muted-foreground">
+            <div className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-lg border border-border/50">
+              <Clock className="w-4 h-4 text-primary/70" />
               <span>{duration}</span>
             </div>
             {conversation.scheduledDateTime && (
-              <div className="flex items-center gap-2 bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/50">
-                <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
+              <div className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-lg border border-border/50">
+                <Calendar className="w-4 h-4 text-primary/70" />
                 <span className="hidden sm:inline">
                   {format(new Date(conversation.scheduledDateTime), 'MMM d, yyyy h:mm a')}
                 </span>
@@ -77,24 +99,76 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
         </div>
       </div>
       
-      <div className="flex items-center justify-end sm:justify-start space-x-3 mt-3 sm:mt-0 sm:ml-4">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 sm:ml-6">
         <Button
-          variant="outline"
           size="sm"
           onClick={() => onViewConversation(conversation)}
-          className="matrix-border hover:matrix-glow w-full sm:w-auto"
+          className="bg-blue-500 hover:bg-blue-500/90 text-white dark:text-black font-semibold w-full sm:w-auto"
         >
           <ExternalLink className="w-4 h-4" />
           <span className="ml-2 sm:hidden">View</span>
         </Button>
+        
         {conversation.status === ConversationStatus.Upcoming && (
           <Button
             size="sm"
-            className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow w-full sm:w-auto"
+            className="bg-primary hover:bg-primary/90 text-white dark:text-black font-semibold w-full sm:w-auto"
           >
-            <Play className="w-4 h-4" />
+            <PhoneCall className="w-4 h-4" />
             <span className="ml-2 sm:hidden">Start</span>
           </Button>
+        )}
+
+        {canDelete && (
+          <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+            <AlertDialogTrigger asChild>
+              <Button 
+                size="sm" 
+                className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+                disabled={deleteConversationMutation.isPending}
+              >
+                {deleteConversationMutation.isPending ? (
+                  <>
+                    <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                    <span className="ml-2 sm:hidden">Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4" />
+                    <span className="ml-2 sm:hidden">Delete</span>
+                  </>
+                )}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="sm:max-w-md">
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Conversation</AlertDialogTitle>
+                <AlertDialogDescription className="text-sm">
+                  Are you sure you want to delete &ldquo;{conversation.name}&rdquo;? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+                          <AlertDialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+              <AlertDialogAction 
+                onClick={handleDelete}
+                className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+                disabled={deleteConversationMutation.isPending}
+              >
+                                  {deleteConversationMutation.isPending ? (
+                  <>
+                    <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    <span>Delete</span>
+                  </>
+                )}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         )}
       </div>
     </div>

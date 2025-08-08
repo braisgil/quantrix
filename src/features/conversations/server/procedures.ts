@@ -251,4 +251,38 @@ export const conversationRouter = createTRPCRouter({
   
       return transcriptWithSpeakers;
     }),
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const [existingConversation] = await ctx.db
+        .select()
+        .from(conversations)
+        .where(
+          and(
+            eq(conversations.id, input.id),
+            eq(conversations.userId, ctx.auth.user.id)
+          )
+        );
+
+      if (!existingConversation) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Conversation not found or you don't have permission to delete it",
+        });
+      }
+
+      // Only allow deletion of upcoming conversations
+      if (existingConversation.status !== ConversationStatus.Upcoming) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Only upcoming conversations can be deleted",
+        });
+      }
+
+      await ctx.db
+        .delete(conversations)
+        .where(eq(conversations.id, input.id));
+
+      return { success: true };
+    }),
 }); 

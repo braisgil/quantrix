@@ -59,7 +59,6 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
             conversation={conversation}
             onStartConversation={handleStartConversation}
             onEditConversation={handleEditConversation}
-            onDeleteConversation={handleDeleteConversation}
             onViewTranscript={handleViewTranscript}
           />
         </CardContent>
