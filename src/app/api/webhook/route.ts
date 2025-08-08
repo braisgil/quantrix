@@ -185,53 +185,104 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Prefer conversation-level context if the channel corresponds to a completed conversation.
     const [existingConversation] = await db
       .select()
       .from(conversations)
       .where(and(eq(conversations.id, channelId), eq(conversations.status, "completed")));
 
-    if (!existingConversation) {
-      return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
+    // Determine session/agent and context summaries
+    let targetSessionId: string | null = null;
+    let agentId: string | null = null;
+    let agentName: string | null = null;
+    let agentInstructions: string | null = null;
+    let summariesText: string = "";
+
+    if (existingConversation) {
+      targetSessionId = existingConversation.sessionId;
+
+      const [existingSession] = await db
+        .select()
+        .from(sessions)
+        .where(eq(sessions.id, targetSessionId));
+
+      if (!existingSession) {
+        return NextResponse.json({ error: "Session not found" }, { status: 404 });
+      }
+
+      const [existingAgent] = await db
+        .select()
+        .from(agents)
+        .where(eq(agents.id, existingSession.agentId));
+
+      if (!existingAgent) {
+        return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+      }
+
+      agentId = existingAgent.id;
+      agentName = existingAgent.name;
+      agentInstructions = existingAgent.instructions;
+      summariesText = `${existingConversation.summary ?? ""}`.trim();
+    } else {
+      // Otherwise, treat the channel ID as a session-level chat, aggregating all completed conversations
+      const [existingSession] = await db
+        .select()
+        .from(sessions)
+        .where(eq(sessions.id, channelId));
+
+      if (!existingSession) {
+        return NextResponse.json({ error: "Conversation or Session not found" }, { status: 404 });
+      }
+
+      const [existingAgent] = await db
+        .select()
+        .from(agents)
+        .where(eq(agents.id, existingSession.agentId));
+
+      if (!existingAgent) {
+        return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+      }
+
+      targetSessionId = existingSession.id;
+      agentId = existingAgent.id;
+      agentName = existingAgent.name;
+      agentInstructions = existingAgent.instructions;
+
+      const completedConversations = await db
+        .select()
+        .from(conversations)
+        .where(
+          and(
+            eq(conversations.sessionId, existingSession.id),
+            eq(conversations.status, "completed"),
+          )
+        );
+
+      summariesText = completedConversations
+        .filter((c) => c.summary && c.summary.trim() !== "")
+        .map((c) => `- ${c.name}:\n${c.summary}`)
+        .join("\n\n");
     }
 
-    // Get the session first, then the agent
-    const [existingSession] = await db
-      .select()
-      .from(sessions)
-      .where(eq(sessions.id, existingConversation.sessionId));
-
-    if (!existingSession) {
-      return NextResponse.json({ error: "Session not found" }, { status: 404 });
+    if (!agentId || !agentName || !agentInstructions) {
+      return NextResponse.json({ error: "Agent information incomplete" }, { status: 500 });
     }
 
-    const [existingAgent] = await db
-      .select()
-      .from(agents)
-      .where(eq(agents.id, existingSession.agentId));
-
-    if (!existingAgent) {
-      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
-    }
-
-    if (userId !== existingAgent.id) {
+    if (userId !== agentId) {
       const instructions = `
-      You are an AI assistant helping the user revisit a recently completed conversation.
-      Below is a summary of the conversation, generated from the transcript:
-      
-      ${existingConversation.summary}
-      
-      The following are your original instructions from the live conversation assistant. Please continue to follow these behavioral guidelines as you assist the user:
-      
-      ${existingAgent.instructions}
-      
-      The user may ask questions about the conversation, request clarifications, or ask for follow-up actions.
-      Always base your responses on the conversation summary above.
-      
-      You also have access to the recent conversation history between you and the user. Use the context of previous messages to provide relevant, coherent, and helpful responses. If the user's question refers to something discussed earlier, make sure to take that into account and maintain continuity in the conversation.
-      
-      If the summary does not contain enough information to answer a question, politely let the user know.
-      
-      Be concise, helpful, and focus on providing accurate information from the conversation and the ongoing conversation.
+You are an AI assistant helping the user revisit completed conversations from a session.
+
+Session ID: ${targetSessionId ?? "unknown"}
+
+Summaries of completed conversations (use as primary factual context):
+${summariesText || "(No completed conversation summaries are available yet.)"}
+
+Follow the original assistant instructions below while responding:
+${agentInstructions}
+
+The user may ask questions about any of the completed conversations, request clarifications, or ask for follow-up actions. Always base your responses on the summaries above and the ongoing chat context.
+If the summaries do not contain enough information to answer a question, say so and suggest a reasonable next step.
+Be concise and helpful.
       `;
 
       const channel = streamChat.channel("messaging", channelId);
@@ -241,7 +292,7 @@ export async function POST(req: NextRequest) {
         .slice(-5)
         .filter((msg) => msg.text && msg.text.trim() !== "")
         .map<ChatCompletionMessageParam>((message) => ({
-          role: message.user?.id === existingAgent.id ? "assistant" : "user",
+          role: message.user?.id === agentId ? "assistant" : "user",
           content: message.text || "",
         }));
 
@@ -264,15 +315,15 @@ export async function POST(req: NextRequest) {
       }
 
       streamChat.upsertUser({
-        id: existingAgent.id,
-        name: existingAgent.name,
+        id: agentId,
+        name: agentName,
       });
 
       channel.sendMessage({
         text: GPTResponseText,
         user: {
-          id: existingAgent.id,
-          name: existingAgent.name,
+          id: agentId,
+          name: agentName,
         },
       });
     }

@@ -78,16 +78,15 @@ export const SessionListItem = ({ session, onConfigure }: SessionListItemProps) 
         </div>
       </div>
       
-      <div className="flex items-center justify-end sm:justify-start space-x-3 mt-4 sm:mt-0 sm:ml-6">
-          <Button
-            variant="outline"
-            size="sm"
-            className="matrix-border hover:matrix-glow w-full sm:w-auto"
-            onClick={handleConfigure}
-          >
-            <ExternalLink className="w-4 h-4" />
-            <span className="ml-2 sm:hidden">View</span>
-          </Button>
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 sm:ml-6">
+        <Button
+          size="sm"
+          onClick={handleConfigure}
+          className="bg-blue-500 hover:bg-blue-500/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+        >
+          <ExternalLink className="w-4 h-4" />
+          <span className="ml-2 sm:hidden">View</span>
+        </Button>
       </div>
     </div>
   );

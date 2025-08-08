@@ -1,23 +1,32 @@
 import { ConversationStatus } from '../types';
 import type { ConversationGetMany } from '../types';
+import {
+  CheckCircle2,
+  Clock,
+  Mic,
+  Cog,
+  XCircle,
+  MessageSquare,
+  type LucideIcon,
+} from 'lucide-react';
 
 /**
  * Gets the appropriate icon for a conversation based on its status
  */
-export const getConversationIcon = (status: ConversationStatus) => {
+export const getConversationIcon = (status: ConversationStatus): LucideIcon => {
   switch (status) {
     case ConversationStatus.Active:
-      return '🎙️';
+      return Mic;
     case ConversationStatus.Completed:
-      return '✅';
+      return CheckCircle2;
     case ConversationStatus.Upcoming:
-      return '⏰';
+      return Clock;
     case ConversationStatus.Processing:
-      return '⚙️';
+      return Cog;
     case ConversationStatus.Cancelled:
-      return '❌';
+      return XCircle;
     default:
-      return '💬';
+      return MessageSquare;
   }
 };
 

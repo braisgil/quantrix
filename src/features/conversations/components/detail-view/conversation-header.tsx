@@ -2,57 +2,44 @@
 
 import { CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { formatDistanceToNow } from 'date-fns';
 import type { ConversationGetOne } from '../../types';
 import { ConversationStatus } from '../../types';
 import { 
   getConversationIcon, 
-  getConversationStatusLabel, 
-  getConversationStatusColor 
+  getConversationStatusLabel
 } from '../../utils/conversation-helpers';
+import { MessageSquare } from 'lucide-react';
 
 interface ConversationHeaderProps {
   conversation: ConversationGetOne;
 }
 
 export const ConversationHeader: React.FC<ConversationHeaderProps> = ({ conversation }) => {
-  const statusIcon = getConversationIcon(conversation.status as ConversationStatus);
+  const StatusIcon = getConversationIcon(conversation.status as ConversationStatus);
   const statusLabel = getConversationStatusLabel(conversation.status as ConversationStatus);
-  const statusColor = getConversationStatusColor(conversation.status as ConversationStatus);
 
   return (
-    <CardHeader className="pb-4 sm:pb-6">
-      <div className="flex items-start justify-between">
-        <div className="flex items-start space-x-4">
-          {/* Icon */}
-          <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center matrix-glow">
-            <span className="text-3xl">{statusIcon}</span>
+    <CardHeader className="text-center pb-0 sm:pb-0 px-0">
+      {/* Header with Icon and Title */}
+      <div className="flex items-center justify-center gap-3 mb-4">
+        <div className="relative matrix-glow">
+          <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center matrix-border">
+            <MessageSquare className="w-4 h-4 text-black" />
           </div>
-
-          {/* Title and Status */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center space-x-3 mb-2">
-              <h1 className="text-2xl font-bold quantrix-gradient matrix-text-glow truncate">
-                {conversation.name}
-              </h1>
-              <Badge 
-                variant="secondary" 
-                className={`${statusColor} bg-primary/10 border-primary/20`}
-              >
-                {statusLabel}
-              </Badge>
-            </div>
-
-            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-              <span>Agent: {conversation.agent.name}</span>
-              <span>Created {formatDistanceToNow(new Date(conversation.createdAt), { addSuffix: true })}</span>
-              {conversation.updatedAt !== conversation.createdAt && (
-                <span>Updated {formatDistanceToNow(new Date(conversation.updatedAt), { addSuffix: true })}</span>
-              )}
-            </div>
-          </div>
+          <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full animate-pulse"></div>
         </div>
+        <h1 className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow truncate">
+          {conversation.name}
+        </h1>
+      </div>
+
+      {/* Status Badge only to avoid repeating details shown below */}
+      <div className="flex flex-wrap gap-2 justify-center mb-2">
+        <Badge variant="secondary" className="matrix-border matrix-glow">
+          <StatusIcon className="h-3 w-3 mr-1" />
+          {statusLabel}
+        </Badge>
       </div>
     </CardHeader>
   );
-}; 
+};

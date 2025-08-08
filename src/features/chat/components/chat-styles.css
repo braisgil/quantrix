@@ -1,0 +1,101 @@
+/* Stream Chat theme overrides to align with Quantrix design tokens */
+
+.stream-theme-support .str-chat,
+.stream-theme-support .str-chat * {
+  --str-chat__font-family: var(--font-sans);
+  --str-chat__primary-color: var(--primary);
+  --str-chat__text-color: var(--foreground);
+  --str-chat__background-color: var(--background);
+  --str-chat__secondary-background-color: var(--card);
+  --str-chat__surface-color: var(--card);
+  --str-chat__disabled-color: var(--muted-foreground);
+  --str-chat__border-color: var(--border);
+  --str-chat__link-color: var(--primary);
+}
+
+/* Container and window */
+.stream-theme-support .str-chat,
+.stream-theme-support .str-chat__container,
+.stream-theme-support .str-chat__main-panel,
+.stream-theme-support .str-chat__virtual-list {
+  background-color: var(--card);
+}
+
+/* Message bubbles */
+.stream-theme-support .str-chat__message-simple__content {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.stream-theme-support .str-chat__message-simple--me .str-chat__message-simple__content {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-color: color-mix(in oklch, var(--primary), black 10%);
+}
+
+.stream-theme-support .str-chat__message-simple--other .str-chat__message-simple__content {
+  background-color: var(--muted);
+  color: var(--foreground);
+}
+
+/* Message input */
+.stream-theme-support .str-chat__message-input,
+.stream-theme-support .str-chat__message-input--emojipicker .str-chat__message-textarea,
+.stream-theme-support textarea.str-chat__message-textarea {
+  background-color: var(--background);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.stream-theme-support .str-chat__message-input .str-chat__send-button {
+  color: var(--primary);
+}
+
+/* Thread panel */
+.stream-theme-support .str-chat__thread {
+  background-color: var(--card);
+  border-left: 1px solid var(--border);
+}
+
+/* Lists, separators */
+.stream-theme-support .str-chat__date-separator > div {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  border-radius: var(--radius-sm);
+}
+
+/* Avatars */
+.stream-theme-support .str-chat__avatar {
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+/* Buttons and focus states */
+.stream-theme-support .str-chat button:focus-visible,
+.stream-theme-support .str-chat [role="button"]:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Reactions */
+.stream-theme-support .str-chat__reaction-picker,
+.stream-theme-support .str-chat__message-reactions {
+  background-color: var(--popover);
+  color: var(--popover-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* Typing indicator */
+.stream-theme-support .str-chat__typing-indicator {
+  color: var(--muted-foreground);
+}
+
+/* Channel header (when provided by library) */
+.stream-theme-support .str-chat__channel-header {
+  background-color: var(--card);
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+}
+
+

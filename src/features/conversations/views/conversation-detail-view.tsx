@@ -9,6 +9,8 @@ import {
   ConversationSummaryCard,
   ConversationActionButtons
 } from '../components';
+import { ChatProvider } from '@/features/chat/components/chat-provider';
+import { ConversationStatus } from '../types';
 
 interface ConversationDetailViewProps {
   conversationId: string;
@@ -39,19 +41,24 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto space-y-6">
+    <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Navigation Header */}
       <ConversationNavigationHeader sessionId={conversation.sessionId} />
 
-      {/* Main Conversation Detail Card */}
-      <Card className="w-full mx-auto matrix-card border-primary/20 backdrop-blur-md">
+      {/* Header */}
+      <div>
         <ConversationHeader conversation={conversation} />
 
-        <CardContent className="pb-4 sm:pb-6">
-          {/* Conversation Information Grid */}
+        <CardContent className="pb-4 sm:pb-6 px-0">
+          {/* Content Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <ConversationDetailsCard conversation={conversation} />
-            <ConversationSummaryCard conversation={conversation} />
+            <div className="flex flex-col gap-6">
+              {conversation.status === ConversationStatus.Completed && (
+                <ChatProvider channelId={conversation.id} channelName={conversation.name} />
+              )}
+              <ConversationSummaryCard conversation={conversation} />
+            </div>
           </div>
 
           {/* Action Buttons */}
@@ -59,11 +66,10 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
             conversation={conversation}
             onStartConversation={handleStartConversation}
             onEditConversation={handleEditConversation}
-            onDeleteConversation={handleDeleteConversation}
             onViewTranscript={handleViewTranscript}
           />
         </CardContent>
-      </Card>
+      </div>
     </div>
   );
 }; 

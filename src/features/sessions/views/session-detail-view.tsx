@@ -2,11 +2,10 @@
 
 import { useQuerySession } from '../api/use-query-session';
 import { useQuerySessionConversations } from '../api/use-query-session-conversations';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { SessionNavigationHeader } from '../components/shared/session-navigation-header';
 import { 
   SessionHeader,
-  SessionDetailsCard,
   SessionConversationsCard,
   SessionChatCard,
   SessionActionButtons
@@ -68,10 +67,13 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
                 conversations={conversations}
                 onCreateConversation={handleCreateConversation}
               />
-              <SessionChatCard
-                sessionId={sessionId}
-                onStartChat={handleStartChat}
-              />
+              {session && (
+                <SessionChatCard
+                  sessionId={session.id}
+                  sessionName={session.name}
+                  onStartChat={handleStartChat}
+                />
+              )}
           </div>
 
           {/* Action Buttons */}
