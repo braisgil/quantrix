@@ -1,10 +1,23 @@
-import React from 'react';
+'use client'
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Clock, MessageSquare, Sparkles, Brain, Target, ExternalLink } from 'lucide-react';
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { Clock, MessageSquare, Sparkles, Brain, Target, ExternalLink, Trash2 } from 'lucide-react';
 import type { AgentsGetMany } from '../../types';
 import { getAgentIcon, formatAgentTotalDuration } from '../../utils/agent-helpers';
 import { formatCategoryName, getSubSubcategoryName } from '../../utils/category-helpers';
+import { useDeleteAgent } from '../../api/use-delete-agent';
 
 interface AgentListItemProps {
   agent: AgentsGetMany[number];
@@ -16,21 +29,28 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
   onConfigure 
 }) => {
   const IconComponent = getAgentIcon(agent);
+  const deleteAgentMutation = useDeleteAgent();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleConfigure = () => {
     onConfigure?.(agent);
   };
 
+  const handleDelete = () => {
+    deleteAgentMutation.mutate({ id: agent.id });
+    setIsDeleteDialogOpen(false);
+  };
+
   return (
-    <div className="matrix-card flex flex-col sm:flex-row sm:items-start sm:justify-between p-5 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
+    <div className="matrix-card flex flex-col sm:flex-row sm:items-start sm:justify-between p-4 sm:p-5 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
       <div className="flex-1 w-full">
         {/* Group 1: Icon, Name, and Badges */}
         <div className="flex items-start space-x-3 sm:space-x-4">
-          <div className="hidden sm:block p-3 bg-primary/10 rounded-lg matrix-glow flex-shrink-0">
-            <IconComponent className="w-7 h-7 text-primary" />
+          <div className="p-2 sm:p-3 bg-primary/10 rounded-lg matrix-glow flex-shrink-0">
+            <IconComponent className="w-5 h-5 sm:w-7 sm:h-7 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="font-semibold text-foreground text-sm sm:text-base mb-1">{agent.name}</h3> 
+            <h3 className="font-semibold text-foreground text-base sm:text-lg mb-2">{agent.name}</h3> 
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 text-xs">
                 <Brain className="h-3 w-3 mr-1" />
@@ -54,34 +74,82 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
         {/* Group 2: Description and Stats */}
         <div className="mt-4 sm:mt-5">
           {agent.description && (
-            <p className="text-xs sm:text-sm text-muted-foreground mb-4 line-clamp-2">
+            <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
               {agent.description}
             </p>
           )}
-          {/* Enhanced stats - always on same line */}
-          <div className="flex items-center gap-3 sm:gap-6 text-xs text-muted-foreground">
+          {/* Enhanced stats - responsive layout */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-xs text-muted-foreground">
             <div className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-lg border border-border/50">
-              <MessageSquare className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
+              <MessageSquare className="w-4 h-4 text-primary/70" />
               <span>{agent.conversationCount} conversation{agent.conversationCount !== 1 ? 's' : ''}</span>
             </div>
             <div className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-lg border border-border/50">
-              <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
+              <Clock className="w-4 h-4 text-primary/70" />
               <span>{formatAgentTotalDuration(agent.totalDuration)} conversation time</span>
             </div>
           </div>
         </div>
       </div>
       
-      <div className="flex items-center justify-end sm:justify-start space-x-3 mt-4 sm:mt-0 sm:ml-6">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 sm:ml-6">
         <Button 
           size="sm" 
           variant="outline" 
           className="matrix-border hover:matrix-glow w-full sm:w-auto"
           onClick={handleConfigure}
         >
-          <ExternalLink className="w-4 h-4" />
-          <span className="ml-2 sm:hidden">View</span>
+          <ExternalLink className="w-4 h-4 mr-2" />
+          View
         </Button>
+        
+        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <AlertDialogTrigger asChild>
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="matrix-border hover:matrix-glow hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 w-full sm:w-auto"
+              disabled={deleteAgentMutation.isPending}
+            >
+              {deleteAgentMutation.isPending ? (
+                <>
+                  <div className="w-3 h-3 border-2 border-destructive/20 border-t-destructive rounded-full animate-spin mr-2" />
+                  <span>Deleting...</span>
+                </>
+              ) : (
+                <>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  <span>Delete</span>
+                </>
+              )}
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className="sm:max-w-md">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Agent</AlertDialogTitle>
+              <AlertDialogDescription className="text-sm">
+                Are you sure you want to delete &ldquo;{agent.name}&rdquo;? This action cannot be undone and will also delete all associated sessions and conversations.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-0">
+              <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+                          <AlertDialogAction 
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 w-full sm:w-auto"
+              disabled={deleteAgentMutation.isPending}
+            >
+              {deleteAgentMutation.isPending ? (
+                <>
+                  <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
+                  <span>Deleting...</span>
+                </>
+              ) : (
+                <span>Delete</span>
+              )}
+            </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </div>
   );

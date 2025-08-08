@@ -49,6 +49,8 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
 
           {/* Action Buttons */}
           <AgentActionButtons
+            agentId={agent.id}
+            agentName={agent.name}
             onEditAgent={handleEditAgent}
             onConfigureAgent={handleConfigureAgent}
           />

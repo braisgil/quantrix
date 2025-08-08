@@ -103,4 +103,30 @@ export const agentsRouter = createTRPCRouter({
 
     return existingAgent;
   }),
+  delete: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const [existingAgent] = await ctx.db
+        .select()
+        .from(agents)
+        .where(
+          and(
+            eq(agents.id, input.id),
+            eq(agents.userId, ctx.auth.user.id)
+          )
+        );
+
+      if (!existingAgent) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Agent not found or you don't have permission to delete it",
+        });
+      }
+
+      await ctx.db
+        .delete(agents)
+        .where(eq(agents.id, input.id));
+
+      return { success: true };
+    }),
 });
