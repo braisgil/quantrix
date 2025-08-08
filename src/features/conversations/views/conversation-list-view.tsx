@@ -9,27 +9,18 @@ import {
   ConversationsEmptyState, 
   ConversationsListHeader 
 } from '../components';
-import { useWizardState } from '../hooks/use-wizard-state';
-import { ConversationWizard } from '../components/wizard';
 import { useRouter } from 'next/navigation';
 
 export const ConversationListView = () => {
   const router = useRouter();
-  const { showWizard, openWizard, closeWizard } = useWizardState();
   const { data: conversationsData } = useQueryConversations();
   const conversations = conversationsData.items || [];
   const { totalConversations, activeConversations, completedConversations, upcomingConversations } = calculateConversationStats(conversations);
 
-  if (showWizard) {
-    return (
-      <div className="space-y-0">
-        <ConversationWizard 
-          onSuccess={closeWizard}
-          onCancel={closeWizard}
-        />
-      </div>
-    );
-  }
+  const handleCreateConversation = () => {
+    // Redirect to sessions page where conversations are created within session context
+    router.push('/sessions');
+  };
 
   const handleViewConversation = (conversation: ConversationGetMany[number]) => {
     router.push(`/conversations/${conversation.id}`);
@@ -37,7 +28,7 @@ export const ConversationListView = () => {
 
   return (
     <div className="space-y-8">
-      <ConversationsListHeader onCreateConversation={openWizard} />
+      <ConversationsListHeader onCreateConversation={handleCreateConversation} />
       <div className="space-y-8">
         <ConversationsStatsCards
           totalConversations={totalConversations}

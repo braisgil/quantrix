@@ -41,7 +41,7 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Navigation Header */}
-      <ConversationNavigationHeader />
+      <ConversationNavigationHeader sessionId={conversation.sessionId} />
 
       {/* Main Conversation Detail Card */}
       <Card className="w-full mx-auto matrix-card border-primary/20 backdrop-blur-md">

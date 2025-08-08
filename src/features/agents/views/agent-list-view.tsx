@@ -34,17 +34,18 @@ export const AgentListView = () => {
     <div className="space-y-8">
       <AgentsListHeader onCreateAgent={openWizard} />
       <div className="space-y-8">
-        <AgentStatsCards
-          activeAgents={activeAgents}
-          totalConversations={totalConversations}
-          totalDurationFormatted={totalDurationFormatted}
-        />
-
         {agents.length > 0 ? (
-          <AgentsList 
-            agents={agents}
-            onConfigureAgent={handleConfigureAgent}
-          />
+          <>
+            <AgentStatsCards
+              activeAgents={activeAgents}
+              totalConversations={totalConversations}
+              totalDurationFormatted={totalDurationFormatted}
+            />
+            <AgentsList 
+              agents={agents}
+              onConfigureAgent={handleConfigureAgent}
+            />
+          </>
         ) : (
           <AgentsEmptyState />
         )}

@@ -96,15 +96,3 @@ export const calculateConversationStats = (conversations: ConversationGetMany) =
     upcomingConversations,
   };
 };
-
-/**
- * Gets a short description for a conversation
- */
-export const getConversationDescription = (conversation: ConversationGetMany[number]) => {
-  if (conversation.summary) {
-    return conversation.summary.length > 60 
-      ? `${conversation.summary.substring(0, 60)}...` 
-      : conversation.summary;
-  }
-  return `Conversation with ${conversation.agent.name}`;
-}; 

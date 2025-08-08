@@ -1,17 +1,15 @@
 'use client';
 
-import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MessageSquare, Clock, Play, ExternalLink, Calendar, User } from 'lucide-react';
-import { formatDistanceToNow, format } from 'date-fns';
+import { MessageSquare, Clock, Play, ExternalLink, Calendar, Bot } from 'lucide-react';
+import { format } from 'date-fns';
 import type { ConversationGetMany } from '../../types';
 import { ConversationStatus } from '../../types';
 import { 
   getConversationStatusLabel, 
   getConversationStatusColor,
   formatConversationDuration,
-  getConversationDescription 
 } from '../../utils/conversation-helpers';
 
 interface ConversationListItemProps {
@@ -25,11 +23,10 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
 }) => {
   const statusLabel = getConversationStatusLabel(conversation.status as ConversationStatus);
   const statusColor = getConversationStatusColor(conversation.status as ConversationStatus);
-  const description = getConversationDescription(conversation);
   const duration = formatConversationDuration(conversation.startedAt, conversation.endedAt);
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between p-4 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
+    <div className="matrix-card flex flex-col sm:flex-row sm:items-start sm:justify-between p-5 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
       <div className="flex-1 w-full">
         {/* Group 1: Icon, Name, and Badges */}
         <div className="flex items-start space-x-3 sm:space-x-4">
@@ -38,7 +35,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2 mb-1">
-              <h3 className="font-semibold text-foreground text-sm sm:text-base">{conversation.name}</h3>
+              <h3 className="font-semibold text-foreground text-sm sm:text-base mb-1">{conversation.name}</h3>
               <Badge 
                 variant="secondary" 
                 className={`${statusColor} ${
@@ -50,23 +47,15 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
                 {statusLabel}
               </Badge>
             </div>
-            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-              <Badge variant="secondary" className="bg-primary/10 text-primary border-primary/30 text-xs">
-                <User className="h-3 w-3 mr-1" />
-                <span className="hidden sm:inline">{conversation.agent.name}</span>
-                <span className="sm:hidden">{conversation.agent.name.split(' ')[0]}</span>
-              </Badge>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Bot className="h-4 w-4 text-primary/70" />
+              <span>{conversation.agent.name}</span>
             </div>
           </div>
         </div>
 
-        {/* Group 2: Description and Stats */}
+        {/* Group 2: Stats */}
         <div className="mt-3 sm:mt-4">
-          {description && (
-            <p className="text-xs sm:text-sm text-muted-foreground mb-3 line-clamp-2">
-              {description}
-            </p>
-          )}
           {/* Enhanced stats - always on same line */}
           <div className="flex items-center gap-2 sm:gap-6 text-xs text-muted-foreground">
             <div className="flex items-center gap-2 bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/50">

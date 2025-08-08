@@ -9,17 +9,25 @@ import { useTRPC } from "@/trpc/client";
 // Import refactored components
 import { useConversationWizard } from "../hooks/use-conversation-wizard";
 import { useStepValidation } from "../hooks/use-step-validation";
-import { StepConversationDetails } from "./steps/step-conversation-details";
+import { StepConversationDetailsSession } from "./steps/step-conversation-details-session";
 import { STEP_CONFIGS } from "../lib/step-config";
 import { cn } from "@/lib/utils";
 import { ConversationNavigationHeader } from "../../shared/conversation-navigation-header";
 
 interface ConversationWizardProps {
+  /** The session ID where the conversation will be created */
+  sessionId: string;
+  /** The session name for display purposes */
+  sessionName: string;
+  /** The agent ID associated with the session */
+  agentId: string;
+  /** Callback when conversation is successfully created */
   onSuccess?: () => void;
+  /** Callback when user cancels the wizard */
   onCancel?: () => void;
 }
 
-export const ConversationWizard = ({ onSuccess, onCancel }: ConversationWizardProps) => {
+export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess, onCancel }: ConversationWizardProps) => {
   const queryClient = useQueryClient();
   const trpc = useTRPC();
   
@@ -31,7 +39,7 @@ export const ConversationWizard = ({ onSuccess, onCancel }: ConversationWizardPr
     prevStep,
     resetWizard,
     getFormData,
-  } = useConversationWizard();
+  } = useConversationWizard({ sessionId, agentId });
 
   const { canProceed } = useStepValidation(wizardState);
 
@@ -39,7 +47,7 @@ export const ConversationWizard = ({ onSuccess, onCancel }: ConversationWizardPr
     trpc.conversations.create.mutationOptions({
     onSuccess: async () => {
       await queryClient.invalidateQueries(
-        trpc.conversations.getMany.queryOptions({})
+        trpc.sessions.getSessionConversations.queryOptions({ sessionId })
       );
       toast.success("Your conversation has been scheduled successfully!");
       resetWizard();
@@ -62,10 +70,16 @@ export const ConversationWizard = ({ onSuccess, onCancel }: ConversationWizardPr
   };
 
   const renderCurrentStep = () => {
-    const stepProps = { wizardState, updateWizardState };
+    const stepProps = { 
+      wizardState, 
+      updateWizardState,
+      sessionId,
+      sessionName,
+      agentId,
+    };
     
     switch (currentStep) {
-      case 0: return <StepConversationDetails {...stepProps} />;
+      case 0: return <StepConversationDetailsSession {...stepProps} />;
       default: return null;
     }
   };
@@ -76,7 +90,7 @@ export const ConversationWizard = ({ onSuccess, onCancel }: ConversationWizardPr
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Navigation Header */}
-      <ConversationNavigationHeader onCancel={onCancel} />
+      <ConversationNavigationHeader sessionId={sessionId} onCancel={onCancel} />
       {/* Enhanced Progress Header */}
       <Card className="matrix-card border-primary/20 backdrop-blur-md">
         <CardContent className="pt-3 pb-2">
@@ -90,7 +104,7 @@ export const ConversationWizard = ({ onSuccess, onCancel }: ConversationWizardPr
                 <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
               </div>
               <h1 className="text-base sm:text-lg font-bold quantrix-gradient matrix-text-glow">
-                Schedule Your Conversation
+                Add Conversation to {sessionName}
               </h1>
             </div>
 

@@ -7,7 +7,7 @@ interface UseWizardStateReturn {
 }
 
 /**
- * Hook for managing conversation wizard visibility state
+ * Hook for managing wizard visibility state
  * Follows the established pattern for state management
  */
 export const useWizardState = (): UseWizardStateReturn => {
@@ -26,4 +26,4 @@ export const useWizardState = (): UseWizardStateReturn => {
     openWizard,
     closeWizard,
   };
-}; 
+};

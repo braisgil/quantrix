@@ -3,13 +3,13 @@
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { 
-  Code, 
+  Bot, 
   Zap,
   Search,
   Terminal,
   Loader2,
   Sparkles,
-  MessageSquare
+  FolderOpen
 } from "lucide-react";
 
 import { 
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/command";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useSearchAgents } from "@/features/agents/api/use-search-agents";
-import { useSearchConversations } from "@/features/conversations/api/use-search-conversations";
+import { useSearchSessions } from "@/features/sessions/api/use-search-sessions";
 import { useDebouncedSearch } from "@/hooks/use-debounced-search";
 
 interface Props {
@@ -34,14 +34,14 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
   const router = useRouter();
   const { search, debouncedSearch, setSearch, isSearching } = useDebouncedSearch();
   const { data: agents, isLoading: agentsLoading } = useSearchAgents(debouncedSearch);
-  const { data: conversations, isLoading: conversationsLoading } = useSearchConversations(debouncedSearch);
+  const { data: sessions, isLoading: sessionsLoading } = useSearchSessions(debouncedSearch);
 
-  const hasAgentResults = agents && agents.items.length > 0;
-  const hasConversationResults = conversations && conversations.items.length > 0;
+  const hasAgentResults = agents && agents.items && agents.items.length > 0;
+  const hasSessionResults = sessions && sessions.items && sessions.items.length > 0;
   const isSearchActive = search && search.trim().length > 0;
-  const showLoading = isSearchActive && (isSearching || agentsLoading || conversationsLoading);
-
-
+  const isDebouncedSearchActive = debouncedSearch && debouncedSearch.trim().length > 0;
+  const showLoading = isSearchActive && (isSearching || agentsLoading || sessionsLoading);
+  const showResults = isDebouncedSearchActive && !showLoading;
 
   const handleNavigation = (path: string) => {
     router.push(path);
@@ -81,7 +81,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
       <DialogContent className="border-border bg-gradient-to-b from-background/95 to-background/90 backdrop-blur-md overflow-hidden p-0 max-w-2xl shadow-2xl ring-1 ring-primary/10">
         <DialogTitle className="sr-only">Search Command</DialogTitle>
         <DialogDescription className="sr-only">
-          Search for AI companions, conversations, or access quick actions
+          Search for AI companions, sessions, or access quick actions
         </DialogDescription>
         <Command shouldFilter={false} className="bg-transparent">
           {/* Search Header */}
@@ -96,7 +96,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                 <Terminal className="h-5 w-5 text-primary drop-shadow-sm" />
               )}
               <CommandInput
-                placeholder="Search AI companions, conversations..."
+                placeholder="Search AI companions, sessions..."
                 value={search}
                 onValueChange={setSearch}
                 className="border-0 focus:ring-0 bg-transparent text-foreground placeholder:text-muted-foreground text-base transition-all duration-200 focus:placeholder:text-muted-foreground/60"
@@ -108,9 +108,9 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
           <CommandList className="max-h-[400px] scrollbar-thin scrollbar-thumb-muted-foreground/30 scrollbar-track-transparent">
             {showLoading ? (
               <LoadingState />
-            ) : (
+            ) : showResults ? (
               <>
-                {!hasAgentResults && !hasConversationResults && isSearchActive && (
+                {!hasAgentResults && !hasSessionResults && (
                   <EmptyState />
                 )}
 
@@ -124,7 +124,7 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                         className="group flex items-center space-x-4 px-4 py-3 mx-2 rounded-lg hover:bg-accent/50 hover:shadow-md hover:scale-[1.01] transition-all duration-300 cursor-pointer border border-transparent hover:border-border/50"
                       >
                         <div className="p-2 bg-muted/50 rounded-lg group-hover:bg-accent group-hover:shadow-sm transition-all duration-200 border border-border/50">
-                          <Code className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
+                          <Bot className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
                         </div>
                         <div className="flex items-center space-x-3 flex-1">
                           <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/60 rounded-full flex items-center justify-center text-sm font-bold text-primary-foreground shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-200">
@@ -147,28 +147,28 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                   </CommandGroup>
                 )}
 
-                {/* Conversations Results */}
-                {hasConversationResults && (
-                  <CommandGroup heading="Conversations" className="px-2 py-3">
-                    {conversations?.items.map((conversation) => (
+                {/* Sessions Results */}
+                {hasSessionResults && (
+                  <CommandGroup heading="Sessions" className="px-2 py-3">
+                    {sessions?.items.map((session) => (
                       <CommandItem
-                        key={conversation.id}
-                        onSelect={() => handleNavigation(`/conversations/${conversation.id}`)}
+                        key={session.id}
+                        onSelect={() => handleNavigation(`/sessions/${session.id}`)}
                         className="group flex items-center space-x-4 px-4 py-3 mx-2 rounded-lg hover:bg-accent/50 hover:shadow-md hover:scale-[1.01] transition-all duration-300 cursor-pointer border border-transparent hover:border-border/50"
                       >
                         <div className="p-2 bg-muted/50 rounded-lg group-hover:bg-accent group-hover:shadow-sm transition-all duration-200 border border-border/50">
-                          <MessageSquare className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
+                          <FolderOpen className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
                         </div>
                         <div className="flex items-center space-x-3 flex-1">
-                          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-200">
-                            {conversation.name.charAt(0).toUpperCase()}
+                          <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-sm font-bold text-white shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-200">
+                            {session.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200">
-                              {conversation.name}
+                              {session.name}
                             </p>
                             <p className="text-xs text-muted-foreground group-hover:text-muted-foreground/80 transition-colors duration-200">
-                              with {conversation.agent.name} • {conversation.status}
+                              with {session.agent.name} • {session.conversationCount} conversations
                             </p>
                           </div>
                         </div>
@@ -179,45 +179,45 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
                     ))}
                   </CommandGroup>
                 )}
-
+              </>
+            ) : (
+              <>
                 {/* Quick Actions - Only show when no search */}
-                {!isSearchActive && (
-                  <CommandGroup heading="Quick Actions" className="px-2 py-3">
-                    <CommandItem
-                      onSelect={() => handleNavigation("/conversations")}
-                      className="group flex items-center space-x-4 px-4 py-3 mx-2 rounded-lg hover:bg-accent/50 hover:shadow-md hover:scale-[1.01] transition-all duration-300 cursor-pointer border border-transparent hover:border-border/50"
-                    >
-                      <div className="p-2 bg-muted/50 rounded-lg group-hover:bg-accent group-hover:shadow-sm transition-all duration-200 border border-border/50">
-                        <Zap className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200">
-                          Start New Conversation
-                        </p>
-                        <p className="text-xs text-muted-foreground group-hover:text-muted-foreground/80 transition-colors duration-200">
-                          Begin chatting with an AI companion
-                        </p>
-                      </div>
-                    </CommandItem>
-                    
-                    <CommandItem
-                      onSelect={() => handleNavigation("/agents")}
-                      className="group flex items-center space-x-4 px-4 py-3 mx-2 rounded-lg hover:bg-accent/50 hover:shadow-md hover:scale-[1.01] transition-all duration-300 cursor-pointer border border-transparent hover:border-border/50"
-                    >
-                      <div className="p-2 bg-muted/50 rounded-lg group-hover:bg-accent group-hover:shadow-sm transition-all duration-200 border border-border/50">
-                        <Terminal className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200">
-                          Create New Companion
-                        </p>
-                        <p className="text-xs text-muted-foreground group-hover:text-muted-foreground/80 transition-colors duration-200">
-                          Design your perfect AI assistant
-                        </p>
-                      </div>
-                    </CommandItem>
-                  </CommandGroup>
-                )}
+                <CommandGroup heading="Quick Actions" className="px-2 py-3">
+                  <CommandItem
+                    onSelect={() => handleNavigation("/sessions")}
+                    className="group flex items-center space-x-4 px-4 py-3 mx-2 rounded-lg hover:bg-accent/50 hover:shadow-md hover:scale-[1.01] transition-all duration-300 cursor-pointer border border-transparent hover:border-border/50"
+                  >
+                    <div className="p-2 bg-muted/50 rounded-lg group-hover:bg-accent group-hover:shadow-sm transition-all duration-200 border border-border/50">
+                      <Zap className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200">
+                        Start New Session
+                      </p>
+                      <p className="text-xs text-muted-foreground group-hover:text-muted-foreground/80 transition-colors duration-200">
+                        Create a session and begin chatting with an AI companion
+                      </p>
+                    </div>
+                  </CommandItem>
+                  
+                  <CommandItem
+                    onSelect={() => handleNavigation("/agents")}
+                    className="group flex items-center space-x-4 px-4 py-3 mx-2 rounded-lg hover:bg-accent/50 hover:shadow-md hover:scale-[1.01] transition-all duration-300 cursor-pointer border border-transparent hover:border-border/50"
+                  >
+                    <div className="p-2 bg-muted/50 rounded-lg group-hover:bg-accent group-hover:shadow-sm transition-all duration-200 border border-border/50">
+                      <Terminal className="h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-200" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors duration-200">
+                        Create New Companion
+                      </p>
+                      <p className="text-xs text-muted-foreground group-hover:text-muted-foreground/80 transition-colors duration-200">
+                        Design your perfect AI assistant
+                      </p>
+                    </div>
+                  </CommandItem>
+                </CommandGroup>
               </>
             )}
           </CommandList>

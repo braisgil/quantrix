@@ -4,9 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { 
   Code, 
-  Users, 
+  Bot, 
   Zap,
   LayoutDashboard,
+  FolderOpen,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -34,14 +35,14 @@ const neuralSections = [
     href: "/overview",
   },
   {
-    icon: Users,
-    label: "Conversations",
-    href: "/conversations",
-  },
-  {
-    icon: Code,
+    icon: Bot,
     label: "Agents",
     href: "/agents",
+  },
+  {
+    icon: FolderOpen,
+    label: "Sessions",
+    href: "/sessions",
   },
 ];
 
