@@ -11,20 +11,33 @@
   --str-chat__disabled-color: var(--muted-foreground);
   --str-chat__border-color: var(--border);
   --str-chat__link-color: var(--primary);
+  /* Ensure popovers/menus render on top */
+  --str-chat__z-index: 60;
 }
 
 /* Container and window */
 .stream-theme-support .str-chat,
 .stream-theme-support .str-chat__container,
 .stream-theme-support .str-chat__main-panel,
+.stream-theme-support .str-chat__window {
+  background-color: var(--card);
+  height: 100%;
+  min-height: 0;
+}
+
 .stream-theme-support .str-chat__virtual-list {
   background-color: var(--card);
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 /* Message bubbles */
 .stream-theme-support .str-chat__message-simple__content {
   border-radius: var(--radius-md);
   border: 1px solid var(--border);
+  background-color: var(--card);
+  color: var(--foreground);
 }
 
 .stream-theme-support .str-chat__message-simple--me .str-chat__message-simple__content {
@@ -34,8 +47,9 @@
 }
 
 .stream-theme-support .str-chat__message-simple--other .str-chat__message-simple__content {
-  background-color: var(--muted);
+  background-color: var(--secondary);
   color: var(--foreground);
+  border-color: var(--border);
 }
 
 /* Message input */
@@ -46,6 +60,7 @@
   color: var(--foreground);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
+  overflow: visible; /* ensure dropdowns aren't clipped */
 }
 
 .stream-theme-support .str-chat__message-input .str-chat__send-button {
@@ -84,6 +99,7 @@
   color: var(--popover-foreground);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
+  z-index: 60;
 }
 
 /* Typing indicator */
@@ -96,6 +112,38 @@
   background-color: var(--card);
   color: var(--foreground);
   border-bottom: 1px solid var(--border);
+}
+
+/* Ensure dropdowns/emoji pickers are visible within cards */
+.stream-theme-support .str-chat__message-options,
+.stream-theme-support .str-chat__message-actions-box,
+.stream-theme-support .str-chat__small-message-input,
+.stream-theme-support .str-chat__file-upload-button,
+.stream-theme-support .str-chat__trigger--button,
+.stream-theme-support .emoji-mart {
+  z-index: 60;
+}
+
+/* Ensure message text inherits the correct color in all themes */
+.stream-theme-support .str-chat__message-simple__text,
+.stream-theme-support .str-chat__message-simple__text p,
+.stream-theme-support .str-chat__message-simple__text span {
+  color: inherit;
+}
+
+.stream-theme-support .str-chat__message-simple__text a {
+  color: var(--link, var(--primary));
+}
+
+/* Fix dark theme contrasts explicitly */
+.dark .stream-theme-support .str-chat__message-simple--other .str-chat__message-simple__content {
+  background-color: var(--secondary);
+  color: var(--foreground);
+}
+
+.dark .stream-theme-support .str-chat__message-simple--me .str-chat__message-simple__content {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
 }
 
 

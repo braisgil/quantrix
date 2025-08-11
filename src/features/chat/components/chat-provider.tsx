@@ -16,11 +16,11 @@ export const ChatProvider = ({ channelId, channelName }: Props) => {
 
   if (isPending || !data?.user) {
     return (
-      <Card className="matrix-card border-primary/20 backdrop-blur-md overflow-hidden">
-        <CardContent className="p-4">
-          <div className="space-y-3">
+      <Card className="matrix-card border-primary/20 backdrop-blur-md flex flex-col h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px]">
+        <CardContent className="p-4 flex-1 flex flex-col min-h-0">
+          <div className="space-y-3 flex-1">
             <Skeleton className="h-6 w-40" />
-            <Skeleton className="h-64 w-full" />
+            <Skeleton className="h-full w-full" />
             <Skeleton className="h-10 w-full" />
           </div>
         </CardContent>

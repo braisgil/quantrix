@@ -63,7 +63,7 @@ export const ChatUI = ({
 
   if (!client) {
     return (
-      <Card className="matrix-card border-primary/20 backdrop-blur-md overflow-hidden">
+      <Card className="matrix-card border-primary/20 backdrop-blur-md flex flex-col h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px]">
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <MessageSquare className="w-4 h-4 text-primary" />
@@ -71,7 +71,7 @@ export const ChatUI = ({
           </CardTitle>
         </CardHeader>
         <Separator />
-        <CardContent className="p-0">
+        <CardContent className="p-0 flex-1 flex flex-col min-h-0">
           <div className="p-4 space-y-3">
             <Skeleton className="h-6 w-48" />
             <Skeleton className="h-64 w-full" />
@@ -83,7 +83,7 @@ export const ChatUI = ({
   }
 
   return (
-    <Card className="matrix-card border-primary/20 backdrop-blur-md overflow-hidden">
+    <Card className="matrix-card border-primary/20 backdrop-blur-md flex flex-col h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px]">
       <CardHeader className="pb-3">
         <CardTitle className="text-base flex items-center gap-2">
           <MessageSquare className="w-4 h-4 text-primary" />
@@ -91,18 +91,20 @@ export const ChatUI = ({
         </CardTitle>
       </CardHeader>
       <Separator />
-      <CardContent className="p-0">
-        <div className="stream-theme-support">
+      <CardContent className="p-0 flex-1 flex flex-col min-h-0">
+        <div className="stream-theme-support h-full">
           <Chat client={client}>
             <Channel channel={channel}>
-              <Window>
-                <div className="flex-1 overflow-y-auto max-h-[calc(100vh-23rem)] border-b bg-card">
-                  <MessageList />
-                </div>
-                <div className="bg-background">
-                  <MessageInput />
-                </div>
-              </Window>
+              <div className="flex h-full flex-col min-h-0">
+                <Window>
+                  <div className="flex-1 min-h-0 border-b bg-card">
+                    <MessageList />
+                  </div>
+                  <div className="bg-background">
+                    <MessageInput />
+                  </div>
+                </Window>
+              </div>
               <Thread />
             </Channel>
           </Chat>

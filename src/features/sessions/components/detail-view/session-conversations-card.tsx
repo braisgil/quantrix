@@ -23,8 +23,8 @@ export const SessionConversationsCard = ({
   };
 
   return (
-    <div>
-      <CardHeader className="pb-4 px-0">
+    <Card className="matrix-card h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
+      <CardHeader className="pb-4 px-0 shrink-0">
         <div className="flex items-center gap-3 mb-2">
           <CardTitle className="text-lg font-bold quantrix-gradient matrix-text-glow">
             Conversations
@@ -34,7 +34,7 @@ export const SessionConversationsCard = ({
           Conversations within this session
         </CardDescription>
       </CardHeader>
-      <CardContent className="px-0">
+      <CardContent className="px-0 flex-1 min-h-0 overflow-y-auto">
         {conversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="relative mb-4">
@@ -80,6 +80,6 @@ export const SessionConversationsCard = ({
           </div>
         )}
       </CardContent>
-    </div>
+    </Card>
   );
 };
