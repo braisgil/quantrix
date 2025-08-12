@@ -12,8 +12,7 @@ import {
 } from "stream-chat-react";
 
 import { useTRPC } from "@/trpc/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { MessageSquare } from "lucide-react";
 
@@ -63,14 +62,16 @@ export const ChatUI = ({
 
   if (!client) {
     return (
-      <Card className="matrix-card border-primary/20 backdrop-blur-md flex flex-col h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px]">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base flex items-center gap-2">
+      <div className="h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
+        <CardHeader className="px-0 pb-6">
+          <div className="flex items-center gap-3 mb-2">
             <MessageSquare className="w-4 h-4 text-primary" />
-            {channelName || "Chat"}
-          </CardTitle>
+            <CardTitle className="text-lg font-bold quantrix-gradient matrix-text-glow">
+              {channelName || "Chat"}
+            </CardTitle>
+          </div>
+          <CardDescription>Messages in this channel</CardDescription>
         </CardHeader>
-        <Separator />
         <CardContent className="p-0 flex-1 flex flex-col min-h-0">
           <div className="p-4 space-y-3">
             <Skeleton className="h-6 w-48" />
@@ -78,19 +79,21 @@ export const ChatUI = ({
             <Skeleton className="h-10 w-full" />
           </div>
         </CardContent>
-      </Card>
+      </div>
     );
   }
 
   return (
-    <Card className="matrix-card border-primary/20 backdrop-blur-md flex flex-col h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px]">
-      <CardHeader className="pb-3">
-        <CardTitle className="text-base flex items-center gap-2">
+    <div className="h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
+      <CardHeader className="px-0 pb-6">
+        <div className="flex items-center gap-3 mb-2">
           <MessageSquare className="w-4 h-4 text-primary" />
-          {channelName || "Chat"}
-        </CardTitle>
+          <CardTitle className="text-lg font-bold quantrix-gradient matrix-text-glow">
+            {channelName || "Chat"}
+          </CardTitle>
+        </div>
+        <CardDescription>Messages in this channel</CardDescription>
       </CardHeader>
-      <Separator />
       <CardContent className="p-0 flex-1 flex flex-col min-h-0">
         <div className="stream-theme-support h-full">
           <Chat client={client}>
@@ -110,6 +113,6 @@ export const ChatUI = ({
           </Chat>
         </div>
       </CardContent>
-    </Card>
+    </div>
   )
 }

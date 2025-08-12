@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Plus } from "lucide-react";
 import { ConversationListItem } from "@/features/conversations/components";
@@ -24,8 +24,8 @@ export const SessionConversationsCard = ({
   
 
   return (
-    <Card className="matrix-card h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
-      <CardHeader className="pb-4 px-0 shrink-0">
+    <div className="h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
+      <CardHeader className="px-0 pb-6">
         <div className="flex items-center gap-3 mb-2">
           <CardTitle className="text-lg font-bold quantrix-gradient matrix-text-glow">
             Conversations
@@ -34,6 +34,15 @@ export const SessionConversationsCard = ({
         <CardDescription>
           Conversations within this session
         </CardDescription>
+        {conversations.length > 0 && (
+          <Button 
+            onClick={onCreateConversation}
+            className="mt-3 bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow w-full"
+          >
+            <Plus className="w-3 h-3 mr-2" />
+            Add Conversation
+          </Button>
+        )}
       </CardHeader>
       <CardContent className="px-0 flex-1 min-h-0 overflow-y-auto">
         {conversations.length === 0 ? (
@@ -70,19 +79,9 @@ export const SessionConversationsCard = ({
                 isDeleting={deletingConversationId === conversation.id}
               />
             ))}
-            
-            <Button 
-              onClick={onCreateConversation}
-              variant="outline"
-              size="sm"
-              className="w-full border-primary/30 hover:bg-primary/10 hover:border-primary"
-            >
-              <Plus className="w-3 h-3 mr-2" />
-              Add Conversation
-            </Button>
           </div>
         )}
       </CardContent>
-    </Card>
+    </div>
   );
 };

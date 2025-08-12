@@ -15,6 +15,7 @@ import { useWizardState } from "../hooks/use-wizard-state";
 import { useDeleteConversation } from "@/features/conversations/api/use-delete-conversation";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useDeleteSession } from "../api/use-delete-session";
 
 interface SessionDetailViewProps {
   sessionId: string;
@@ -31,6 +32,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   const conversations = conversationsData?.items || [];
   const deleteConversationMutation = useDeleteConversation({ sessionId });
   const [deletingConversationId, setDeletingConversationId] = useState<string | undefined>(undefined);
+  const deleteSessionMutation = useDeleteSession();
 
   const handleCreateConversation = () => {
     openWizard();
@@ -39,6 +41,22 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   const handleStartChat = () => {
     // TODO: Implement chat functionality
     console.log('Start chat for session:', sessionId);
+  };
+  const handleEditSession = () => {
+    // TODO: Implement session editing UI
+    console.log('Edit session:', sessionId);
+  };
+
+  const handleDeleteSession = () => {
+    if (!session) return;
+    deleteSessionMutation.mutate(
+      { id: session.id },
+      {
+        onSuccess: () => {
+          router.push('/sessions');
+        },
+      }
+    );
   };
 
   const handleDeleteConversation = (conversation: (typeof conversations)[number]) => {
@@ -96,8 +114,10 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
 
           {/* Action Buttons */}
           <SessionActionButtons
-            onCreateConversation={handleCreateConversation}
-            onStartChat={handleStartChat}
+            sessionName={session?.name ?? ''}
+            onEditSession={handleEditSession}
+            onDeleteSession={handleDeleteSession}
+            isDeleting={deleteSessionMutation.isPending}
           />
         </CardContent>
       </div>
