@@ -3,18 +3,8 @@
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
-import { MessageSquare, Clock, Play, ExternalLink, Calendar, Bot, Trash2, PhoneCall } from 'lucide-react';
+import ConfirmDialog from '@/components/confirm-dialog';
+import { MessageSquare, Clock, ExternalLink, Calendar, Bot, Trash2, PhoneCall } from 'lucide-react';
 import { format } from 'date-fns';
 import type { ConversationGetMany } from '../../types';
 import { ConversationStatus } from '../../types';
@@ -120,55 +110,26 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
         )}
 
         {canDelete && (
-          <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-            <AlertDialogTrigger asChild>
-              <Button 
-                size="sm" 
-                className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-                disabled={deleteConversationMutation.isPending}
-              >
-                {deleteConversationMutation.isPending ? (
-                  <>
-                    <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                    <span className="ml-2 sm:hidden">Deleting...</span>
-                  </>
-                ) : (
-                  <>
-                    <Trash2 className="w-4 h-4" />
-                    <span className="ml-2 sm:hidden">Delete</span>
-                  </>
-                )}
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent className="sm:max-w-md">
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Conversation</AlertDialogTitle>
-                <AlertDialogDescription className="text-sm">
-                  Are you sure you want to delete &ldquo;{conversation.name}&rdquo;? This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-                          <AlertDialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
-              <AlertDialogAction 
-                onClick={handleDelete}
-                className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-                disabled={deleteConversationMutation.isPending}
-              >
-                                  {deleteConversationMutation.isPending ? (
-                  <>
-                    <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
-                    <span>Deleting...</span>
-                  </>
-                ) : (
-                  <>
-                    <Trash2 className="w-4 h-4 mr-2" />
-                    <span>Delete</span>
-                  </>
-                )}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <ConfirmDialog
+            open={isDeleteDialogOpen}
+            onOpenChange={setIsDeleteDialogOpen}
+            title="Delete Conversation"
+            description={<span>Are you sure you want to delete &ldquo;{conversation.name}&rdquo;? This action cannot be undone.</span>}
+            confirmLabel={deleteConversationMutation.isPending ? 'Deleting...' : 'Delete'}
+            onConfirm={handleDelete}
+            isLoading={deleteConversationMutation.isPending}
+            confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+            cancelButtonClassName="w-full sm:w-auto"
+          >
+            <Button 
+              size="sm" 
+              className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+              disabled={deleteConversationMutation.isPending}
+            >
+              <Trash2 className="w-4 h-4" />
+              <span className="ml-2 sm:hidden">{deleteConversationMutation.isPending ? 'Deleting...' : 'Delete'}</span>
+            </Button>
+          </ConfirmDialog>
         )}
       </div>
     </div>
