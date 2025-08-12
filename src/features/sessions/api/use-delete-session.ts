@@ -12,6 +12,10 @@ export const useDeleteSession = () => {
         await queryClient.invalidateQueries(
           trpc.sessions.getMany.queryOptions({})
         );
+        // Deleting a session may remove its conversations
+        await queryClient.invalidateQueries(
+          trpc.conversations.getMany.queryOptions({})
+        );
         toast.success('Session deleted successfully');
       },
       onError: (error) => {

@@ -14,18 +14,18 @@ import {
   getSessionStatusLabel,
   formatConversationCount
 } from "../../utils";
-import { useDeleteSession } from "../../api/use-delete-session";
 
 interface SessionListItemProps {
   session: SessionGetMany[0];
   onConfigure?: (session: SessionGetMany[0]) => void;
+  onDelete?: (session: SessionGetMany[0]) => void;
+  isDeleting?: boolean;
 }
 
-export const SessionListItem = ({ session, onConfigure }: SessionListItemProps) => {
+export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: SessionListItemProps) => {
   const StatusIcon = getSessionStatusIcon(session.status as SessionStatus);
   const statusColor = getSessionStatusColor(session.status as SessionStatus);
   const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
-  const deleteSessionMutation = useDeleteSession();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleConfigure = () => {
@@ -33,7 +33,7 @@ export const SessionListItem = ({ session, onConfigure }: SessionListItemProps) 
   };
 
   const handleDelete = () => {
-    deleteSessionMutation.mutate({ id: session.id });
+    onDelete?.(session);
     setIsDeleteDialogOpen(false);
   };
 
@@ -103,19 +103,19 @@ export const SessionListItem = ({ session, onConfigure }: SessionListItemProps) 
           onOpenChange={setIsDeleteDialogOpen}
           title="Delete Session"
           description={<span>Are you sure you want to delete “{session.name}”? This action cannot be undone and will also delete all associated conversations.</span>}
-          confirmLabel={deleteSessionMutation.isPending ? 'Deleting...' : 'Delete'}
+          confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
           onConfirm={handleDelete}
-          isLoading={deleteSessionMutation.isPending}
+          isLoading={isDeleting}
           confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
           cancelButtonClassName="w-full sm:w-auto"
         >
           <Button
             size="sm"
             className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-            disabled={deleteSessionMutation.isPending}
+            disabled={isDeleting}
           >
             <Trash2 className="w-4 h-4 mr-2" />
-            <span>{deleteSessionMutation.isPending ? 'Deleting...' : 'Delete'}</span>
+            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
           </Button>
         </ConfirmDialog>
       </div>

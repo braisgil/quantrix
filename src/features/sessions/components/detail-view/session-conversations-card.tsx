@@ -1,6 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Plus } from "lucide-react";
 import { ConversationListItem } from "@/features/conversations/components";
 import { ConversationGetMany } from "@/features/conversations/types";
@@ -8,19 +7,21 @@ import { ConversationGetMany } from "@/features/conversations/types";
 interface SessionConversationsCardProps {
   conversations: ConversationGetMany;
   onCreateConversation: () => void;
+  onDeleteConversation?: (conversation: ConversationGetMany[number]) => void;
+  deletingConversationId?: string;
+  onViewConversation?: (conversation: ConversationGetMany[number]) => void;
 }
 
 
 
 export const SessionConversationsCard = ({ 
   conversations, 
-  onCreateConversation 
+  onCreateConversation,
+  onDeleteConversation,
+  deletingConversationId,
+  onViewConversation,
 }: SessionConversationsCardProps) => {
-
-  const handleViewConversation = (conversation: ConversationGetMany[number]) => {
-    // Navigate to the conversation detail page
-    window.location.href = `/conversations/${conversation.id}`;
-  };
+  
 
   return (
     <Card className="matrix-card h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
@@ -64,7 +65,9 @@ export const SessionConversationsCard = ({
               <ConversationListItem
                 key={conversation.id}
                 conversation={conversation}
-                onViewConversation={handleViewConversation}
+                onViewConversation={onViewConversation || (() => {})}
+                onDelete={onDeleteConversation}
+                isDeleting={deletingConversationId === conversation.id}
               />
             ))}
             

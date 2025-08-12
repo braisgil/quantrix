@@ -6,11 +6,15 @@ import AgentListItem from './agent-list-item';
 interface AgentsListProps {
   agents: AgentsGetMany;
   onConfigureAgent?: (agent: AgentsGetMany[number]) => void;
+  onDeleteAgent?: (agent: AgentsGetMany[number]) => void;
+  deletingAgentId?: string;
 }
 
 const AgentsList: React.FC<AgentsListProps> = ({ 
   agents, 
-  onConfigureAgent 
+  onConfigureAgent,
+  onDeleteAgent,
+  deletingAgentId,
 }) => {
   return (
     <div>
@@ -30,6 +34,8 @@ const AgentsList: React.FC<AgentsListProps> = ({
             key={agent.id}
             agent={agent}
             onConfigure={onConfigureAgent}
+            onDelete={onDeleteAgent}
+            isDeleting={deletingAgentId === agent.id}
           />
         ))}
       </CardContent>

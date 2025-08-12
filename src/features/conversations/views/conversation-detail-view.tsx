@@ -1,7 +1,7 @@
 'use client';
 
 import { useQueryConversation } from '../api/use-query-conversation';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import {
   ConversationNavigationHeader,
   ConversationHeader,
@@ -11,6 +11,8 @@ import {
 } from '../components';
 import { ChatProvider } from '@/features/chat/components/chat-provider';
 import { ConversationStatus } from '../types';
+import { useDeleteConversation } from '../api/use-delete-conversation';
+import { useRouter } from 'next/navigation';
 
 interface ConversationDetailViewProps {
   conversationId: string;
@@ -18,6 +20,8 @@ interface ConversationDetailViewProps {
 
 export const ConversationDetailView = ({ conversationId }: ConversationDetailViewProps) => {
   const { data: conversation } = useQueryConversation(conversationId);
+  const router = useRouter();
+  const deleteConversationMutation = useDeleteConversation({ sessionId: conversation?.sessionId });
 
   const handleStartConversation = () => {
     // TODO: Implement conversation start
@@ -30,8 +34,16 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
   };
 
   const handleDeleteConversation = () => {
-    // TODO: Implement conversation deletion
-    console.log('Delete conversation:', conversation.name);
+    if (!conversation) return;
+    deleteConversationMutation.mutate(
+      { id: conversation.id },
+      {
+        onSuccess: () => {
+          // Redirect to the specific session detail view that contained this conversation
+          router.push(`/sessions/${conversation.sessionId}`);
+        },
+      }
+    );
   };
 
   const handleViewTranscript = () => {
@@ -67,6 +79,8 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
             onStartConversation={handleStartConversation}
             onEditConversation={handleEditConversation}
             onViewTranscript={handleViewTranscript}
+            onDeleteConversation={handleDeleteConversation}
+            isDeleting={deleteConversationMutation.isPending}
           />
         </CardContent>
       </div>

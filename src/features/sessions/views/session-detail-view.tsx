@@ -12,12 +12,16 @@ import {
 } from '../components/detail-view';
 import { ConversationWizard } from "@/features/conversations/components/wizard/components/conversation-wizard";
 import { useWizardState } from "../hooks/use-wizard-state";
+import { useDeleteConversation } from "@/features/conversations/api/use-delete-conversation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface SessionDetailViewProps {
   sessionId: string;
 }
 
 export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
+  const router = useRouter();
   const { showWizard, openWizard, closeWizard } = useWizardState();
   const { data: session } = useQuerySession(sessionId);
   const { data: conversationsData } = useQuerySessionConversations({
@@ -25,6 +29,8 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   });
   
   const conversations = conversationsData?.items || [];
+  const deleteConversationMutation = useDeleteConversation({ sessionId });
+  const [deletingConversationId, setDeletingConversationId] = useState<string | undefined>(undefined);
 
   const handleCreateConversation = () => {
     openWizard();
@@ -33,6 +39,13 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   const handleStartChat = () => {
     // TODO: Implement chat functionality
     console.log('Start chat for session:', sessionId);
+  };
+
+  const handleDeleteConversation = (conversation: (typeof conversations)[number]) => {
+    setDeletingConversationId(conversation.id);
+    deleteConversationMutation.mutate({ id: conversation.id }, {
+      onSettled: () => setDeletingConversationId(undefined),
+    });
   };
 
   if (showWizard && session) {
@@ -66,6 +79,11 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
               <SessionConversationsCard
                 conversations={conversations}
                 onCreateConversation={handleCreateConversation}
+                onDeleteConversation={handleDeleteConversation}
+                deletingConversationId={deletingConversationId}
+                onViewConversation={(conversation) => {
+                  router.push(`/conversations/${conversation.id}`);
+                }}
               />
               {session && (
                 <SessionChatCard

@@ -15,8 +15,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Play, Edit, Trash2, MessageSquare } from 'lucide-react';
 import { ConversationStatus } from '../../types';
-import { useDeleteConversation } from '../../api/use-delete-conversation';
-import { useRouter } from 'next/navigation';
 
 interface ConversationActionButtonsProps {
   conversation: {
@@ -28,6 +26,8 @@ interface ConversationActionButtonsProps {
   onStartConversation?: () => void;
   onEditConversation?: () => void;
   onViewTranscript?: () => void;
+  onDeleteConversation?: () => void;
+  isDeleting?: boolean;
 }
 
 export const ConversationActionButtons: React.FC<ConversationActionButtonsProps> = ({
@@ -35,16 +35,14 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
   onStartConversation,
   onEditConversation,
   onViewTranscript,
+  onDeleteConversation,
+  isDeleting,
 }) => {
-  const router = useRouter();
-  const deleteConversationMutation = useDeleteConversation({ sessionId: conversation.sessionId });
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleDelete = () => {
-    deleteConversationMutation.mutate({ id: conversation.id });
+    onDeleteConversation?.();
     setIsDeleteDialogOpen(false);
-    // Redirect to conversations list after deletion
-    router.push('/conversations');
   };
 
   const canStart = conversation.status === ConversationStatus.Upcoming;
@@ -90,9 +88,9 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
             <Button 
               size="sm"
               className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-              disabled={deleteConversationMutation.isPending}
+              disabled={isDeleting}
             >
-              {deleteConversationMutation.isPending ? (
+              {isDeleting ? (
                 <>
                   <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
                   <span>Deleting...</span>
@@ -117,9 +115,9 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
               <AlertDialogAction 
                 onClick={handleDelete}
                 className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-                disabled={deleteConversationMutation.isPending}
+                disabled={isDeleting}
               >
-                              {deleteConversationMutation.isPending ? (
+                              {isDeleting ? (
                 <>
                   <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
                   <span>Deleting...</span>

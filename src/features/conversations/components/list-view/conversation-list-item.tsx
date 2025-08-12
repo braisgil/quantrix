@@ -13,25 +13,27 @@ import {
   getConversationStatusColor,
   formatConversationDuration,
 } from '../../utils/conversation-helpers';
-import { useDeleteConversation } from '../../api/use-delete-conversation';
 
 interface ConversationListItemProps {
   conversation: ConversationGetMany[number];
   onViewConversation: (conversation: ConversationGetMany[number]) => void;
+  onDelete?: (conversation: ConversationGetMany[number]) => void;
+  isDeleting?: boolean;
 }
 
 const ConversationListItem: React.FC<ConversationListItemProps> = ({
   conversation,
   onViewConversation,
+  onDelete,
+  isDeleting,
 }) => {
   const statusLabel = getConversationStatusLabel(conversation.status as ConversationStatus);
   const statusColor = getConversationStatusColor(conversation.status as ConversationStatus);
   const duration = formatConversationDuration(conversation.startedAt, conversation.endedAt);
-  const deleteConversationMutation = useDeleteConversation({ sessionId: conversation.sessionId });
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleDelete = () => {
-    deleteConversationMutation.mutate({ id: conversation.id });
+    onDelete?.(conversation);
     setIsDeleteDialogOpen(false);
   };
 
@@ -115,19 +117,19 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
             onOpenChange={setIsDeleteDialogOpen}
             title="Delete Conversation"
             description={<span>Are you sure you want to delete &ldquo;{conversation.name}&rdquo;? This action cannot be undone.</span>}
-            confirmLabel={deleteConversationMutation.isPending ? 'Deleting...' : 'Delete'}
+            confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
             onConfirm={handleDelete}
-            isLoading={deleteConversationMutation.isPending}
+            isLoading={isDeleting}
             confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
             cancelButtonClassName="w-full sm:w-auto"
           >
             <Button 
               size="sm" 
               className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-              disabled={deleteConversationMutation.isPending}
+              disabled={isDeleting}
             >
               <Trash2 className="w-4 h-4" />
-              <span className="ml-2 sm:hidden">{deleteConversationMutation.isPending ? 'Deleting...' : 'Delete'}</span>
+              <span className="ml-2 sm:hidden">{isDeleting ? 'Deleting...' : 'Delete'}</span>
             </Button>
           </ConfirmDialog>
         )}

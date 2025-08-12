@@ -10,12 +10,16 @@ import {
   ConversationsListHeader 
 } from '../components';
 import { useRouter } from 'next/navigation';
+import { useDeleteConversation } from '../api/use-delete-conversation';
+import { useState } from 'react';
 
 export const ConversationListView = () => {
   const router = useRouter();
   const { data: conversationsData } = useQueryConversations();
   const conversations = conversationsData.items || [];
   const { totalConversations, activeConversations, completedConversations, upcomingConversations } = calculateConversationStats(conversations);
+  const deleteConversationMutation = useDeleteConversation();
+  const [deletingConversationId, setDeletingConversationId] = useState<string | undefined>(undefined);
 
   const handleCreateConversation = () => {
     // Redirect to sessions page where conversations are created within session context
@@ -24,6 +28,13 @@ export const ConversationListView = () => {
 
   const handleViewConversation = (conversation: ConversationGetMany[number]) => {
     router.push(`/conversations/${conversation.id}`);
+  };
+
+  const handleDeleteConversation = (conversation: ConversationGetMany[number]) => {
+    setDeletingConversationId(conversation.id);
+    deleteConversationMutation.mutate({ id: conversation.id }, {
+      onSettled: () => setDeletingConversationId(undefined),
+    });
   };
 
   return (
@@ -41,6 +52,8 @@ export const ConversationListView = () => {
           <ConversationsList 
             conversations={conversations}
             onViewConversation={handleViewConversation}
+            onDeleteConversation={handleDeleteConversation}
+            deletingConversationId={deletingConversationId}
           />
         ) : (
           <ConversationsEmptyState />

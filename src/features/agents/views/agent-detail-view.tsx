@@ -2,7 +2,7 @@
 
 import { useQueryAgent } from '../api/use-query-agent';
 import { CardContent } from '@/components/ui/card';
-import {
+import { 
   AgentNavigationHeader,
   AgentHeader,
   AgentDetailsCard,
@@ -10,6 +10,8 @@ import {
   AgentCustomConfigCard,
   AgentActionButtons
 } from '../components';
+import { useDeleteAgent } from '../api/use-delete-agent';
+import { useRouter } from 'next/navigation';
 
 interface AgentDetailViewProps {
   agentId: string;
@@ -17,6 +19,8 @@ interface AgentDetailViewProps {
 
 export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
   const { data: agent } = useQueryAgent(agentId);
+  const router = useRouter();
+  const deleteAgentMutation = useDeleteAgent();
 
   const handleConfigureAgent = () => {
     // TODO: Implement agent configuration
@@ -26,6 +30,18 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
   const handleEditAgent = () => {
     // TODO: Implement agent editing
     console.log('Edit agent:', agent.name);
+  };
+
+  const handleDeleteAgent = () => {
+    if (!agent) return;
+    deleteAgentMutation.mutate(
+      { id: agent.id },
+      {
+        onSuccess: () => {
+          router.push('/agents');
+        },
+      }
+    );
   };
 
   return (
@@ -49,10 +65,11 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
 
           {/* Action Buttons */}
           <AgentActionButtons
-            agentId={agent.id}
             agentName={agent.name}
             onEditAgent={handleEditAgent}
             onConfigureAgent={handleConfigureAgent}
+            onDeleteAgent={handleDeleteAgent}
+            isDeleting={deleteAgentMutation.isPending}
           />
         </CardContent>
       </div>

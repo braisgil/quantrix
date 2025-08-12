@@ -12,6 +12,13 @@ export const useDeleteAgent = () => {
         await queryClient.invalidateQueries(
           trpc.agents.getMany.queryOptions({})
         );
+        // Deleting an agent cascades to sessions and conversations
+        await queryClient.invalidateQueries(
+          trpc.sessions.getMany.queryOptions({})
+        );
+        await queryClient.invalidateQueries(
+          trpc.conversations.getMany.queryOptions({})
+        );
         toast.success("Agent deleted successfully");
       },
       onError: (error) => {
