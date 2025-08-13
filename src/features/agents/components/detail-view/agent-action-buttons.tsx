@@ -47,30 +47,32 @@ export const AgentActionButtons = ({
         <Settings className="h-4 w-4 mr-2" />
         Configure Settings
       </Button>
-      <ConfirmDialog
-        open={isDeleteDialogOpen}
-        onOpenChange={setIsDeleteDialogOpen}
-        title="Delete Agent"
-        description={
-          <span>
-            Are you sure you want to delete &ldquo;{agentName}&rdquo;? This action cannot be undone and will also delete all associated sessions and conversations.
-          </span>
-        }
-        confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
-        onConfirm={handleDelete}
-        isLoading={isDeleting}
-        confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-        cancelButtonClassName="w-full sm:w-auto"
-      >
-        <Button 
-          size="sm"
-          className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-          disabled={isDeleting}
+      {onDeleteAgent && (
+        <ConfirmDialog
+          open={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          title="Delete Agent"
+          description={
+            <span>
+              Are you sure you want to delete &ldquo;{agentName}&rdquo;? This action cannot be undone and will also delete all associated sessions and conversations.
+            </span>
+          }
+          confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
+          onConfirm={handleDelete}
+          isLoading={isDeleting}
+          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
+          cancelButtonClassName="w-full sm:w-auto"
         >
-          <Trash2 className="h-4 w-4 mr-2" />
-          <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
-        </Button>
-      </ConfirmDialog>
+          <Button 
+            size="sm"
+            className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
+            disabled={isDeleting}
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+          </Button>
+        </ConfirmDialog>
+      )}
     </div>
   );
 }; 

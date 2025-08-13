@@ -8,7 +8,7 @@ export { SessionsEmptyState } from "./list-view/sessions-empty-state";
 export { 
   SessionHeader,
   SessionDetailsCard,
-  SessionConversationsCard,
+  SessionConversationsList,
   SessionChatCard,
   SessionActionButtons
 } from "./detail-view";

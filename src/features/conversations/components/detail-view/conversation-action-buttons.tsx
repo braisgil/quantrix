@@ -45,7 +45,8 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
         <Button
           onClick={onStartConversation}
           size="sm"
-          className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow w-full sm:w-auto"
+          variant="call"
+          className="font-semibold matrix-glow w-full sm:w-auto"
         >
           <Play className="w-4 h-4 mr-2" />
           Start Conversation
@@ -56,7 +57,8 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
         <Button
           onClick={onViewTranscript}
           size="sm"
-          className="bg-blue-500 hover:bg-blue-500/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+          variant="view"
+          className="font-semibold w-full sm:w-auto"
         >
           <MessageSquare className="w-4 h-4 mr-2" />
           View Transcript
@@ -75,7 +77,7 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
         </Button>
       )}
 
-      {canDelete && (
+      {canDelete && onDeleteConversation && (
         <ConfirmDialog
           open={isDeleteDialogOpen}
           onOpenChange={setIsDeleteDialogOpen}
@@ -88,12 +90,12 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
           confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
           onConfirm={handleDelete}
           isLoading={Boolean(isDeleting)}
-          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
           cancelButtonClassName="w-full sm:w-auto"
         >
           <Button
             size="sm"
-            className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+            className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
             disabled={isDeleting}
           >
             <Trash2 className="h-4 w-4 mr-2" />

@@ -25,7 +25,7 @@ export const CallView = ({ conversationId }: CallViewProps) => {
             <p className="text-sm sm:text-base text-muted-foreground">
               You can no longer join this meeting. Check the conversation details for a summary.
             </p>
-            <Button asChild className="w-full h-10 sm:h-11">
+            <Button asChild variant="view" className="w-full h-10 sm:h-11">
               <Link href={`/conversations/${conversationId}`}>
                 View conversation details
               </Link>

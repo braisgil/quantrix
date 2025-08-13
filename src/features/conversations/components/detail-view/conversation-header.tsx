@@ -24,7 +24,7 @@ export const ConversationHeader: React.FC<ConversationHeaderProps> = ({ conversa
       <div className="flex items-center justify-center gap-3 mb-4">
         <div className="relative matrix-glow">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center matrix-border">
-            <MessageSquare className="w-4 h-4 text-black" />
+          <MessageSquare className="w-4 h-4 text-primary-foreground" />
           </div>
           <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full animate-pulse"></div>
         </div>

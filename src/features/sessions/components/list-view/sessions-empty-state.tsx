@@ -31,7 +31,7 @@ export const SessionsEmptyState = ({ onCreateSession, hasAgents }: SessionsEmpty
         {!hasAgents && (
         <Button 
           onClick={onCreateSession}
-          className="matrix-glow bg-primary hover:bg-primary/90 text-black"
+        className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground"
         >
           <Plus className="w-4 h-4 mr-2" />
           {"Create an Agent First"}

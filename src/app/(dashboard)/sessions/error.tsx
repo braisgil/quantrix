@@ -52,7 +52,7 @@ export default function SessionsError({
             </Button>
             <Button
               onClick={reset}
-              className="matrix-glow bg-primary hover:bg-primary/90 text-black"
+            className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
               Try Again

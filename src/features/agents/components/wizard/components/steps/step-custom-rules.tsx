@@ -80,7 +80,7 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepProps) =
                   isSelected={selected}
                   onClick={() => selectCustomRule1(option.id)}
                   icon={getInteractionIcon(option.name)}
-                  iconColor={selected ? "text-black" : "text-muted-foreground"}
+                  iconColor={selected ? "text-primary-foreground" : "text-muted-foreground"}
                   badges={["Communication Style"]}
                 />
               );
@@ -117,7 +117,7 @@ export const StepCustomRules = ({ wizardState, updateWizardState }: StepProps) =
                   isSelected={selected}
                   onClick={() => selectCustomRule2(option.id)}
                   icon={getLearningIcon()}
-                  iconColor={selected ? "text-black" : "text-muted-foreground"}
+                  iconColor={selected ? "text-primary-foreground" : "text-muted-foreground"}
                   badges={["Learning Approach"]}
                 />
               );

@@ -47,7 +47,10 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
   return (
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Navigation Header */}
-      <AgentNavigationHeader />
+      <AgentNavigationHeader 
+        onDelete={handleDeleteAgent}
+        isDeleting={deleteAgentMutation.isPending}
+      />
 
       {/* Main Agent Detail Card */}
       <div>
@@ -68,8 +71,6 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
             agentName={agent.name}
             onEditAgent={handleEditAgent}
             onConfigureAgent={handleConfigureAgent}
-            onDeleteAgent={handleDeleteAgent}
-            isDeleting={deleteAgentMutation.isPending}
           />
         </CardContent>
       </div>

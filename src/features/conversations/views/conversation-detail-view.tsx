@@ -55,7 +55,11 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Navigation Header */}
-      <ConversationNavigationHeader sessionId={conversation.sessionId} />
+      <ConversationNavigationHeader 
+        sessionId={conversation.sessionId}
+        onDelete={conversation.status === ConversationStatus.Upcoming ? handleDeleteConversation : undefined}
+        isDeleting={deleteConversationMutation.isPending}
+      />
 
       {/* Header */}
       <div>
@@ -66,9 +70,16 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <ConversationDetailsCard conversation={conversation} />
             <div className="flex flex-col gap-6">
-              {conversation.status === ConversationStatus.Completed && (
-                <ChatProvider channelId={conversation.id} channelName={conversation.name} />
-              )}
+              <ChatProvider
+                channelId={conversation.id}
+                channelName={conversation.name}
+                disabled={conversation.status !== ConversationStatus.Completed}
+                disabledMessage={
+                  conversation.status !== ConversationStatus.Completed
+                    ? "Chat is disabled until this conversation is marked as Completed."
+                    : undefined
+                }
+              />
               <ConversationSummaryCard conversation={conversation} />
             </div>
           </div>
@@ -79,8 +90,6 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
             onStartConversation={handleStartConversation}
             onEditConversation={handleEditConversation}
             onViewTranscript={handleViewTranscript}
-            onDeleteConversation={handleDeleteConversation}
-            isDeleting={deleteConversationMutation.isPending}
           />
         </CardContent>
       </div>

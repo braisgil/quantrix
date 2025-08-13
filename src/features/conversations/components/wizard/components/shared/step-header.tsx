@@ -7,7 +7,7 @@ export const StepHeader = ({ title, description, icon: Icon }: StepHeaderProps) 
       <div className="flex items-center gap-3 mb-3">
         <div className="relative matrix-glow">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center matrix-border">
-            <Icon className="w-4 h-4 text-black" />
+          <Icon className="w-4 h-4 text-primary-foreground" />
           </div>
           <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
         </div>

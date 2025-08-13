@@ -12,7 +12,7 @@ export { SessionsEmptyState } from "./components/list-view/sessions-empty-state"
 export { 
   SessionHeader,
   SessionDetailsCard,
-  SessionConversationsCard,
+  SessionConversationsList,
   SessionChatCard,
   SessionActionButtons
 } from "./components/detail-view";

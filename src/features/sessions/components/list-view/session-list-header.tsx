@@ -25,7 +25,7 @@ export const SessionsListHeader: React.FC<SessionsListHeaderProps> = ({ onCreate
           onClick={onCreateSession}
           disabled={!hasAgents}
             className={hasAgents 
-              ? "bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow w-full md:w-auto"
+              ? "bg-primary hover:bg-primary/90 text-primary-foreground font-semibold matrix-glow w-full md:w-auto"
               : "opacity-50 cursor-not-allowed"
             }
         >

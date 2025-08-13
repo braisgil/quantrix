@@ -42,9 +42,8 @@ export const ConversationSummaryCard: React.FC<ConversationSummaryCardProps> = (
           <div className="flex flex-wrap gap-2">
             {hasTranscript && (
               <Button
-                variant="outline"
                 size="sm"
-                className="border-primary/20 hover:border-primary/40"
+                variant="view"
                 onClick={() => conversation.transcriptUrl && window.open(conversation.transcriptUrl, '_blank')}
               >
                 <FileText className="w-4 h-4 mr-2" />
@@ -54,9 +53,8 @@ export const ConversationSummaryCard: React.FC<ConversationSummaryCardProps> = (
             )}
             {hasRecording && (
               <Button
-                variant="outline"
                 size="sm"
-                className="border-primary/20 hover:border-primary/40"
+                variant="call"
                 onClick={() => conversation.recordingUrl && window.open(conversation.recordingUrl, '_blank')}
               >
                 <Download className="w-4 h-4 mr-2" />

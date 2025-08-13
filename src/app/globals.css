@@ -25,6 +25,7 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -43,31 +44,32 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* Matrix Green Colors */
+/* Brand Accent Colors (Aurora Cyber aesthetic) */
 :root {
-  --matrix-green: #00ff41;
-  --matrix-green-dark: #00cc33;
-  --matrix-green-light: #66ff66;
-  --matrix-green-glow: rgba(0, 255, 65, 0.3);
-  --matrix-green-soft: rgba(0, 255, 65, 0.1);
-  
+  /* Primary brand hue (cyan) with complementary violet accents */
+  --matrix-green: #22d3ee; /* primary accent (kept var name for compatibility) */
+  --matrix-green-dark: #06b6d4;
+  --matrix-green-light: #67e8f9;
+  --matrix-green-glow: rgba(34, 211, 238, 0.28);
+  --matrix-green-soft: rgba(34, 211, 238, 0.08);
+
   /* Line clamp utilities */
   --line-clamp-1: 1;
   --line-clamp-2: 2;
   --line-clamp-3: 3;
-  
+
   /* Enhanced colors for better light theme readability */
-  --matrix-green-readable: #00851c;  /* Much darker for better contrast */
-  --matrix-green-readable-glow: rgba(0, 133, 28, 0.2);
-  --matrix-green-readable-soft: rgba(0, 133, 28, 0.08);
-  
-  /* Matrix Grid Colors for Light Theme */
-  --matrix-grid-light: rgba(0, 133, 28, 0.12);
-  --matrix-grid-light-strong: rgba(0, 133, 28, 0.18);
-  
-  /* Matrix Grid Colors for Dark Theme */
-  --matrix-grid-dark: rgba(0, 255, 65, 0.1);
-  --matrix-grid-dark-strong: rgba(0, 255, 65, 0.2);
+  --matrix-green-readable: #0e7490; /* deeper cyan for light theme contrast */
+  --matrix-green-readable-glow: rgba(14, 116, 144, 0.18);
+  --matrix-green-readable-soft: rgba(14, 116, 144, 0.08);
+
+  /* Grid tint for light/dark themes */
+  --matrix-grid-light: rgba(14, 116, 144, 0.10);
+  --matrix-grid-light-strong: rgba(14, 116, 144, 0.16);
+  --matrix-grid-dark: rgba(34, 211, 238, 0.10);
+  --matrix-grid-dark-strong: rgba(34, 211, 238, 0.2);
+
+  /* Sidebar defaults for light theme */
   --sidebar: hsl(0 0% 98%);
   --sidebar-foreground: hsl(240 5.3% 26.1%);
   --sidebar-primary: hsl(240 5.9% 10%);
@@ -78,25 +80,26 @@
   --sidebar-ring: hsl(217.2 91.2% 59.8%);
 }
 
-/* Default to Light Theme with Matrix Colors */
+/* Default to Light Theme (sleek minimal with cyan accents) */
 :root {
   --radius: 0.5rem;
-  --background: oklch(0.98 0 0); /* Light background */
-  --foreground: oklch(0.15 0 0); /* Dark text */
-  --card: oklch(1 0 0); /* White card background */
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(1 0 0);
   --card-foreground: oklch(0.15 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0 0);
-  --primary: var(--matrix-green-readable); /* More readable dark green for light theme */
-  --primary-foreground: oklch(0.98 0 0); /* Light text on green */
-  --secondary: oklch(0.96 0 0); /* Light gray */
+  --primary: var(--matrix-green-readable);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.2 0 0);
   --muted: oklch(0.96 0 0);
   --muted-foreground: oklch(0.55 0 0);
   --accent: oklch(0.96 0 0);
-  --accent-foreground: var(--matrix-green-readable); /* More readable accent foreground */
-  --destructive: oklch(0.58 0.25 27); /* Red for light theme */
-  --border: oklch(0.9 0 0); /* Light border */
+  --accent-foreground: var(--matrix-green-readable);
+  --destructive: oklch(0.58 0.25 27);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.9 0 0);
   --input: oklch(0.9 0 0);
   --ring: var(--matrix-green-readable);
   --chart-1: var(--matrix-green-readable);
@@ -114,38 +117,39 @@
   --sidebar-ring: var(--matrix-green-readable);
 }
 
-/* Dark Theme (when toggled) */
+/* Dark Theme (deep slate with aurora accents) */
 .dark {
-  --background: oklch(0.05 0 0); /* Very dark background */
-  --foreground: oklch(0.98 0 0); /* Almost white text */
-  --card: oklch(0.08 0 0); /* Dark card background */
+  --background: oklch(0.17 0.03 260);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.14 0.02 260);
   --card-foreground: oklch(0.95 0 0);
   --popover: oklch(0.08 0 0);
   --popover-foreground: oklch(0.95 0 0);
-  --primary: var(--matrix-green); /* Matrix green primary */
-  --primary-foreground: oklch(0.05 0 0); /* Dark text on green */
-  --secondary: oklch(0.12 0 0); /* Slightly lighter dark */
+  --primary: var(--matrix-green);
+  --primary-foreground: oklch(0.05 0 0);
+  --secondary: oklch(0.22 0.02 260);
   --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.1 0 0);
+  --muted: oklch(0.2 0.02 260);
   --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.12 0 0);
+  --accent: oklch(0.22 0.02 260);
   --accent-foreground: var(--matrix-green);
-  --destructive: oklch(0.6 0.2 15); /* Warm red */
-  --border: oklch(0.15 0 0); /* Dark border */
-  --input: oklch(0.12 0 0);
+  --destructive: oklch(0.6 0.2 15);
+  --destructive-foreground: oklch(0.05 0 0);
+  --border: oklch(0.28 0.02 260);
+  --input: oklch(0.24 0.02 260);
   --ring: var(--matrix-green);
   --chart-1: var(--matrix-green);
   --chart-2: oklch(0.7 0.15 180);
   --chart-3: oklch(0.6 0.1 240);
   --chart-4: oklch(0.8 0.2 60);
   --chart-5: oklch(0.75 0.18 300);
-  --sidebar: oklch(0.08 0 0);
+  --sidebar: oklch(0.14 0.02 260);
   --sidebar-foreground: oklch(0.95 0 0);
   --sidebar-primary: var(--matrix-green);
   --sidebar-primary-foreground: oklch(0.05 0 0);
-  --sidebar-accent: oklch(0.12 0 0);
+  --sidebar-accent: oklch(0.22 0.02 260);
   --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.15 0 0);
+  --sidebar-border: oklch(0.28 0.02 260);
   --sidebar-ring: var(--matrix-green);
 }
 
@@ -169,9 +173,7 @@
     color: var(--matrix-green-readable);
   }
   
-  .dark a {
-    color: var(--matrix-green);
-  }
+  .dark a { color: var(--matrix-green); }
   
   /* Better hover states for light theme */
   a:hover {
@@ -254,13 +256,9 @@
   50% { opacity: 0.8; }
 }
 
-.matrix-glow {
-  animation: glow-pulse 2s ease-in-out infinite;
-}
+.matrix-glow { animation: glow-pulse 4s ease-in-out infinite; }
 
-.matrix-text-glow {
-  animation: text-glow 3s ease-in-out infinite;
-}
+.matrix-text-glow { animation: text-glow 6s ease-in-out infinite; }
 
 /* Dark theme enhanced glow effects */
 .dark .matrix-glow {
@@ -272,44 +270,39 @@
 }
 
 .matrix-border {
-  border: 1px solid var(--matrix-green-readable);
-  box-shadow: 0 0 5px var(--matrix-green-readable-glow);
+  border: 1px solid color-mix(in oklab, var(--border) 80%, var(--matrix-green) 20%);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--border) 70%, var(--matrix-green) 30%) inset;
 }
 
 /* Enhanced matrix border for dark theme */
 .dark .matrix-border {
-  border: 1px solid var(--matrix-green);
-  box-shadow: 0 0 10px var(--matrix-green-glow);
+  border: 1px solid color-mix(in oklab, var(--border) 55%, var(--matrix-green) 45%);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--border) 50%, var(--matrix-green) 50%) inset;
 }
 
+/* Aurora gradient background */
 .matrix-bg {
-  background: linear-gradient(135deg, 
-    oklch(0.96 0 0) 0%, 
-    oklch(0.98 0 0) 50%, 
-    oklch(0.96 0 0) 100%
-  );
+  background:
+    radial-gradient(1200px 800px at 10% 10%, color-mix(in oklab, var(--matrix-green) 40%, transparent) 0%, transparent 60%),
+    radial-gradient(1000px 700px at 90% 0%, color-mix(in oklab, #7c3aed 30%, transparent) 0%, transparent 60%),
+    radial-gradient(1400px 900px at 50% 100%, color-mix(in oklab, #22c55e 18%, transparent) 0%, transparent 60%),
+    linear-gradient(180deg, color-mix(in oklab, var(--background) 96%, transparent) 0%, var(--background) 100%);
 }
 
+/* Glass surface */
 .matrix-card {
-  background: linear-gradient(135deg, 
-    var(--matrix-green-readable-soft) 0%, 
-    rgba(255, 255, 255, 0.9) 50%, 
-    var(--matrix-green-readable-soft) 100%
-  );
-  border: 1px solid var(--matrix-grid-light-strong);
-  backdrop-filter: blur(10px);
-  /* Better mobile touch interaction */
+  background: linear-gradient(180deg, color-mix(in oklab, var(--background) 86%, transparent) 0%, color-mix(in oklab, var(--background) 94%, transparent) 100%);
+  border: 1px solid color-mix(in oklab, var(--border) 70%, var(--matrix-green) 30%);
+  backdrop-filter: blur(12px) saturate(120%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 30px -12px color-mix(in oklab, var(--matrix-green) 18%, transparent);
 }
 
 /* Enhanced matrix card for dark theme */
 .dark .matrix-card {
-  background: linear-gradient(135deg, 
-    var(--matrix-green-soft) 0%, 
-    rgba(0, 0, 0, 0.9) 50%, 
-    var(--matrix-green-soft) 100%
-  );
-  border: 1px solid var(--matrix-grid-dark-strong);
+  background: linear-gradient(180deg, color-mix(in oklab, var(--background) 65%, transparent) 0%, color-mix(in oklab, var(--background) 82%, transparent) 100%);
+  border: 1px solid color-mix(in oklab, var(--border) 55%, var(--matrix-green) 45%);
+  box-shadow: 0 12px 40px -16px color-mix(in oklab, var(--matrix-green) 28%, transparent);
 }
 
 /* Matrix container with subtle grid background */
@@ -403,7 +396,7 @@
 }
 
 .quantrix-gradient {
-  background: linear-gradient(135deg, var(--matrix-green-readable) 0%, #005c14 100%);
+  background: linear-gradient(135deg, var(--matrix-green) 0%, #7c3aed 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -411,7 +404,7 @@
 
 /* Enhanced gradient for dark theme */
 .dark .quantrix-gradient {
-  background: linear-gradient(135deg, var(--matrix-green) 0%, #00cc33 100%);
+  background: linear-gradient(135deg, var(--matrix-green) 0%, #a78bfa 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

@@ -44,7 +44,7 @@ export const SessionDetailsCard = ({ session }: SessionDetailsCardProps) => {
           <p className="text-xs text-muted-foreground font-medium">AI Companion</p>
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/60 rounded-full flex items-center justify-center">
-              <Bot className="w-4 h-4 text-black" />
+            <Bot className="w-4 h-4 text-primary" />
             </div>
             <div>
               <p className="text-sm font-medium">{session.agent.name}</p>

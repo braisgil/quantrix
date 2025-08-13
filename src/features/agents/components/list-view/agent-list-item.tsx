@@ -88,7 +88,8 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 sm:ml-6">
         <Button 
           size="sm" 
-          className="bg-blue-500 hover:bg-blue-500/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+          variant="view"
+          className="font-semibold w-full sm:w-auto"
           onClick={handleConfigure}
         >
           <ExternalLink className="w-4 h-4 mr-2" />
@@ -107,12 +108,12 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
           confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
           onConfirm={handleDelete}
           isLoading={isDeleting}
-          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
           cancelButtonClassName="w-full sm:w-auto"
         >
           <Button 
             size="sm" 
-            className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+            className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
             disabled={isDeleting}
           >
             <Trash2 className="w-4 h-4 mr-2" />

@@ -99,7 +99,7 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
             <div className="flex items-center justify-center gap-2">
               <div className="relative matrix-glow">
                 <div className="w-6 h-6 bg-gradient-to-br from-primary to-primary/80 rounded-md flex items-center justify-center matrix-border">
-                  <MessageSquare className="w-3 h-3 text-black" />
+                  <MessageSquare className="w-3 h-3 text-primary-foreground" />
                 </div>
                 <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
               </div>
@@ -170,7 +170,7 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
                   className={cn(
                     "matrix-glow font-semibold px-4 text-xs",
                     canProceed(currentStep) 
-                      ? "bg-primary hover:bg-primary/90 text-black" 
+                      ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
                       : "opacity-50 cursor-not-allowed"
                   )}
                 >
@@ -182,7 +182,7 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
                   onClick={handleSubmit}
                   disabled={!canSubmit || createConversationMutation.isPending}
                   size="sm"
-                  className="matrix-glow bg-primary hover:bg-primary/90 text-black font-semibold px-4 text-xs"
+                  className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
                 >
                   {createConversationMutation.isPending ? (
                     <>
@@ -209,8 +209,8 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
                 size="sm"
                 className={cn(
                   "matrix-glow font-semibold px-4 text-xs",
-                  canProceed(currentStep) 
-                    ? "bg-primary hover:bg-primary/90 text-black" 
+                    canProceed(currentStep) 
+                      ? "bg-primary hover:bg-primary/90 text-primary-foreground" 
                     : "opacity-50 cursor-not-allowed"
                 )}
               >
@@ -222,7 +222,7 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
                 onClick={handleSubmit}
                 disabled={!canSubmit || createConversationMutation.isPending}
                 size="sm"
-                className="matrix-glow bg-primary hover:bg-primary/90 text-black font-semibold px-4 text-xs"
+                className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
               >
                 {createConversationMutation.isPending ? (
                   <>

@@ -2,7 +2,6 @@
 export { default as ConversationsStatsCards } from './conversations-stats-cards';
 
 // List view components
-export { default as ConversationsList } from './list-view/conversations-list';
 export { default as ConversationsListHeader } from './list-view/conversations-list-header';
 export { default as ConversationListItem } from './list-view/conversation-list-item';
 export { default as ConversationsEmptyState } from './list-view/conversations-empty-state';

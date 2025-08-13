@@ -123,7 +123,7 @@ export const CallErrorBoundary: React.FC<CallErrorBoundaryProps> = ({
               </Button>
             )}
             
-            <Button asChild variant="outline" className="w-full">
+              <Button asChild variant="view" className="w-full">
               <Link 
                 href={conversationId ? `/conversations/${conversationId}` : '/conversations'} 
                 className="inline-flex items-center justify-center"

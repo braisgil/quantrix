@@ -39,7 +39,7 @@ export default function Home() {
         <div className="flex items-center space-x-2 sm:space-x-3">
           <div className="relative matrix-glow">
             <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center matrix-border">
-              <Code className="w-5 sm:w-6 h-5 sm:h-6 text-black" />
+              <Code className="w-5 sm:w-6 h-5 sm:h-6 text-primary-foreground" />
             </div>
             <div className="absolute -top-1 -right-1 w-2.5 sm:w-3 h-2.5 sm:h-3 bg-primary rounded-full animate-pulse"></div>
           </div>
@@ -57,7 +57,7 @@ export default function Home() {
           <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">Pricing</Button>
           <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">About</Button>
           <ModeToggle />
-          <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow" asChild>
+              <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold matrix-glow" asChild>
             <Link href="/sign-in">Get Started</Link>
           </Button>
         </div>
@@ -82,7 +82,7 @@ export default function Home() {
               <Button variant="ghost" className="justify-start text-muted-foreground hover:text-primary">Features</Button>
               <Button variant="ghost" className="justify-start text-muted-foreground hover:text-primary">Pricing</Button>
               <Button variant="ghost" className="justify-start text-muted-foreground hover:text-primary">About</Button>
-              <Button className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow mt-2" asChild>
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold matrix-glow mt-2" asChild>
                 <Link href="/sign-in">Get Started</Link>
               </Button>
             </div>
@@ -112,9 +112,9 @@ export default function Home() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center mb-12 sm:mb-16 px-4">
-            <Button 
+              <Button 
               size="lg" 
-              className="text-base sm:text-lg px-8 sm:px-10 py-6 sm:py-8 bg-primary hover:bg-primary/90 text-black font-bold matrix-glow transform hover:scale-105 transition-all duration-300 min-h-[56px]"
+                className="text-base sm:text-lg px-8 sm:px-10 py-6 sm:py-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold matrix-glow transform hover:scale-105 transition-all duration-300 min-h-[56px]"
               asChild
             >
               <Link href="/sign-in">
@@ -122,7 +122,7 @@ export default function Home() {
                 Get Started Free
               </Link>
             </Button>
-            <Button 
+              <Button 
               size="lg" 
               variant="outline" 
               className="text-base sm:text-lg px-8 sm:px-10 py-6 sm:py-8 border-primary/30 text-primary hover:bg-primary/10 transform hover:scale-105 transition-all duration-300 min-h-[56px]"
@@ -409,7 +409,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
               <Button 
                 size="lg" 
-                className="text-base sm:text-lg px-8 sm:px-12 py-6 sm:py-8 bg-primary hover:bg-primary/90 text-black font-bold matrix-glow transform hover:scale-105 transition-all duration-300 min-h-[56px]"
+                className="text-base sm:text-lg px-8 sm:px-12 py-6 sm:py-8 bg-primary hover:bg-primary/90 text-primary-foreground font-bold matrix-glow transform hover:scale-105 transition-all duration-300 min-h-[56px]"
                 asChild
               >
                 <Link href="/sign-up">
@@ -431,12 +431,12 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="relative px-4 sm:px-6 py-12 sm:py-16 border-t border-primary/20">
+      <footer className="relative px-4 sm:px-6 py-12 sm:py-16 border-t border-primary/20 bg-background/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between mb-8 sm:mb-12">
             <div className="flex items-center space-x-3 sm:space-x-4 mb-6 md:mb-0">
-              <div className="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center matrix-glow">
-                <Code className="w-6 sm:w-7 h-6 sm:h-7 text-black" />
+              <div className="w-10 sm:w-12 h-10 sm:h-12 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
+              <Code className="w-6 sm:w-7 h-6 sm:h-7 text-primary-foreground" />
               </div>
               <div>
                 <span className="text-xl sm:text-2xl font-bold quantrix-gradient matrix-text-glow">

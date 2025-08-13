@@ -92,7 +92,8 @@ export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: 
         <Button
           size="sm"
           onClick={handleConfigure}
-          className="bg-blue-500 hover:bg-blue-500/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+          variant="view"
+          className="font-semibold w-full sm:w-auto"
         >
           <ExternalLink className="w-4 h-4" />
           <span className="ml-2 sm:hidden">View</span>
@@ -106,16 +107,16 @@ export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: 
           confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
           onConfirm={handleDelete}
           isLoading={isDeleting}
-          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
           cancelButtonClassName="w-full sm:w-auto"
         >
           <Button
             size="sm"
-            className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+            className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
             disabled={isDeleting}
           >
-            <Trash2 className="w-4 h-4 mr-2" />
-            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+            <Trash2 className="w-4 h-4" />
+            <span className="ml-2 sm:hidden">{isDeleting ? 'Deleting...' : 'Delete'}</span>
           </Button>
         </ConfirmDialog>
       </div>

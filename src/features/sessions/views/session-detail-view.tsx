@@ -6,7 +6,7 @@ import { CardContent } from '@/components/ui/card';
 import { SessionNavigationHeader } from '../components/shared/session-navigation-header';
 import { 
   SessionHeader,
-  SessionConversationsCard,
+  SessionConversationsList,
   SessionChatCard,
   SessionActionButtons
 } from '../components/detail-view';
@@ -16,6 +16,7 @@ import { useDeleteConversation } from "@/features/conversations/api/use-delete-c
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDeleteSession } from "../api/use-delete-session";
+import { ConversationStatus } from "@/features/conversations/types";
 
 interface SessionDetailViewProps {
   sessionId: string;
@@ -30,6 +31,9 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   });
   
   const conversations = conversationsData?.items || [];
+  const hasCompletedConversation = conversations.some(
+    (c) => c.status === ConversationStatus.Completed
+  );
   const deleteConversationMutation = useDeleteConversation({ sessionId });
   const [deletingConversationId, setDeletingConversationId] = useState<string | undefined>(undefined);
   const deleteSessionMutation = useDeleteSession();
@@ -81,7 +85,10 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Navigation Header */}
-      <SessionNavigationHeader />
+      <SessionNavigationHeader 
+        onDelete={handleDeleteSession}
+        isDeleting={deleteSessionMutation.isPending}
+      />
 
       {/* Main Session Detail Card */}
       <div className="px-0">
@@ -94,7 +101,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
           */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
-              <SessionConversationsCard
+              <SessionConversationsList
                 conversations={conversations}
                 onCreateConversation={handleCreateConversation}
                 onDeleteConversation={handleDeleteConversation}
@@ -108,6 +115,12 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
                   sessionId={session.id}
                   sessionName={session.name}
                   onStartChat={handleStartChat}
+                  disabled={!hasCompletedConversation}
+                  disabledMessage={
+                    !hasCompletedConversation
+                      ? "To start a chat in this session, first complete at least one conversation."
+                      : undefined
+                  }
                 />
               )}
           </div>
@@ -116,8 +129,6 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
           <SessionActionButtons
             sessionName={session?.name ?? ''}
             onEditSession={handleEditSession}
-            onDeleteSession={handleDeleteSession}
-            isDeleting={deleteSessionMutation.isPending}
           />
         </CardContent>
       </div>

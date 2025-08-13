@@ -20,7 +20,7 @@ const ConversationsListHeader: React.FC<ConversationsListHeaderProps> = ({ onCre
         </p>
       </div>
       <Button 
-        className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow w-full md:w-auto" 
+        className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold matrix-glow w-full md:w-auto" 
         onClick={onCreateConversation}
       >
         <Plus className="w-4 h-4 mr-2" />

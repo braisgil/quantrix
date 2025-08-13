@@ -1,7 +1,8 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, X } from 'lucide-react';
+import ConfirmDialog from '@/components/confirm-dialog';
+import { ArrowLeft, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface ConversationNavigationHeaderProps {
@@ -9,11 +10,15 @@ interface ConversationNavigationHeaderProps {
   sessionId?: string;
   /** Custom cancel handler, takes precedence over sessionId navigation */
   onCancel?: () => void;
+  onDelete?: () => void;
+  isDeleting?: boolean;
 }
 
 export const ConversationNavigationHeader: React.FC<ConversationNavigationHeaderProps> = ({ 
   sessionId,
-  onCancel 
+  onCancel,
+  onDelete,
+  isDeleting
 }) => {
   const router = useRouter();
 
@@ -37,14 +42,25 @@ export const ConversationNavigationHeader: React.FC<ConversationNavigationHeader
         <ArrowLeft className="w-4 h-4" />
         {sessionId ? 'Back to Session' : 'Back to Sessions'}
       </Button>
-      <Button 
-        variant="ghost"
-        size="sm" 
-        onClick={handleBackClick}
-        className="text-muted-foreground hover:text-foreground lg:hidden"
-      >
-        <X className="w-4 h-4" />
-      </Button>
+      {onDelete && (
+        <ConfirmDialog
+          title="Delete Conversation"
+          description="Are you sure you want to delete this conversation? This action cannot be undone."
+          confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
+          onConfirm={onDelete}
+          isLoading={Boolean(isDeleting)}
+          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white font-semibold"
+        >
+          <Button 
+            size="sm"
+            className="bg-destructive hover:bg-destructive/90 text-white font-semibold"
+            disabled={isDeleting}
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+          </Button>
+        </ConfirmDialog>
+      )}
     </div>
   );
 }; 

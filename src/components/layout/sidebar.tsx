@@ -79,7 +79,7 @@ export const SidebarCustom = () => {
         <MobileAwareLink href="/" className="flex items-center space-x-3">
           <div className="relative matrix-glow">
             <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center matrix-border">
-              <Code className="w-6 h-6 text-black" />
+              <Code className="w-6 h-6 text-primary-foreground" />
             </div>
             <div className="absolute -top-1 -right-1 w-3 h-3 bg-primary rounded-full animate-pulse"></div>
           </div>
@@ -100,40 +100,43 @@ export const SidebarCustom = () => {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {neuralSections.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    className={cn(
-                      "h-12 mx-2 mb-1 rounded-lg transition-all duration-300 hover:matrix-border hover:bg-primary/10 border border-transparent",
-                      pathname === item.href && "matrix-border bg-primary/10 matrix-glow"
-                    )}
-                    isActive={pathname === item.href}
-                  >
-                    <MobileAwareLink href={item.href} className="flex items-center space-x-3 p-3">
-                      <div className={cn(
-                        "p-2 rounded-lg transition-all duration-300",
-                        pathname === item.href 
-                          ? "bg-primary/20 matrix-glow" 
-                          : "bg-muted/50 hover:bg-primary/10"
-                      )}>
-                        <item.icon className={cn(
-                          "size-5 transition-colors",
-                          pathname === item.href ? "text-primary" : "text-muted-foreground"
-                        )} />
-                      </div>
-                      <span className={cn(
-                        "text-sm font-medium tracking-tight transition-colors",
-                        pathname === item.href 
-                          ? "text-primary matrix-text-glow" 
-                          : "text-foreground"
-                      )}>
-                        {item.label}
-                      </span>
-                    </MobileAwareLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {neuralSections.map((item) => {
+                const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                return (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      asChild
+                      className={cn(
+                        "h-12 mx-2 mb-1 rounded-lg transition-all duration-300 hover:matrix-border hover:bg-sidebar-accent border border-transparent",
+                        isActive && "matrix-border bg-background/95 matrix-glow"
+                      )}
+                      isActive={isActive}
+                    >
+                      <MobileAwareLink href={item.href} className="flex items-center space-x-3 p-3">
+                        <div className={cn(
+                          "p-2 rounded-lg transition-all duration-300",
+                          isActive
+                            ? "bg-background/95 matrix-glow"
+                            : "bg-muted/50 hover:bg-sidebar-accent"
+                        )}>
+                          <item.icon className={cn(
+                            "size-5 transition-colors",
+                            isActive ? "text-primary" : "text-muted-foreground"
+                          )} />
+                        </div>
+                        <span className={cn(
+                          "text-sm font-medium tracking-tight transition-colors",
+                          isActive
+                            ? "text-primary matrix-text-glow"
+                            : "text-foreground"
+                        )}>
+                          {item.label}
+                        </span>
+                      </MobileAwareLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -145,40 +148,43 @@ export const SidebarCustom = () => {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {quantumSections.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    className={cn(
-                      "h-12 mx-2 mb-1 rounded-lg transition-all duration-300 hover:matrix-border hover:bg-primary/10 border border-transparent",
-                      pathname === item.href && "matrix-border bg-primary/10 matrix-glow"
-                    )}
-                    isActive={pathname === item.href}
-                  >
-                    <MobileAwareLink href={item.href} className="flex items-center space-x-3 p-3">
-                      <div className={cn(
-                        "p-2 rounded-lg transition-all duration-300",
-                        pathname === item.href 
-                          ? "bg-primary/20 matrix-glow" 
-                          : "bg-muted/50 hover:bg-primary/10"
-                      )}>
-                        <item.icon className={cn(
-                          "size-5 transition-colors",
-                          pathname === item.href ? "text-primary" : "text-muted-foreground"
-                        )} />
-                      </div>
-                      <span className={cn(
-                        "text-sm font-medium tracking-tight transition-colors",
-                        pathname === item.href 
-                          ? "text-primary matrix-text-glow" 
-                          : "text-foreground"
-                      )}>
-                        {item.label}
-                      </span>
-                    </MobileAwareLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {quantumSections.map((item) => {
+                const isActive = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                return (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      asChild
+                      className={cn(
+                        "h-12 mx-2 mb-1 rounded-lg transition-all duration-300 hover:matrix-border hover:bg-sidebar-accent border border-transparent",
+                        isActive && "matrix-border bg-background/95 matrix-glow"
+                      )}
+                      isActive={isActive}
+                    >
+                      <MobileAwareLink href={item.href} className="flex items-center space-x-3 p-3">
+                        <div className={cn(
+                          "p-2 rounded-lg transition-all duration-300",
+                          isActive
+                            ? "bg-background/95 matrix-glow"
+                            : "bg-muted/50 hover:bg-sidebar-accent"
+                        )}>
+                          <item.icon className={cn(
+                            "size-5 transition-colors",
+                            isActive ? "text-primary" : "text-muted-foreground"
+                          )} />
+                        </div>
+                        <span className={cn(
+                          "text-sm font-medium tracking-tight transition-colors",
+                          isActive
+                            ? "text-primary matrix-text-glow"
+                            : "text-foreground"
+                        )}>
+                          {item.label}
+                        </span>
+                      </MobileAwareLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

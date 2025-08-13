@@ -17,7 +17,7 @@ const Page: React.FC = () => {
             Manage your neural network companions
           </p>
         </div>
-        <Button className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow">
+      <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold matrix-glow">
           <Plus className="w-4 h-4 mr-2" />
           Create Agent
         </Button>

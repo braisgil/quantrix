@@ -1,10 +1,10 @@
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Plus } from "lucide-react";
+import { MessageSquare, Phone, Plus } from "lucide-react";
 import { ConversationListItem } from "@/features/conversations/components";
 import { ConversationGetMany } from "@/features/conversations/types";
 
-interface SessionConversationsCardProps {
+interface SessionConversationsListProps {
   conversations: ConversationGetMany;
   onCreateConversation: () => void;
   onDeleteConversation?: (conversation: ConversationGetMany[number]) => void;
@@ -14,19 +14,20 @@ interface SessionConversationsCardProps {
 
 
 
-export const SessionConversationsCard = ({ 
+export const SessionConversationsList = ({ 
   conversations, 
   onCreateConversation,
   onDeleteConversation,
   deletingConversationId,
   onViewConversation,
-}: SessionConversationsCardProps) => {
+}: SessionConversationsListProps) => {
   
 
   return (
-    <div className="h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
+    <div className={`flex flex-col ${conversations.length > 1 ? "h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px]" : ""}`}>
       <CardHeader className="px-0 pb-6">
         <div className="flex items-center gap-3 mb-2">
+          <Phone className="w-4 h-4 text-primary" />
           <CardTitle className="text-lg font-bold quantrix-gradient matrix-text-glow">
             Conversations
           </CardTitle>
@@ -37,7 +38,7 @@ export const SessionConversationsCard = ({
         {conversations.length > 0 && (
           <Button 
             onClick={onCreateConversation}
-            className="mt-3 bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow w-full"
+            className="mt-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold matrix-glow w-full"
           >
             <Plus className="w-3 h-3 mr-2" />
             Add Conversation
@@ -62,7 +63,7 @@ export const SessionConversationsCard = ({
             <Button 
               onClick={onCreateConversation}
               size="sm"
-              className="matrix-glow bg-primary hover:bg-primary/90 text-black"
+              className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground"
             >
               <Plus className="w-3 h-3 mr-2" />
               Create First Conversation

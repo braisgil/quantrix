@@ -95,7 +95,8 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
         <Button
           size="sm"
           onClick={() => onViewConversation(conversation)}
-          className="bg-blue-500 hover:bg-blue-500/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+          variant="view"
+          className="font-semibold w-full sm:w-auto"
         >
           <ExternalLink className="w-4 h-4" />
           <span className="ml-2 sm:hidden">View</span>
@@ -104,7 +105,8 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
         {conversation.status === ConversationStatus.Upcoming && (
           <Button
             size="sm"
-            className="bg-primary hover:bg-primary/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+            variant="call"
+            className="font-semibold w-full sm:w-auto"
           >
             <PhoneCall className="w-4 h-4" />
             <span className="ml-2 sm:hidden">Start</span>
@@ -120,12 +122,12 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
             confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
             onConfirm={handleDelete}
             isLoading={isDeleting}
-            confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+            confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
             cancelButtonClassName="w-full sm:w-auto"
           >
             <Button 
               size="sm" 
-              className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+              className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
               disabled={isDeleting}
             >
               <Trash2 className="w-4 h-4" />
