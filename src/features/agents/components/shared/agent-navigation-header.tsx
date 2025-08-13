@@ -1,17 +1,25 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import ConfirmDialog from '@/components/confirm-dialog';
-import { ArrowLeft, Trash2 } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { AgentActionButtons } from '../detail-view/agent-action-buttons';
 
-interface AgentNavigationHeaderProps {
-  onCancel?: () => void;
-  onDelete?: () => void;
-  isDeleting?: boolean;
-}
+type AgentNavigationHeaderProps =
+  | {
+      onCancel?: () => void;
+      onDelete: () => void;
+      isDeleting?: boolean;
+      agentName: string;
+    }
+  | {
+      onCancel?: () => void;
+      onDelete?: undefined;
+      isDeleting?: boolean;
+      agentName?: string;
+    };
 
-export const AgentNavigationHeader = ({ onCancel, onDelete, isDeleting }: AgentNavigationHeaderProps) => {
+export const AgentNavigationHeader = ({ onCancel, onDelete, isDeleting, agentName }: AgentNavigationHeaderProps) => {
   const router = useRouter();
 
   const handleBackClick = () => {
@@ -33,23 +41,7 @@ export const AgentNavigationHeader = ({ onCancel, onDelete, isDeleting }: AgentN
         Back to Agents
       </Button>
       {onDelete && (
-        <ConfirmDialog
-          title="Delete Agent"
-          description="Are you sure you want to delete this agent? This action cannot be undone and will also remove all associated sessions and conversations."
-          confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
-          onConfirm={onDelete}
-          isLoading={Boolean(isDeleting)}
-          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white font-semibold"
-        >
-          <Button 
-            size="sm"
-            className="bg-destructive hover:bg-destructive/90 text-white font-semibold"
-            disabled={isDeleting}
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
-          </Button>
-        </ConfirmDialog>
+        <AgentActionButtons agentName={agentName} onDeleteAgent={onDelete} isDeleting={isDeleting} />
       )}
     </div>
   );

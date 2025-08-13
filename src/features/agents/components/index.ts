@@ -12,7 +12,6 @@ export { AgentHeader } from './detail-view/agent-header';
 export { AgentDetailsCard } from './detail-view/agent-details-card';
 export { AgentSpecializationCard } from './detail-view/agent-specialization-card';
 export { AgentCustomConfigCard } from './detail-view/agent-custom-config-card';
-export { AgentActionButtons } from './detail-view/agent-action-buttons';
 
 // Shared components  
 export { 

@@ -11,7 +11,7 @@ export { useSearchConversations } from './api/use-search-conversations';
 // Note: Conversation wizard is now strictly session-scoped and managed within session contexts
 
 // Main view components
-export { ConversationListView, ConversationDetailView } from './views';
+export { ConversationDetailView } from './views';
 
 // Wizard components
 export { ConversationWizard } from './components/wizard';
@@ -22,7 +22,6 @@ export {
   ConversationsStatsCards,
   
   // List view
-  ConversationsList,
   ConversationsListHeader,
   ConversationListItem,
   ConversationsEmptyState,
@@ -31,7 +30,6 @@ export {
   ConversationHeader,
   ConversationDetailsCard,
   ConversationSummaryCard,
-  ConversationActionButtons,
   
   // Shared utilities
   ConversationSkeleton,

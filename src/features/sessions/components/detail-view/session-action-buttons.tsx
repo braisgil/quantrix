@@ -3,18 +3,16 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ConfirmDialog from '@/components/confirm-dialog';
-import { Edit, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 
 interface SessionActionButtonsProps {
   sessionName: string;
-  onEditSession: () => void;
   onDeleteSession?: () => void;
   isDeleting?: boolean;
 }
 
 export const SessionActionButtons = ({
   sessionName,
-  onEditSession,
   onDeleteSession,
   isDeleting,
 }: SessionActionButtonsProps) => {
@@ -27,16 +25,6 @@ export const SessionActionButtons = ({
 
   return (
     <div className="flex flex-col sm:flex-row gap-3 justify-center">
-      <Button
-        onClick={onEditSession}
-        variant="outline"
-        size="sm"
-        className="matrix-glow matrix-border w-full sm:w-auto"
-      >
-        <Edit className="h-4 w-4 mr-2" />
-        Edit
-      </Button>
-
       {onDeleteSession && (
         <ConfirmDialog
           open={isDeleteDialogOpen}

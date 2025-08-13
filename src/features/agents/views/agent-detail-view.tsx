@@ -7,8 +7,7 @@ import {
   AgentHeader,
   AgentDetailsCard,
   AgentSpecializationCard,
-  AgentCustomConfigCard,
-  AgentActionButtons
+  AgentCustomConfigCard
 } from '../components';
 import { useDeleteAgent } from '../api/use-delete-agent';
 import { useRouter } from 'next/navigation';
@@ -22,15 +21,7 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
   const router = useRouter();
   const deleteAgentMutation = useDeleteAgent();
 
-  const handleConfigureAgent = () => {
-    // TODO: Implement agent configuration
-    console.log('Configure agent:', agent.name);
-  };
-
-  const handleEditAgent = () => {
-    // TODO: Implement agent editing
-    console.log('Edit agent:', agent.name);
-  };
+  // Removed edit/configure actions; using delete-only per new pattern
 
   const handleDeleteAgent = () => {
     if (!agent) return;
@@ -48,6 +39,7 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
     <div className="w-full max-w-5xl mx-auto space-y-6">
       {/* Navigation Header */}
       <AgentNavigationHeader 
+        agentName={agent?.name}
         onDelete={handleDeleteAgent}
         isDeleting={deleteAgentMutation.isPending}
       />
@@ -66,12 +58,7 @@ export const AgentDetailView = ({ agentId }: AgentDetailViewProps) => {
           {/* Custom Configuration Summary */}
           <AgentCustomConfigCard agent={agent} />
 
-          {/* Action Buttons */}
-          <AgentActionButtons
-            agentName={agent.name}
-            onEditAgent={handleEditAgent}
-            onConfigureAgent={handleConfigureAgent}
-          />
+          {/* Action Buttons moved to navigation header */}
         </CardContent>
       </div>
     </div>

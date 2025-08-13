@@ -1,17 +1,25 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import ConfirmDialog from "@/components/confirm-dialog";
-import { ArrowLeft, Trash2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { SessionActionButtons } from "../detail-view/session-action-buttons";
 
-interface SessionNavigationHeaderProps {
-  onCancel?: () => void;
-  onDelete?: () => void;
-  isDeleting?: boolean;
-}
+type SessionNavigationHeaderProps =
+  | {
+      onCancel?: () => void;
+      onDelete: () => void;
+      isDeleting?: boolean;
+      sessionName: string;
+    }
+  | {
+      onCancel?: () => void;
+      onDelete?: undefined;
+      isDeleting?: boolean;
+      sessionName?: string;
+    };
 
-export const SessionNavigationHeader = ({ onCancel, onDelete, isDeleting }: SessionNavigationHeaderProps) => {
+export const SessionNavigationHeader = ({ onCancel, onDelete, isDeleting, sessionName }: SessionNavigationHeaderProps) => {
   const router = useRouter();
 
   const handleBackClick = () => {
@@ -33,23 +41,7 @@ export const SessionNavigationHeader = ({ onCancel, onDelete, isDeleting }: Sess
         Back to Sessions
       </Button>
       {onDelete && (
-        <ConfirmDialog
-          title="Delete Session"
-          description="Are you sure you want to delete this session? This action cannot be undone and will also remove all associated conversations."
-          confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
-          onConfirm={onDelete}
-          isLoading={Boolean(isDeleting)}
-          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white font-semibold"
-        >
-          <Button 
-            size="sm"
-            className="bg-destructive hover:bg-destructive/90 text-white font-semibold"
-            disabled={isDeleting}
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
-          </Button>
-        </ConfirmDialog>
+        <SessionActionButtons sessionName={sessionName} onDeleteSession={onDelete} isDeleting={isDeleting} />
       )}
     </div>
   );

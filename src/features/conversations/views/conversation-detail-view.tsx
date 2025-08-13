@@ -6,8 +6,7 @@ import {
   ConversationNavigationHeader,
   ConversationHeader,
   ConversationDetailsCard,
-  ConversationSummaryCard,
-  ConversationActionButtons
+  ConversationSummaryCard
 } from '../components';
 import { ChatProvider } from '@/features/chat/components/chat-provider';
 import { ConversationStatus } from '../types';
@@ -23,15 +22,7 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
   const router = useRouter();
   const deleteConversationMutation = useDeleteConversation({ sessionId: conversation?.sessionId });
 
-  const handleStartConversation = () => {
-    // TODO: Implement conversation start
-    console.log('Start conversation:', conversation.name);
-  };
-
-  const handleEditConversation = () => {
-    // TODO: Implement conversation editing
-    console.log('Edit conversation:', conversation.name);
-  };
+  // Removed start/edit actions; delete handled via header
 
   const handleDeleteConversation = () => {
     if (!conversation) return;
@@ -46,17 +37,14 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
     );
   };
 
-  const handleViewTranscript = () => {
-    if (conversation.transcriptUrl) {
-      window.open(conversation.transcriptUrl, '_blank');
-    }
-  };
+  // View transcript removed from action buttons; keep feature elsewhere if needed
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Navigation Header */}
       <ConversationNavigationHeader 
         sessionId={conversation.sessionId}
+        conversationName={conversation?.name}
         onDelete={conversation.status === ConversationStatus.Upcoming ? handleDeleteConversation : undefined}
         isDeleting={deleteConversationMutation.isPending}
       />
@@ -84,13 +72,7 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
             </div>
           </div>
 
-          {/* Action Buttons */}
-          <ConversationActionButtons
-            conversation={conversation}
-            onStartConversation={handleStartConversation}
-            onEditConversation={handleEditConversation}
-            onViewTranscript={handleViewTranscript}
-          />
+          {/* Action Buttons moved to navigation header */}
         </CardContent>
       </div>
     </div>

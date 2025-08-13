@@ -13,8 +13,7 @@ export {
   SessionHeader,
   SessionDetailsCard,
   SessionConversationsList,
-  SessionChatCard,
-  SessionActionButtons
+  SessionChatCard
 } from "./components/detail-view";
 
 // Components - Wizard

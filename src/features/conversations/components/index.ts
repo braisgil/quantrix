@@ -10,7 +10,6 @@ export { default as ConversationsEmptyState } from './list-view/conversations-em
 export { ConversationHeader } from './detail-view/conversation-header';
 export { ConversationDetailsCard } from './detail-view/conversation-details-card';
 export { ConversationSummaryCard } from './detail-view/conversation-summary-card';
-export { ConversationActionButtons } from './detail-view/conversation-action-buttons';
 
 // Shared components  
 export { 

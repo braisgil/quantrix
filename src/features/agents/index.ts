@@ -26,7 +26,6 @@ export {
   AgentDetailsCard,
   AgentSpecializationCard,
   AgentCustomConfigCard,
-  AgentActionButtons,
   
   // Shared utilities
   AgentSkeleton,

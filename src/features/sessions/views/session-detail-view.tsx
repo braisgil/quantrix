@@ -7,8 +7,7 @@ import { SessionNavigationHeader } from '../components/shared/session-navigation
 import { 
   SessionHeader,
   SessionConversationsList,
-  SessionChatCard,
-  SessionActionButtons
+  SessionChatCard
 } from '../components/detail-view';
 import { ConversationWizard } from "@/features/conversations/components/wizard/components/conversation-wizard";
 import { useWizardState } from "../hooks/use-wizard-state";
@@ -46,10 +45,6 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
     // TODO: Implement chat functionality
     console.log('Start chat for session:', sessionId);
   };
-  const handleEditSession = () => {
-    // TODO: Implement session editing UI
-    console.log('Edit session:', sessionId);
-  };
 
   const handleDeleteSession = () => {
     if (!session) return;
@@ -86,6 +81,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
     <div className="w-full max-w-7xl mx-auto space-y-6">
       {/* Navigation Header */}
       <SessionNavigationHeader 
+        sessionName={session?.name}
         onDelete={handleDeleteSession}
         isDeleting={deleteSessionMutation.isPending}
       />
@@ -125,11 +121,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
               )}
           </div>
 
-          {/* Action Buttons */}
-          <SessionActionButtons
-            sessionName={session?.name ?? ''}
-            onEditSession={handleEditSession}
-          />
+          {/* Action Buttons moved to navigation header */}
         </CardContent>
       </div>
     </div>
