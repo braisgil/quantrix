@@ -6,7 +6,9 @@ import type { ConversationGetOne } from '../../types';
 import { ConversationStatus } from '../../types';
 import { 
   getConversationIcon, 
-  getConversationStatusLabel
+  getConversationStatusLabel,
+  getEffectiveDisplayStatus,
+  getConversationStatusBadgeClasses,
 } from '../../utils/conversation-helpers';
 import { MessageSquare } from 'lucide-react';
 
@@ -15,8 +17,10 @@ interface ConversationHeaderProps {
 }
 
 export const ConversationHeader: React.FC<ConversationHeaderProps> = ({ conversation }) => {
-  const StatusIcon = getConversationIcon(conversation.status as ConversationStatus);
-  const statusLabel = getConversationStatusLabel(conversation.status as ConversationStatus);
+  const effectiveStatus = getEffectiveDisplayStatus(conversation);
+  const StatusIcon = getConversationIcon(effectiveStatus as ConversationStatus);
+  const statusLabel = getConversationStatusLabel(effectiveStatus as ConversationStatus);
+  const statusBadgeClasses = getConversationStatusBadgeClasses(effectiveStatus as ConversationStatus);
 
   return (
     <CardHeader className="text-center pb-0 sm:pb-0 px-0">
@@ -35,7 +39,7 @@ export const ConversationHeader: React.FC<ConversationHeaderProps> = ({ conversa
 
       {/* Status Badge only to avoid repeating details shown below */}
       <div className="flex flex-wrap gap-2 justify-center mb-2">
-        <Badge variant="secondary" className="matrix-border matrix-glow">
+        <Badge variant="secondary" className={`matrix-border matrix-glow ${statusBadgeClasses}`}>
           <StatusIcon className="h-3 w-3 mr-1" />
           {statusLabel}
         </Badge>

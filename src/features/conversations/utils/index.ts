@@ -5,4 +5,6 @@ export {
   getConversationStatusColor,
   formatConversationDuration,
   calculateConversationStats,
+  getEffectiveDisplayStatus,
+  getConversationStatusBadgeClasses,
 } from './conversation-helpers'; 

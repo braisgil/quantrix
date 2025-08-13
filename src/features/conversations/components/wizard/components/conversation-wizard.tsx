@@ -45,18 +45,24 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
 
   const createConversationMutation = useMutation(
     trpc.conversations.create.mutationOptions({
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(
-        trpc.sessions.getSessionConversations.queryOptions({ sessionId })
-      );
-      toast.success("Your conversation has been scheduled successfully!");
-      resetWizard();
-      onSuccess?.();
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to schedule your conversation");
-    },
-  }));
+      onSuccess: async (_, variables) => {
+        await queryClient.invalidateQueries(
+          trpc.sessions.getSessionConversations.queryOptions({ sessionId })
+        );
+        const isScheduled = Boolean(variables.scheduledDateTime);
+        toast.success(
+          isScheduled
+            ? "Your conversation has been scheduled successfully!"
+            : "Your conversation is available now!"
+        );
+        resetWizard();
+        onSuccess?.();
+      },
+      onError: (error) => {
+        toast.error(error.message || "Failed to create your conversation");
+      },
+    })
+  );
 
   const handleNext = () => {
     if (canProceed(currentStep)) {
@@ -218,24 +224,24 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
                 <Sparkles className="w-3 h-3 ml-1" />
               </Button>
             ) : (
-              <Button 
-                onClick={handleSubmit}
-                disabled={!canSubmit || createConversationMutation.isPending}
-                size="sm"
-                className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
-              >
-                {createConversationMutation.isPending ? (
-                  <>
-                    <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
-                    <span>Scheduling...</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-3 h-3 mr-1" />
-                    <span>Schedule Conversation</span>
-                  </>
-                )}
-              </Button>
+                <Button 
+                  onClick={handleSubmit}
+                  disabled={!canSubmit || createConversationMutation.isPending}
+                  size="sm"
+                  className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
+                >
+                  {createConversationMutation.isPending ? (
+                    <>
+                      <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3 h-3 mr-1" />
+                      <span>{wizardState.isScheduled ? 'Schedule Conversation' : 'Create Conversation'}</span>
+                    </>
+                  )}
+                </Button>
             )}
           </div>
         </CardFooter>

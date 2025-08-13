@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, Phone, Plus } from "lucide-react";
 import { ConversationListItem } from "@/features/conversations/components";
 import { ConversationGetMany } from "@/features/conversations/types";
+import { Badge } from "@/components/ui/badge";
 
 interface SessionConversationsListProps {
   conversations: ConversationGetMany;
@@ -35,6 +36,11 @@ export const SessionConversationsList = ({
         <CardDescription>
           Conversations within this session
         </CardDescription>
+        <div className="mt-2 gap-2 text-xs">
+          <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-700 border-yellow-500/30 dark:text-yellow-400 dark:bg-yellow-500/10">
+            Scheduled: Not joinable until 30 min before scheduled time
+          </Badge>
+        </div>
         {conversations.length > 0 && (
           <Button 
             onClick={onCreateConversation}

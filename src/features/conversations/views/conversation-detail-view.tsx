@@ -45,7 +45,7 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
       <ConversationNavigationHeader 
         sessionId={conversation.sessionId}
         conversationName={conversation?.name}
-        onDelete={conversation.status === ConversationStatus.Upcoming ? handleDeleteConversation : undefined}
+        onDelete={conversation.status !== ConversationStatus.Completed ? handleDeleteConversation : undefined}
         isDeleting={deleteConversationMutation.isPending}
       />
 

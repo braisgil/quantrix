@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Clock, Calendar, MessageSquare, User } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import type { ConversationGetOne } from '../../types';
-import { formatConversationDuration } from '../../utils/conversation-helpers';
+import { formatConversationDuration, isConversationJoinAvailable } from '../../utils/conversation-helpers';
 
 interface ConversationDetailsCardProps {
   conversation: ConversationGetOne;
@@ -18,6 +18,16 @@ export const ConversationDetailsCard: React.FC<ConversationDetailsCardProps> = (
       label: 'Status',
       value: conversation.status,
       icon: MessageSquare,
+    },
+    ...(conversation.scheduledDateTime ? [{
+      label: 'Scheduled',
+      value: new Date(conversation.scheduledDateTime).toLocaleString(),
+      icon: Calendar,
+    }] : []),
+    {
+      label: 'Joinable',
+      value: isConversationJoinAvailable(conversation) ? 'Yes' : 'No',
+      icon: Calendar,
     },
     {
       label: 'Duration',

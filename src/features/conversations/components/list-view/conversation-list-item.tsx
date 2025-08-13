@@ -4,14 +4,18 @@ import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import ConfirmDialog from '@/components/confirm-dialog';
-import { MessageSquare, Clock, ExternalLink, Calendar, Bot, Trash2, PhoneCall } from 'lucide-react';
+import { Clock, ExternalLink, Calendar, Bot, Trash2, PhoneCall } from 'lucide-react';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import type { ConversationGetMany } from '../../types';
 import { ConversationStatus } from '../../types';
 import { 
   getConversationStatusLabel, 
-  getConversationStatusColor,
   formatConversationDuration,
+  isConversationJoinAvailable,
+  getConversationIcon,
+  getEffectiveDisplayStatus,
+  getConversationStatusBadgeClasses,
 } from '../../utils/conversation-helpers';
 
 interface ConversationListItemProps {
@@ -27,9 +31,11 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
   onDelete,
   isDeleting,
 }) => {
-  const statusLabel = getConversationStatusLabel(conversation.status as ConversationStatus);
-  const statusColor = getConversationStatusColor(conversation.status as ConversationStatus);
+  const effectiveStatus = getEffectiveDisplayStatus(conversation);
+  const statusLabel = getConversationStatusLabel(effectiveStatus as ConversationStatus);
+  const statusBadgeClasses = getConversationStatusBadgeClasses(effectiveStatus as ConversationStatus);
   const duration = formatConversationDuration(conversation.startedAt, conversation.endedAt);
+  const StatusIcon = getConversationIcon(conversation.status as ConversationStatus);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleDelete = () => {
@@ -37,7 +43,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
     setIsDeleteDialogOpen(false);
   };
 
-  const canDelete = conversation.status === ConversationStatus.Upcoming;
+  const canDelete = conversation.status !== ConversationStatus.Completed;
 
   return (
     <div className="matrix-card flex flex-col sm:flex-row sm:items-start sm:justify-between p-4 sm:p-5 bg-muted/50 rounded-lg border border-primary/20 hover:matrix-border transition-all duration-300">
@@ -45,21 +51,19 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
         {/* Group 1: Icon, Name, and Badges */}
         <div className="flex items-start space-x-3 sm:space-x-4">
           <div className="p-2 sm:p-3 bg-primary/10 rounded-lg matrix-glow flex-shrink-0">
-            <MessageSquare className="w-5 h-5 sm:w-7 sm:h-7 text-primary" />
+            <StatusIcon className="w-5 h-5 sm:w-7 sm:h-7 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2 mb-1">
               <h3 className="font-semibold text-foreground text-base sm:text-lg mb-0">{conversation.name}</h3>
-              <Badge 
-                variant="secondary" 
-                className={`${statusColor} ${
-                  conversation.status === ConversationStatus.Upcoming 
-                    ? 'bg-yellow-500/20 text-yellow-700 border-yellow-500/40 dark:text-yellow-500 dark:bg-yellow-500/10 dark:border-yellow-500/30' 
-                    : 'bg-primary/10 text-primary border-primary/30'
-                } text-xs font-medium`}
-              >
-                {statusLabel}
-              </Badge>
+              <div className="flex items-center gap-2">
+                <Badge 
+                  variant="secondary" 
+                  className={`matrix-border ${statusBadgeClasses} text-xs font-medium`}
+                >
+                  {statusLabel}
+                </Badge>
+              </div>
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Bot className="h-4 w-4 text-primary/70" />
@@ -102,14 +106,17 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
           <span className="ml-2 sm:hidden">View</span>
         </Button>
         
-        {conversation.status === ConversationStatus.Upcoming && (
+        {(conversation.status === ConversationStatus.Available || (conversation.status === ConversationStatus.Scheduled && isConversationJoinAvailable(conversation))) && (
           <Button
+            asChild
             size="sm"
             variant="call"
             className="font-semibold w-full sm:w-auto"
           >
-            <PhoneCall className="w-4 h-4" />
-            <span className="ml-2 sm:hidden">Start</span>
+            <Link href={`/call/${conversation.id}`}>
+              <PhoneCall className="w-4 h-4" />
+              <span className="ml-2 sm:hidden">Start</span>
+            </Link>
           </Button>
         )}
 

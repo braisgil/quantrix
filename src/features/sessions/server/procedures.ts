@@ -182,7 +182,8 @@ export const sessionsRouter = createTRPCRouter({
         search: z.string().nullish(),
         status: z
           .enum([
-            "upcoming",
+            "scheduled",
+            "available",
             "active",
             "completed",
             "processing",
@@ -232,7 +233,7 @@ export const sessionsRouter = createTRPCRouter({
         .orderBy(desc(conversations.createdAt), desc(conversations.id));
 
       return {
-        items: data
+        items: data,
       };
     }),
 });

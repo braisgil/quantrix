@@ -7,6 +7,7 @@ export interface ConversationWizardState {
   agentId: string | null;
   
   // Date and time
+  isScheduled: boolean;
   scheduledDate: Date | null;
   scheduledTime: string | null;
 }

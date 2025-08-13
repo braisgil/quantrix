@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns";
 import { WizardLayout } from "../shared/wizard-layout";
 import type { StepProps } from "../../types/wizard";
+import { Switch } from "@/components/ui/switch";
 
 interface ExtendedStepProps extends StepProps {
   sessionId: string;
@@ -80,6 +81,25 @@ export const StepConversationDetailsSession = ({
           </p>
         </div>
 
+        {/* Availability toggle */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium text-primary">Availability</Label>
+          <div className="flex items-center justify-between rounded-lg border border-primary/20 p-3 bg-background/50">
+            <div className="flex flex-col">
+              <span className="text-sm font-medium">{wizardState.isScheduled ? "Scheduled" : "Available now"}</span>
+              <span className="text-xs text-muted-foreground">
+                {wizardState.isScheduled
+                  ? "Call becomes available 30 minutes before the scheduled time"
+                  : "Call is available immediately after creation"}
+              </span>
+            </div>
+            <Switch
+              checked={wizardState.isScheduled}
+              onCheckedChange={(checked) => updateWizardState({ isScheduled: Boolean(checked) })}
+            />
+          </div>
+        </div>
+
         {/* Date and Time Selection */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Date Picker */}
@@ -92,6 +112,7 @@ export const StepConversationDetailsSession = ({
                 <Button
                   variant="outline"
                   className="w-full justify-start text-left font-normal matrix-border bg-background/50 backdrop-blur-sm hover:bg-accent/50"
+                  disabled={!wizardState.isScheduled}
                 >
                   <Calendar className="mr-2 h-4 w-4 text-primary" />
                   {wizardState.scheduledDate ? (
@@ -137,6 +158,7 @@ export const StepConversationDetailsSession = ({
                     }
                   }}
                   className="pl-10 text-center matrix-border bg-background/50 backdrop-blur-sm"
+                  disabled={!wizardState.isScheduled}
                 />
               </div>
               <span className="text-lg font-medium text-primary">:</span>
@@ -154,6 +176,7 @@ export const StepConversationDetailsSession = ({
                     }
                   }}
                   className="text-center matrix-border bg-background/50 backdrop-blur-sm"
+                  disabled={!wizardState.isScheduled}
                 />
               </div>
             </div>
@@ -176,11 +199,19 @@ export const StepConversationDetailsSession = ({
                 <FolderOpen className="w-4 h-4 text-primary" />
                 <span><strong>Session:</strong> {sessionName}</span>
               </div>
-              {wizardState.scheduledDate && wizardState.scheduledTime && (
+              {wizardState.isScheduled && wizardState.scheduledDate && wizardState.scheduledTime && (
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-primary" />
                   <span>
                     <strong>Scheduled:</strong> {format(wizardState.scheduledDate, "PPP")} at {wizardState.scheduledTime}
+                  </span>
+                </div>
+              )}
+              {!wizardState.isScheduled && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-primary" />
+                  <span>
+                    <strong>Availability:</strong> Available now
                   </span>
                 </div>
               )}
