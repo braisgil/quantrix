@@ -9,6 +9,8 @@ import { SessionWizard } from "../components/wizard/components/session-wizard";
 import { SessionsEmptyState } from "../components/list-view/sessions-empty-state";
 import { useWizardState } from "../hooks/use-wizard-state";
 import { SessionGetMany } from "../types";
+import { useDeleteSession } from "../api/use-delete-session";
+import { useState } from "react";
 
 export const SessionListView = () => {
   const router = useRouter();
@@ -22,6 +24,8 @@ export const SessionListView = () => {
   const agents = agentsData?.items || [];
   const hasAgents = agents.length > 0;
   const hasSessions = sessions.length > 0;
+  const deleteSessionMutation = useDeleteSession();
+  const [deletingSessionId, setDeletingSessionId] = useState<string | undefined>(undefined);
 
   const handleCreateSession = () => {
     if (hasAgents) {
@@ -44,6 +48,13 @@ export const SessionListView = () => {
     router.push(`/sessions/${session.id}`);
   };
 
+  const handleDeleteSession = (session: SessionGetMany[number]) => {
+    setDeletingSessionId(session.id);
+    deleteSessionMutation.mutate({ id: session.id }, {
+      onSettled: () => setDeletingSessionId(undefined),
+    });
+  };
+
   return (
     <div className="space-y-6">
       <SessionsListHeader
@@ -54,6 +65,8 @@ export const SessionListView = () => {
       <SessionsList
         sessions={sessions}
         onConfigureSession={handleConfigureSession}
+        onDeleteSession={handleDeleteSession}
+        deletingSessionId={deletingSessionId}
       />
       ) : (
         <SessionsEmptyState onCreateSession={handleCreateSession} hasAgents={hasAgents} />

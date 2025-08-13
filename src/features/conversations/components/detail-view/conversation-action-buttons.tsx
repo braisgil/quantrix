@@ -2,21 +2,9 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { 
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+import ConfirmDialog from '@/components/confirm-dialog';
 import { Play, Edit, Trash2, MessageSquare } from 'lucide-react';
 import { ConversationStatus } from '../../types';
-import { useDeleteConversation } from '../../api/use-delete-conversation';
-import { useRouter } from 'next/navigation';
 
 interface ConversationActionButtonsProps {
   conversation: {
@@ -28,6 +16,8 @@ interface ConversationActionButtonsProps {
   onStartConversation?: () => void;
   onEditConversation?: () => void;
   onViewTranscript?: () => void;
+  onDeleteConversation?: () => void;
+  isDeleting?: boolean;
 }
 
 export const ConversationActionButtons: React.FC<ConversationActionButtonsProps> = ({
@@ -35,16 +25,14 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
   onStartConversation,
   onEditConversation,
   onViewTranscript,
+  onDeleteConversation,
+  isDeleting,
 }) => {
-  const router = useRouter();
-  const deleteConversationMutation = useDeleteConversation({ sessionId: conversation.sessionId });
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleDelete = () => {
-    deleteConversationMutation.mutate({ id: conversation.id });
+    onDeleteConversation?.();
     setIsDeleteDialogOpen(false);
-    // Redirect to conversations list after deletion
-    router.push('/conversations');
   };
 
   const canStart = conversation.status === ConversationStatus.Upcoming;
@@ -52,11 +40,12 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
   const canDelete = conversation.status === ConversationStatus.Upcoming;
 
   return (
-    <div className="flex flex-wrap gap-3 pt-6 border-t border-border/50">
+    <div className="flex flex-col sm:flex-row gap-3 justify-center">
       {canStart && onStartConversation && (
         <Button
           onClick={onStartConversation}
-          className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow"
+          size="sm"
+          className="bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow w-full sm:w-auto"
         >
           <Play className="w-4 h-4 mr-2" />
           Start Conversation
@@ -66,7 +55,8 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
       {onViewTranscript && (
         <Button
           onClick={onViewTranscript}
-          className="bg-blue-500 hover:bg-blue-500/90 text-white dark:text-black font-semibold"
+          size="sm"
+          className="bg-blue-500 hover:bg-blue-500/90 text-white dark:text-black font-semibold w-full sm:w-auto"
         >
           <MessageSquare className="w-4 h-4 mr-2" />
           View Transcript
@@ -76,8 +66,9 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
       {canEdit && onEditConversation && (
         <Button
           variant="outline"
+          size="sm"
           onClick={onEditConversation}
-          className="border-primary/20 hover:border-primary/40"
+          className="matrix-glow matrix-border w-full sm:w-auto"
         >
           <Edit className="w-4 h-4 mr-2" />
           Edit
@@ -85,55 +76,30 @@ export const ConversationActionButtons: React.FC<ConversationActionButtonsProps>
       )}
 
       {canDelete && (
-        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-          <AlertDialogTrigger asChild>
-            <Button 
-              size="sm"
-              className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-              disabled={deleteConversationMutation.isPending}
-            >
-              {deleteConversationMutation.isPending ? (
-                <>
-                  <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
-                  <span>Deleting...</span>
-                </>
-              ) : (
-                <>
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  <span>Delete</span>
-                </>
-              )}
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent className="sm:max-w-md">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete Conversation</AlertDialogTitle>
-              <AlertDialogDescription className="text-sm">
-                Are you sure you want to delete &ldquo;{conversation.name}&rdquo;? This action cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
-              <AlertDialogAction 
-                onClick={handleDelete}
-                className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
-                disabled={deleteConversationMutation.isPending}
-              >
-                              {deleteConversationMutation.isPending ? (
-                <>
-                  <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2" />
-                  <span>Deleting...</span>
-                </>
-              ) : (
-                <>
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  <span>Delete</span>
-                </>
-              )}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <ConfirmDialog
+          open={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          title="Delete Conversation"
+          description={
+            <span>
+              Are you sure you want to delete &ldquo;{conversation.name}&rdquo;? This action cannot be undone.
+            </span>
+          }
+          confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
+          onConfirm={handleDelete}
+          isLoading={Boolean(isDeleting)}
+          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+          cancelButtonClassName="w-full sm:w-auto"
+        >
+          <Button
+            size="sm"
+            className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+            disabled={isDeleting}
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+          </Button>
+        </ConfirmDialog>
       )}
     </div>
   );

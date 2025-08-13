@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FolderOpen, MessageSquare, Calendar, Bot, ExternalLink } from "lucide-react";
+import ConfirmDialog from "@/components/confirm-dialog";
+import { FolderOpen, MessageSquare, Calendar, Bot, ExternalLink, Trash2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { SessionGetMany } from "../../types";
 import { SessionStatus } from "../../types";
@@ -16,15 +18,23 @@ import {
 interface SessionListItemProps {
   session: SessionGetMany[0];
   onConfigure?: (session: SessionGetMany[0]) => void;
+  onDelete?: (session: SessionGetMany[0]) => void;
+  isDeleting?: boolean;
 }
 
-export const SessionListItem = ({ session, onConfigure }: SessionListItemProps) => {
+export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: SessionListItemProps) => {
   const StatusIcon = getSessionStatusIcon(session.status as SessionStatus);
   const statusColor = getSessionStatusColor(session.status as SessionStatus);
   const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleConfigure = () => {
     onConfigure?.(session);
+  };
+
+  const handleDelete = () => {
+    onDelete?.(session);
+    setIsDeleteDialogOpen(false);
   };
 
   return (
@@ -87,6 +97,27 @@ export const SessionListItem = ({ session, onConfigure }: SessionListItemProps) 
           <ExternalLink className="w-4 h-4" />
           <span className="ml-2 sm:hidden">View</span>
         </Button>
+
+        <ConfirmDialog
+          open={isDeleteDialogOpen}
+          onOpenChange={setIsDeleteDialogOpen}
+          title="Delete Session"
+          description={<span>Are you sure you want to delete “{session.name}”? This action cannot be undone and will also delete all associated conversations.</span>}
+          confirmLabel={isDeleting ? 'Deleting...' : 'Delete'}
+          onConfirm={handleDelete}
+          isLoading={isDeleting}
+          confirmButtonClassName="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+          cancelButtonClassName="w-full sm:w-auto"
+        >
+          <Button
+            size="sm"
+            className="bg-destructive hover:bg-destructive/90 text-white dark:text-black font-semibold w-full sm:w-auto"
+            disabled={isDeleting}
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+          </Button>
+        </ConfirmDialog>
       </div>
     </div>
   );

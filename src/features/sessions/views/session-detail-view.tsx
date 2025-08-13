@@ -2,23 +2,27 @@
 
 import { useQuerySession } from '../api/use-query-session';
 import { useQuerySessionConversations } from '../api/use-query-session-conversations';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { SessionNavigationHeader } from '../components/shared/session-navigation-header';
 import { 
   SessionHeader,
-  SessionDetailsCard,
   SessionConversationsCard,
   SessionChatCard,
   SessionActionButtons
 } from '../components/detail-view';
 import { ConversationWizard } from "@/features/conversations/components/wizard/components/conversation-wizard";
 import { useWizardState } from "../hooks/use-wizard-state";
+import { useDeleteConversation } from "@/features/conversations/api/use-delete-conversation";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useDeleteSession } from "../api/use-delete-session";
 
 interface SessionDetailViewProps {
   sessionId: string;
 }
 
 export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
+  const router = useRouter();
   const { showWizard, openWizard, closeWizard } = useWizardState();
   const { data: session } = useQuerySession(sessionId);
   const { data: conversationsData } = useQuerySessionConversations({
@@ -26,6 +30,9 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   });
   
   const conversations = conversationsData?.items || [];
+  const deleteConversationMutation = useDeleteConversation({ sessionId });
+  const [deletingConversationId, setDeletingConversationId] = useState<string | undefined>(undefined);
+  const deleteSessionMutation = useDeleteSession();
 
   const handleCreateConversation = () => {
     openWizard();
@@ -34,6 +41,29 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   const handleStartChat = () => {
     // TODO: Implement chat functionality
     console.log('Start chat for session:', sessionId);
+  };
+  const handleEditSession = () => {
+    // TODO: Implement session editing UI
+    console.log('Edit session:', sessionId);
+  };
+
+  const handleDeleteSession = () => {
+    if (!session) return;
+    deleteSessionMutation.mutate(
+      { id: session.id },
+      {
+        onSuccess: () => {
+          router.push('/sessions');
+        },
+      }
+    );
+  };
+
+  const handleDeleteConversation = (conversation: (typeof conversations)[number]) => {
+    setDeletingConversationId(conversation.id);
+    deleteConversationMutation.mutate({ id: conversation.id }, {
+      onSettled: () => setDeletingConversationId(undefined),
+    });
   };
 
   if (showWizard && session) {
@@ -67,17 +97,27 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
               <SessionConversationsCard
                 conversations={conversations}
                 onCreateConversation={handleCreateConversation}
+                onDeleteConversation={handleDeleteConversation}
+                deletingConversationId={deletingConversationId}
+                onViewConversation={(conversation) => {
+                  router.push(`/conversations/${conversation.id}`);
+                }}
               />
-              <SessionChatCard
-                sessionId={sessionId}
-                onStartChat={handleStartChat}
-              />
+              {session && (
+                <SessionChatCard
+                  sessionId={session.id}
+                  sessionName={session.name}
+                  onStartChat={handleStartChat}
+                />
+              )}
           </div>
 
           {/* Action Buttons */}
           <SessionActionButtons
-            onCreateConversation={handleCreateConversation}
-            onStartChat={handleStartChat}
+            sessionName={session?.name ?? ''}
+            onEditSession={handleEditSession}
+            onDeleteSession={handleDeleteSession}
+            isDeleting={deleteSessionMutation.isPending}
           />
         </CardContent>
       </div>

@@ -1,6 +1,5 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { MessageSquare, Plus } from "lucide-react";
 import { ConversationListItem } from "@/features/conversations/components";
 import { ConversationGetMany } from "@/features/conversations/types";
@@ -8,23 +7,25 @@ import { ConversationGetMany } from "@/features/conversations/types";
 interface SessionConversationsCardProps {
   conversations: ConversationGetMany;
   onCreateConversation: () => void;
+  onDeleteConversation?: (conversation: ConversationGetMany[number]) => void;
+  deletingConversationId?: string;
+  onViewConversation?: (conversation: ConversationGetMany[number]) => void;
 }
 
 
 
 export const SessionConversationsCard = ({ 
   conversations, 
-  onCreateConversation 
+  onCreateConversation,
+  onDeleteConversation,
+  deletingConversationId,
+  onViewConversation,
 }: SessionConversationsCardProps) => {
-
-  const handleViewConversation = (conversation: ConversationGetMany[number]) => {
-    // Navigate to the conversation detail page
-    window.location.href = `/conversations/${conversation.id}`;
-  };
+  
 
   return (
-    <div>
-      <CardHeader className="pb-4 px-0">
+    <div className="h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
+      <CardHeader className="px-0 pb-6">
         <div className="flex items-center gap-3 mb-2">
           <CardTitle className="text-lg font-bold quantrix-gradient matrix-text-glow">
             Conversations
@@ -33,8 +34,17 @@ export const SessionConversationsCard = ({
         <CardDescription>
           Conversations within this session
         </CardDescription>
+        {conversations.length > 0 && (
+          <Button 
+            onClick={onCreateConversation}
+            className="mt-3 bg-primary hover:bg-primary/90 text-black font-semibold matrix-glow w-full"
+          >
+            <Plus className="w-3 h-3 mr-2" />
+            Add Conversation
+          </Button>
+        )}
       </CardHeader>
-      <CardContent className="px-0">
+      <CardContent className="px-0 flex-1 min-h-0 overflow-y-auto">
         {conversations.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <div className="relative mb-4">
@@ -64,19 +74,11 @@ export const SessionConversationsCard = ({
               <ConversationListItem
                 key={conversation.id}
                 conversation={conversation}
-                onViewConversation={handleViewConversation}
+                onViewConversation={onViewConversation || (() => {})}
+                onDelete={onDeleteConversation}
+                isDeleting={deletingConversationId === conversation.id}
               />
             ))}
-            
-            <Button 
-              onClick={onCreateConversation}
-              variant="outline"
-              size="sm"
-              className="w-full border-primary/30 hover:bg-primary/10 hover:border-primary"
-            >
-              <Plus className="w-3 h-3 mr-2" />
-              Add Conversation
-            </Button>
           </div>
         )}
       </CardContent>

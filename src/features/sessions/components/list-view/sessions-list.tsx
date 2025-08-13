@@ -5,9 +5,11 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from "@/component
 interface SessionsListProps {
   sessions: SessionGetMany;
   onConfigureSession?: (session: SessionGetMany[0]) => void;
+  onDeleteSession?: (session: SessionGetMany[0]) => void;
+  deletingSessionId?: string;
 }
 
-export const SessionsList = ({ sessions, onConfigureSession }: SessionsListProps) => {
+export const SessionsList = ({ sessions, onConfigureSession, onDeleteSession, deletingSessionId }: SessionsListProps) => {
 
 
   return (
@@ -24,7 +26,13 @@ export const SessionsList = ({ sessions, onConfigureSession }: SessionsListProps
     </CardHeader>
     <CardContent className="px-0 space-y-4">
       {sessions.map((session) => (
-        <SessionListItem key={session.id} session={session} onConfigure={onConfigureSession} />
+        <SessionListItem
+          key={session.id}
+          session={session}
+          onConfigure={onConfigureSession}
+          onDelete={onDeleteSession}
+          isDeleting={deletingSessionId === session.id}
+        />
       ))}
 
     </CardContent>

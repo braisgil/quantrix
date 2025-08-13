@@ -2,28 +2,27 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTRPC } from '@/trpc/client';
 import { toast } from 'sonner';
 
-export const useDeleteAgent = () => {
+export const useDeleteSession = () => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  
+
   return useMutation({
-    ...trpc.agents.delete.mutationOptions({
+    ...trpc.sessions.delete.mutationOptions({
       onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.agents.getMany.queryOptions({})
-        );
-        // Deleting an agent cascades to sessions and conversations
         await queryClient.invalidateQueries(
           trpc.sessions.getMany.queryOptions({})
         );
+        // Deleting a session may remove its conversations
         await queryClient.invalidateQueries(
           trpc.conversations.getMany.queryOptions({})
         );
-        toast.success("Agent deleted successfully");
+        toast.success('Session deleted successfully');
       },
       onError: (error) => {
-        toast.error(error.message || "Failed to delete agent");
+        toast.error(error.message || 'Failed to delete session');
       },
     }),
   });
 };
+
+

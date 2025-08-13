@@ -8,28 +8,34 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 interface ConversationsListProps {
   conversations: ConversationGetMany;
   onViewConversation: (conversation: ConversationGetMany[number]) => void;
+  onDeleteConversation?: (conversation: ConversationGetMany[number]) => void;
+  deletingConversationId?: string;
 }
 
 const ConversationsList: React.FC<ConversationsListProps> = ({
   conversations,
   onViewConversation,
+  onDeleteConversation,
+  deletingConversationId,
 }) => {
   return (
-    <Card className="matrix-card">
-      <CardHeader>
+    <Card className="matrix-card h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
+      <CardHeader className="shrink-0">
         <CardTitle className="text-xl">Conversation List</CardTitle>
         <CardDescription>
           View your conversations with AI companions
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
-      {conversations.map((conversation) => (
-        <ConversationListItem
-          key={conversation.id}
-          conversation={conversation}
-          onViewConversation={onViewConversation}
-        />
-      ))}
+      <CardContent className="flex-1 min-h-0 overflow-y-auto space-y-4">
+        {conversations.map((conversation) => (
+          <ConversationListItem
+            key={conversation.id}
+            conversation={conversation}
+            onViewConversation={onViewConversation}
+            onDelete={onDeleteConversation}
+            isDeleting={deletingConversationId === conversation.id}
+          />
+        ))}
       </CardContent>
     </Card>
   );

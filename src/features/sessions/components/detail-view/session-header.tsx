@@ -2,13 +2,12 @@
 
 import { Badge } from "@/components/ui/badge";
 import { CardHeader } from "@/components/ui/card";
-import { FolderOpen, Bot, Calendar, Archive, CheckCircle } from "lucide-react";
+import { FolderOpen, Bot, Calendar } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { SessionGetOne } from "../../types";
 import { SessionStatus } from "../../types";
 import { 
   getSessionStatusIcon, 
-  getSessionStatusColor, 
   getSessionStatusLabel
 } from "../../utils";
 
@@ -18,7 +17,6 @@ interface SessionHeaderProps {
 
 export const SessionHeader = ({ session }: SessionHeaderProps) => {
   const StatusIcon = getSessionStatusIcon(session.status as SessionStatus);
-  const statusColor = getSessionStatusColor(session.status as SessionStatus);
   const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
   
   return (

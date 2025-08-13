@@ -488,9 +488,10 @@
   }
 
   /* Keep transitions shorter but don't disable completely for better UX */
-  *:not([class*="animate-"]) {
+  /* Disabled: global transition override caused undesirable hover effects */
+  /* *:not([class*="animate-"]) {
     transition-duration: 0.15s !important;
-  }
+  } */
 }
 
 /* Matrix Button Styles */

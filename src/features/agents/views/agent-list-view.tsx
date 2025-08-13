@@ -7,6 +7,8 @@ import { calculateAgentStats } from '../utils/agent-helpers';
 import { AgentStatsCards, AgentsList, AgentsEmptyState, AgentsListHeader } from '../components';
 import { useWizardState } from '../hooks/use-wizard-state';
 import { AgentWizard } from '../components/wizard/components/agent-wizard';
+import { useDeleteAgent } from '../api/use-delete-agent';
+import { useState } from 'react';
 
 export const AgentListView = () => {
   const router = useRouter();
@@ -14,6 +16,8 @@ export const AgentListView = () => {
   const { data: agentsData } = useQueryAgents();
   const agents = agentsData.items || [];
   const { activeAgents, totalConversations, totalDurationFormatted } = calculateAgentStats(agents);
+  const deleteAgentMutation = useDeleteAgent();
+  const [deletingAgentId, setDeletingAgentId] = useState<string | undefined>(undefined);
 
   if (showWizard) {
     return (
@@ -30,6 +34,13 @@ export const AgentListView = () => {
     router.push(`/agents/${agent.id}`);
   };
 
+  const handleDeleteAgent = (agent: AgentsGetMany[number]) => {
+    setDeletingAgentId(agent.id);
+    deleteAgentMutation.mutate({ id: agent.id }, {
+      onSettled: () => setDeletingAgentId(undefined),
+    });
+  };
+
   return (
     <div className="space-y-8">
       <AgentsListHeader onCreateAgent={openWizard} />
@@ -44,6 +55,8 @@ export const AgentListView = () => {
             <AgentsList 
               agents={agents}
               onConfigureAgent={handleConfigureAgent}
+              onDeleteAgent={handleDeleteAgent}
+              deletingAgentId={deletingAgentId}
             />
           </>
         ) : (
