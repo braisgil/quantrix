@@ -13,7 +13,6 @@ import {
 
 import { useTRPC } from "@/trpc/client";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { MessageSquare } from "lucide-react";
 
 import "stream-chat-react/dist/css/v2/index.css";
@@ -60,7 +59,8 @@ export const ChatUI = ({
     setChannel(channel);
   }, [client, channelId, channelName, userId]);
 
-  if (!client) {
+  // Show a single site spinner until both client and channel are ready
+  if (!client || !channel) {
     return (
       <div className="h-[calc(100vh-12rem)] sm:h-[70vh] min-h-[420px] flex flex-col">
         <CardHeader className="px-0 pb-6">
@@ -72,11 +72,10 @@ export const ChatUI = ({
           </div>
           <CardDescription>Messages in this channel</CardDescription>
         </CardHeader>
-        <CardContent className="p-0 flex-1 flex flex-col min-h-0">
-          <div className="p-4 space-y-3">
-            <Skeleton className="h-6 w-48" />
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-10 w-full" />
+        <CardContent className="p-0 flex-1 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-3">
+            <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-primary border-t-transparent" />
+            <span className="text-sm text-muted-foreground">Loading Chat UI...</span>
           </div>
         </CardContent>
       </div>
@@ -95,16 +94,20 @@ export const ChatUI = ({
         <CardDescription>Messages in this channel</CardDescription>
       </CardHeader>
       <CardContent className="p-0 flex-1 flex flex-col min-h-0">
-        <div className="stream-theme-support h-full">
+        <div className="stream-theme-support h-full w-full rounded-lg border border-border/50 bg-card/50 backdrop-blur-sm shadow-lg dark:shadow-matrix-green-glow/10 dark:border-matrix-green-glow/20 relative">
           <Chat client={client}>
             <Channel channel={channel}>
-              <div className="flex h-full flex-col min-h-0">
+              <div className="flex h-full w-full flex-col min-h-0">
                 <Window>
-                  <div className="flex-1 min-h-0 border-b bg-card">
-                    <MessageList />
+                  <div className="flex-1 min-h-0 w-full bg-card/80 backdrop-blur-sm">
+                    <div className="h-full w-full border-b border-border/30 dark:border-matrix-green-glow/20">
+                      <MessageList />
+                    </div>
                   </div>
-                  <div className="bg-background">
-                    <MessageInput />
+                  <div className="w-full bg-background/90 backdrop-blur-sm border-t border-border/30 dark:border-matrix-green-glow/20 p-3 relative overflow-visible">
+                    <div className="w-full rounded-md border border-border/50 dark:border-matrix-green-glow/30 bg-card shadow-sm dark:shadow-matrix-green-glow/5 relative overflow-visible">
+                      <MessageInput />
+                    </div>
                   </div>
                 </Window>
               </div>

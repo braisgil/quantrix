@@ -22,14 +22,27 @@
 .stream-theme-support .str-chat__window {
   background-color: var(--card);
   height: 100%;
+  width: 100%;
   min-height: 0;
 }
 
 .stream-theme-support .str-chat__virtual-list {
   background-color: var(--card);
   height: 100%;
+  width: 100%;
   min-height: 0;
   overflow-y: auto;
+}
+
+/* Ensure message list fills the entire width */
+.stream-theme-support .str-chat__list,
+.stream-theme-support .str-chat__ul,
+.stream-theme-support .str-chat__li {
+  width: 100%;
+}
+
+.stream-theme-support .str-chat__message-list-scroll {
+  width: 100%;
 }
 
 /* Message bubbles */
@@ -135,15 +148,299 @@
   color: var(--link, var(--primary));
 }
 
-/* Fix dark theme contrasts explicitly */
-.dark .stream-theme-support .str-chat__message-simple--other .str-chat__message-simple__content {
-  background-color: var(--secondary);
-  color: var(--foreground);
+/* Fix dark theme contrasts explicitly with better visibility - Both old and new message structures */
+.dark .stream-theme-support .str-chat__message-simple--other .str-chat__message-simple__content,
+.dark .stream-theme-support .str-chat__message--other .str-chat__message-bubble {
+  background-color: oklch(0.15 0 0) !important; /* Darker than default secondary */
+  color: oklch(0.95 0 0) !important; /* Bright white text */
+  border: 1px solid oklch(0.25 0 0) !important;
+  box-shadow: 0 0 0 1px var(--matrix-green-glow) !important;
 }
 
-.dark .stream-theme-support .str-chat__message-simple--me .str-chat__message-simple__content {
-  background-color: var(--primary);
-  color: var(--primary-foreground);
+.dark .stream-theme-support .str-chat__message-simple--me .str-chat__message-simple__content,
+.dark .stream-theme-support .str-chat__message--me .str-chat__message-bubble {
+  background-color: var(--matrix-green) !important;
+  color: oklch(0.05 0 0) !important; /* Dark text on green */
+  border: 1px solid var(--matrix-green-dark) !important;
+  box-shadow: 0 0 8px var(--matrix-green-glow) !important;
 }
 
+/* Set the CSS custom properties that Stream Chat uses for message bubbles */
+.dark .stream-theme-support .str-chat__message--other {
+  --str-chat__message-bubble-background-color: oklch(0.15 0 0);
+  --str-chat__message-bubble-color: oklch(0.95 0 0);
+  --str-chat__message-bubble-border-radius: var(--radius-md);
+  --str-chat__message-bubble-box-shadow: 0 0 0 1px var(--matrix-green-glow);
+}
+
+.dark .stream-theme-support .str-chat__message--me {
+  --str-chat__message-bubble-background-color: var(--matrix-green);
+  --str-chat__message-bubble-color: oklch(0.05 0 0);
+  --str-chat__message-bubble-border-radius: var(--radius-md);
+  --str-chat__message-bubble-box-shadow: 0 0 8px var(--matrix-green-glow);
+}
+
+/* Enhanced message text contrast for dark theme - Both old and new structures */
+.dark .stream-theme-support .str-chat__message-simple__text,
+.dark .stream-theme-support .str-chat__message-simple__text p,
+.dark .stream-theme-support .str-chat__message-simple__text span,
+.dark .stream-theme-support .str-chat__message-text,
+.dark .stream-theme-support .str-chat__message-text p,
+.dark .stream-theme-support .str-chat__message-text span,
+.dark .stream-theme-support .str-chat__message-text-inner p {
+  color: inherit !important;
+  font-weight: 500 !important;
+}
+
+/* Ensure message bubble text inherits colors correctly */
+.dark .stream-theme-support .str-chat__message-bubble .str-chat__message-text,
+.dark .stream-theme-support .str-chat__message-bubble .str-chat__message-text *,
+.dark .stream-theme-support .str-chat__message-bubble .str-chat__message-text-inner * {
+  color: inherit !important;
+}
+
+/* Better file upload button and attachment styling */
+.stream-theme-support .str-chat__attachment-list {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px;
+}
+
+.stream-theme-support .str-chat__file-upload-button,
+.stream-theme-support .str-chat__attachment-upload-button,
+.stream-theme-support [data-testid="file-upload-button"] {
+  z-index: 100 !important;
+  position: relative !important;
+  background-color: var(--card) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.stream-theme-support .str-chat__file-upload-button:hover,
+.stream-theme-support .str-chat__attachment-upload-button:hover {
+  background-color: var(--accent) !important;
+  color: var(--accent-foreground) !important;
+}
+
+/* Fix for file upload dropdown/popover positioning */
+.stream-theme-support .str-chat__message-input-wrapper {
+  position: relative;
+  z-index: 110;
+  overflow: visible;
+}
+
+.stream-theme-support .str-chat__message-input {
+  position: relative;
+  overflow: visible !important;
+  width: 100%;
+}
+
+/* Ensure the entire input area allows overflow for dropdowns */
+.stream-theme-support .str-chat__main-panel,
+.stream-theme-support .str-chat__window,
+.stream-theme-support .str-chat__container {
+  overflow: visible !important;
+}
+
+/* Enhanced z-index for all interactive elements */
+.stream-theme-support .str-chat__message-options,
+.stream-theme-support .str-chat__message-actions-box,
+.stream-theme-support .str-chat__small-message-input,
+.stream-theme-support .str-chat__file-upload-button,
+.stream-theme-support .str-chat__trigger--button,
+.stream-theme-support .emoji-mart,
+.stream-theme-support .str-chat__tooltip,
+.stream-theme-support .str-chat__attachment-list,
+.stream-theme-support [role="dialog"],
+.stream-theme-support [role="menu"],
+.stream-theme-support .str-chat__dropdown,
+.stream-theme-support .str-chat__attachment-selector,
+.stream-theme-support .str-chat__attachment-selector-menu,
+.stream-theme-support .str-chat__attachment-selector__menu {
+  z-index: 120 !important;
+  position: relative !important;
+}
+
+/* Specific attachment selector styling */
+.stream-theme-support .str-chat__attachment-selector__menu-button {
+  z-index: 120 !important;
+  position: relative !important;
+}
+
+/* Ensure dropdowns appear above everything */
+.stream-theme-support .str-chat__attachment-selector__menu,
+.stream-theme-support [data-floating-ui-portal] {
+  z-index: 150 !important;
+}
+
+/* Override any container that might clip dropdowns */
+.stream-theme-support .str-chat__message-input-inner,
+.stream-theme-support .str-chat__message-input,
+.stream-theme-support .str-chat__window,
+.stream-theme-support .str-chat {
+  overflow: visible !important;
+}
+
+/* Matrix-themed enhancements - Both old and new structures */
+.dark .stream-theme-support .str-chat__message-simple--me .str-chat__message-simple__content,
+.dark .stream-theme-support .str-chat__message--me .str-chat__message-bubble {
+  background: linear-gradient(135deg, var(--matrix-green) 0%, var(--matrix-green-dark) 100%) !important;
+  box-shadow: 
+    0 0 8px var(--matrix-green-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .stream-theme-support .str-chat__message-simple--other .str-chat__message-simple__content,
+.dark .stream-theme-support .str-chat__message--other .str-chat__message-bubble {
+  background: linear-gradient(135deg, oklch(0.12 0 0) 0%, oklch(0.18 0 0) 100%) !important;
+  box-shadow: 
+    0 0 4px var(--matrix-green-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Update CSS custom properties for gradients */
+.dark .stream-theme-support .str-chat__message--me {
+  --str-chat__message-bubble-background-color: linear-gradient(135deg, var(--matrix-green) 0%, var(--matrix-green-dark) 100%);
+  --str-chat__message-bubble-box-shadow: 0 0 8px var(--matrix-green-glow), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dark .stream-theme-support .str-chat__message--other {
+  --str-chat__message-bubble-background-color: linear-gradient(135deg, oklch(0.12 0 0) 0%, oklch(0.18 0 0) 100%);
+  --str-chat__message-bubble-box-shadow: 0 0 4px var(--matrix-green-glow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Enhanced message input styling for dark theme */
+.dark .stream-theme-support .str-chat__message-input,
+.dark .stream-theme-support .str-chat__message-input--emojipicker .str-chat__message-textarea,
+.dark .stream-theme-support textarea.str-chat__message-textarea {
+  background: linear-gradient(135deg, oklch(0.08 0 0) 0%, oklch(0.12 0 0) 100%);
+  border: 1px solid var(--matrix-green-glow);
+  box-shadow: 
+    0 0 4px var(--matrix-green-glow),
+    inset 0 1px 0 rgba(0, 255, 65, 0.1);
+}
+
+.dark .stream-theme-support .str-chat__message-input:focus-within {
+  border-color: var(--matrix-green);
+  box-shadow: 
+    0 0 8px var(--matrix-green-glow),
+    0 0 16px rgba(0, 255, 65, 0.2);
+}
+
+/* Enhanced scrollbar styling for message list */
+.stream-theme-support .str-chat__virtual-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.stream-theme-support .str-chat__virtual-list::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+.stream-theme-support .str-chat__virtual-list::-webkit-scrollbar-thumb {
+  background: var(--matrix-green);
+  border-radius: 3px;
+}
+
+.dark .stream-theme-support .str-chat__virtual-list::-webkit-scrollbar-thumb:hover {
+  background: var(--matrix-green-light);
+  box-shadow: 0 0 4px var(--matrix-green-glow);
+}
+
+/* Enhanced typing indicator */
+.dark .stream-theme-support .str-chat__typing-indicator {
+  color: var(--matrix-green);
+  font-weight: 500;
+}
+
+/* Enhanced date separator */
+.dark .stream-theme-support .str-chat__date-separator > div {
+  background: linear-gradient(135deg, var(--matrix-green-glow) 0%, oklch(0.1 0 0) 100%);
+  color: var(--matrix-green);
+  border: 1px solid var(--matrix-green-glow);
+  font-weight: 500;
+}
+
+/* Enhanced send button */
+.dark .stream-theme-support .str-chat__message-input .str-chat__send-button {
+  color: var(--matrix-green);
+  background: oklch(0.08 0 0);
+  border: 1px solid var(--matrix-green-glow);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.dark .stream-theme-support .str-chat__message-input .str-chat__send-button:hover {
+  background: var(--matrix-green);
+  color: oklch(0.05 0 0);
+  box-shadow: 0 0 8px var(--matrix-green-glow);
+}
+
+/* Enhanced avatar styling */
+.dark .stream-theme-support .str-chat__avatar {
+  box-shadow: 0 0 0 2px var(--matrix-green-glow);
+  border-radius: 50%;
+}
+
+/* Matrix-themed reactions */
+.dark .stream-theme-support .str-chat__reaction-picker,
+.dark .stream-theme-support .str-chat__message-reactions {
+  background: linear-gradient(135deg, oklch(0.08 0 0) 0%, oklch(0.12 0 0) 100%);
+  border: 1px solid var(--matrix-green-glow);
+  box-shadow: 0 0 8px var(--matrix-green-glow);
+}
+
+/* Enhanced thread panel */
+.dark .stream-theme-support .str-chat__thread {
+  background: linear-gradient(135deg, oklch(0.05 0 0) 0%, oklch(0.08 0 0) 100%);
+  border-left: 2px solid var(--matrix-green);
+  box-shadow: -4px 0 8px var(--matrix-green-glow);
+}
+
+/* Message hover effects - Both old and new structures */
+.dark .stream-theme-support .str-chat__message-simple:hover .str-chat__message-simple__content,
+.dark .stream-theme-support .str-chat__message:hover .str-chat__message-bubble {
+  transform: translateY(-1px) !important;
+  transition: transform 0.2s ease !important;
+}
+
+.dark .stream-theme-support .str-chat__message-simple--me:hover .str-chat__message-simple__content,
+.dark .stream-theme-support .str-chat__message--me:hover .str-chat__message-bubble {
+  box-shadow: 
+    0 0 12px var(--matrix-green-glow),
+    0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dark .stream-theme-support .str-chat__message-simple--other:hover .str-chat__message-simple__content,
+.dark .stream-theme-support .str-chat__message--other:hover .str-chat__message-bubble {
+  box-shadow: 
+    0 0 8px var(--matrix-green-glow),
+    0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Loading states with Matrix theme */
+.dark .stream-theme-support .str-chat__loading-indicator {
+  color: var(--matrix-green);
+}
+
+/* Enhanced attachment styling */
+.dark .stream-theme-support .str-chat__attachment {
+  background: linear-gradient(135deg, oklch(0.08 0 0) 0%, oklch(0.12 0 0) 100%);
+  border: 1px solid var(--matrix-green-glow);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 4px var(--matrix-green-glow);
+}
+
+.dark .stream-theme-support .str-chat__attachment:hover {
+  box-shadow: 0 0 8px var(--matrix-green-glow);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Ensure outer chat container has a visible border in dark theme */
+.dark .stream-theme-support {
+  border-color: var(--matrix-green-glow) !important;
+  box-shadow: 0 0 0 1px var(--matrix-green-glow), 0 0 8px rgba(0, 255, 65, 0.12) !important;
+}
 
