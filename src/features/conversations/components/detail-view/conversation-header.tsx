@@ -2,7 +2,7 @@
 
 import { CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import type { ConversationGetOne } from '../../types';
+import type { ConversationDetail } from '../../types';
 import { ConversationStatus } from '../../types';
 import { 
   getConversationIcon, 
@@ -13,7 +13,7 @@ import {
 import { MessageSquare } from 'lucide-react';
 
 interface ConversationHeaderProps {
-  conversation: ConversationGetOne;
+  conversation: ConversationDetail;
 }
 
 export const ConversationHeader: React.FC<ConversationHeaderProps> = ({ conversation }) => {

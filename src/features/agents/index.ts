@@ -1,66 +1,15 @@
-// Main feature exports - provides clean public API for agents feature
+// Public API for agents feature - provides clean interface for external consumers
 
-// Core types
-export type { Agent, AgentsGetMany, AgentsGetOne } from './types';
-
-// API hooks
-export { useQueryAgent } from './api/use-query-agent';
-export { useQueryAgents } from './api/use-query-agents';
-
-// Main view components
+// Main views (most common use case)
 export { AgentListView, AgentDetailView } from './views';
 
-// Individual components for custom layouts
-export {
-  // Stats
-  AgentStatsCards,
-  
-  // List view
-  AgentsList,
-  AgentsListHeader,
-  AgentListItem,
-  AgentsEmptyState,
-  
-  // Detail view
-  AgentHeader,
-  AgentDetailsCard,
-  AgentSpecializationCard,
-  AgentCustomConfigCard,
-  
-  // Shared utilities
-  AgentSkeleton,
-  ErrorBoundary,
-  AgentNavigationHeader,
-  
-  // Types
-  type AgentSkeletonVariant,
-} from './components';
+// API hooks for external use
+export { useQueryAgent } from './api/use-query-agent';
+export { useQueryAgents } from './api/use-query-agents';
+export { useSearchAgents } from './api/use-search-agents';
 
-// Utility functions
-export {
-  // Agent helpers
-  getAgentIcon,
-  getAgentDescription,
-  calculateAgentStats,
-  
-  // Category helpers
-  formatCategoryName,
-  getCategoryDescription,
-  getSubcategoryDescription,
-  getSubSubcategoryName,
-  getSubcategoryNames,
-  isValidCategory,
-  isValidSubcategory,
-  
-  // Custom rule helpers
-  getCustomRuleOption,
-  hasCustomRules,
-  getAgentCustomRules,
-  isValidCustomRule,
-  
-  // Types
-  type CustomRuleOption,
-} from './utils';
+// Public types
+export type { AgentList, AgentItem, AgentDetail } from './types';
 
-// Server-side exports (for app router)
+// Server exports for app router
 export { agentsRouter } from './server/procedures';

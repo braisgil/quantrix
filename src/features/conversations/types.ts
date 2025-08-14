@@ -1,11 +1,11 @@
 import { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/trpc/routers/_app";
 
-export type ConversationGetMany = inferRouterOutputs<AppRouter>["conversations"]["getMany"]["items"];
-export type ConversationItem = ConversationGetMany[number];
-export type ConversationGetOne = inferRouterOutputs<AppRouter>["conversations"]["getOne"];
-export type ConversationItemWithAvailability = ConversationItem & { isJoinAvailable?: boolean };
-export type ConversationGetOneWithAvailability = ConversationGetOne & { isJoinAvailable?: boolean };
+// Unified, standardized types inferred from tRPC router
+export type ConversationList = inferRouterOutputs<AppRouter>["conversations"]["getMany"]["items"];
+export type ConversationItem = ConversationList[number];
+export type ConversationDetail = inferRouterOutputs<AppRouter>["conversations"]["getOne"];
+// Optional availability decoration is handled at usage sites; avoid embedded union types here
 
 export enum ConversationStatus {
   Scheduled = "scheduled",
@@ -16,6 +16,15 @@ export enum ConversationStatus {
   Cancelled = "cancelled",
 };
 
+export const CONVERSATION_STATUS_VALUES = [
+  ConversationStatus.Scheduled,
+  ConversationStatus.Available,
+  ConversationStatus.Active,
+  ConversationStatus.Completed,
+  ConversationStatus.Processing,
+  ConversationStatus.Cancelled,
+] as const;
+
 export type StreamTranscriptItem = {
   speaker_id: string;
   type: string;
@@ -23,3 +32,6 @@ export type StreamTranscriptItem = {
   start_ts: number;
   stop_ts: number;
 };
+
+// Backward-compatible aliases (to be gradually migrated away from)
+// (Removed legacy aliases ConversationGetMany/ConversationGetOne)

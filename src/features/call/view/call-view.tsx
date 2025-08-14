@@ -12,7 +12,7 @@ import type { CallViewProps } from "../types";
 export const CallView = ({ conversationId }: CallViewProps) => {
   const { data: conversation } = useQueryCall(conversationId);
 
-  if (conversation.status === "completed") {
+  if (conversation?.status === "completed") {
     return (
       <div className="flex min-h-screen items-center justify-center p-4 sm:p-6 matrix-bg">
         <Card className="matrix-card w-full max-w-sm sm:max-w-md mx-auto border-primary/20 backdrop-blur-md">
@@ -37,7 +37,7 @@ export const CallView = ({ conversationId }: CallViewProps) => {
     );
   }
 
-  if (!isConversationJoinAvailable(conversation)) {
+  if (!conversation || !isConversationJoinAvailable(conversation)) {
     return (
       <div className="flex min-h-screen items-center justify-center p-4 sm:p-6 matrix-bg">
         <Card className="matrix-card w-full max-w-sm sm:max-w-md mx-auto border-primary/20 backdrop-blur-md">
@@ -62,5 +62,5 @@ export const CallView = ({ conversationId }: CallViewProps) => {
     );
   }
 
-  return <CallProvider conversationId={conversationId} conversationName={conversation.name} />;
+  return <CallProvider conversationId={conversationId} conversationName={conversation?.name ?? ""} />;
 };

@@ -1,12 +1,12 @@
 import React from 'react';
 import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import type { AgentsGetMany } from '../../types';
-import AgentListItem from './agent-list-item';
+import type { AgentList, AgentItem } from '../../types';
+import { AgentListItem } from './agent-list-item';
 
 interface AgentsListProps {
-  agents: AgentsGetMany;
-  onConfigureAgent?: (agent: AgentsGetMany[number]) => void;
-  onDeleteAgent?: (agent: AgentsGetMany[number]) => void;
+  agents: AgentList;
+  onConfigureAgent?: (agent: AgentItem) => void;
+  onDeleteAgent?: (agent: AgentItem) => void;
   deletingAgentId?: string;
 }
 
@@ -43,4 +43,4 @@ const AgentsList: React.FC<AgentsListProps> = ({
   );
 };
 
-export default AgentsList;
+export { AgentsList };

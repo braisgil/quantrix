@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import ConfirmDialog from "@/components/confirm-dialog";
 import { FolderOpen, MessageSquare, Clock, Bot, ExternalLink, Trash2 } from "lucide-react";
 import { formatAgentTotalDuration } from "@/features/agents/utils/agent-helpers";
-import type { SessionGetMany } from "../../types";
+import type { SessionList } from "../../types";
 import { SessionStatus } from "../../types";
 import { 
   getSessionStatusIcon, 
@@ -16,9 +16,9 @@ import {
 } from "../../utils";
 
 interface SessionListItemProps {
-  session: SessionGetMany[0];
-  onConfigure?: (session: SessionGetMany[0]) => void;
-  onDelete?: (session: SessionGetMany[0]) => void;
+  session: SessionList[number];
+  onConfigure?: (session: SessionList[number]) => void;
+  onDelete?: (session: SessionList[number]) => void;
   isDeleting?: boolean;
 }
 

@@ -1,13 +1,15 @@
 import { sessions, agents, conversations } from "@/db/schema";
-import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
+import { createTRPCRouter, protectedProcedure, rateLimited } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { eq, and, getTableColumns, ilike, desc, count, sql } from "drizzle-orm";
 import { sessionsInsertSchema, sessionsUpdateSchema } from "../schema";
 import z from "zod";
 import { SessionStatus } from "../types";
+import { buildIlikePattern } from "@/lib/utils";
 
 export const sessionsRouter = createTRPCRouter({
   create: protectedProcedure
+    .use(rateLimited({ windowMs: 10_000, max: 10 }))
     .input(sessionsInsertSchema)
     .mutation(async ({ input, ctx }) => {
       // Verify that the agent exists and belongs to the user
@@ -40,6 +42,7 @@ export const sessionsRouter = createTRPCRouter({
     }),
 
   update: protectedProcedure
+    .use(rateLimited({ windowMs: 10_000, max: 30 }))
     .input(
       z.object({
         id: z.string(),
@@ -77,6 +80,7 @@ export const sessionsRouter = createTRPCRouter({
     }),
 
   delete: protectedProcedure
+    .use(rateLimited({ windowMs: 10_000, max: 20 }))
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
       const [existingSession] = await ctx.db
@@ -163,7 +167,8 @@ export const sessionsRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { search, status, agentId } = input;
+      const { status, agentId } = input;
+      const search = buildIlikePattern(input.search ?? undefined);
 
       const data = await ctx.db
         .select({
@@ -192,7 +197,7 @@ export const sessionsRouter = createTRPCRouter({
         .where(
           and(
             eq(sessions.userId, ctx.auth.user.id),
-            search ? ilike(sessions.name, `%${search}%`) : undefined,
+            search ? ilike(sessions.name, search) : undefined,
             status ? eq(sessions.status, status) : undefined,
             agentId ? eq(sessions.agentId, agentId) : undefined
           )

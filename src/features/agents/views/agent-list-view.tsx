@@ -1,14 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useQueryAgents } from '../api/use-query-agents';
-import type { AgentsGetMany } from '../types';
-import { calculateAgentStats } from '../utils/agent-helpers';
-import { AgentStatsCards, AgentsList, AgentsEmptyState, AgentsListHeader } from '../components';
-import { useWizardState } from '../hooks/use-wizard-state';
-import { AgentWizard } from '../components/wizard/components/agent-wizard';
-import { useDeleteAgent } from '../api/use-delete-agent';
 import { useState } from 'react';
+
+import { useDeleteAgent } from '../api/use-delete-agent';
+import { useQueryAgents } from '../api/use-query-agents';
+import { AgentStatsCards, AgentsList, AgentsEmptyState, AgentsListHeader } from '../components';
+import { AgentWizard } from '../components/wizard/components/agent-wizard';
+import { useWizardState } from '../hooks/use-wizard-state';
+import  { type AgentItem } from '../types';
+import { calculateAgentStats } from '../utils/agent-helpers';
 
 export const AgentListView = () => {
   const router = useRouter();
@@ -30,11 +31,11 @@ export const AgentListView = () => {
     );
   }
 
-  const handleConfigureAgent = (agent: AgentsGetMany[number]) => {
+  const handleConfigureAgent = (agent: AgentItem) => {
     router.push(`/agents/${agent.id}`);
   };
 
-  const handleDeleteAgent = (agent: AgentsGetMany[number]) => {
+  const handleDeleteAgent = (agent: AgentItem) => {
     setDeletingAgentId(agent.id);
     deleteAgentMutation.mutate({ id: agent.id }, {
       onSettled: () => setDeletingAgentId(undefined),

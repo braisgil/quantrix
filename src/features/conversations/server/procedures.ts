@@ -1,15 +1,20 @@
-import { agents, conversations, sessions } from "@/db/schema";
-import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { eq, and, getTableColumns, sql, ilike, desc } from "drizzle-orm";
-import { conversationsInsertSchema } from "../schema";
 import z from "zod";
-import { ConversationStatus } from "../types";
-import { streamVideo } from "@/lib/stream-video";
+
+import { agents, conversations, sessions } from "@/db/schema";
 import { streamChat } from "@/lib/stream-chat";
+import { streamVideo } from "@/lib/stream-video";
+import { buildIlikePattern } from "@/lib/utils";
+import { createTRPCRouter, protectedProcedure, rateLimited } from "@/trpc/init";
+
+import { conversationsInsertSchema } from "../schema";
+import { ConversationStatus } from "../types";
 
 export const conversationRouter = createTRPCRouter({
-  generateChatToken: protectedProcedure.mutation(async ({ ctx }) => {
+  generateChatToken: protectedProcedure
+    .use(rateLimited({ windowMs: 10_000, max: 50 }))
+    .mutation(async ({ ctx }) => {
     const token = streamChat.createToken(ctx.auth.user.id);
     await streamChat.upsertUser({
       id: ctx.auth.user.id,
@@ -20,6 +25,7 @@ export const conversationRouter = createTRPCRouter({
   }),
   // Removed legacy generateToken in favor of generateCallToken that enforces availability
   generateCallToken: protectedProcedure
+    .use(rateLimited({ windowMs: 10_000, max: 20 }))
     .input(z.object({ conversationId: z.string() }))
     .mutation(async ({ input, ctx }) => {
       // Verify conversation belongs to user
@@ -78,6 +84,7 @@ export const conversationRouter = createTRPCRouter({
       return token;
     }),
   create: protectedProcedure
+    .use(rateLimited({ windowMs: 10_000, max: 10 }))
     .input(conversationsInsertSchema)
     .mutation(async ({ input, ctx }) => {
       // First verify the session exists and belongs to the user
@@ -201,7 +208,8 @@ export const conversationRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const { search, status, sessionId } = input;
+      const { status, sessionId } = input;
+      const search = buildIlikePattern(input.search ?? undefined);
 
       const data = await ctx.db
         .select({
@@ -215,7 +223,7 @@ export const conversationRouter = createTRPCRouter({
         .where(
           and(
             eq(conversations.userId, ctx.auth.user.id),
-            search ? ilike(conversations.name, `%${search}%`) : undefined,
+            search ? ilike(conversations.name, search) : undefined,
             status ? eq(conversations.status, status) : undefined,
             sessionId ? eq(conversations.sessionId, sessionId) : undefined,
           )
@@ -228,6 +236,7 @@ export const conversationRouter = createTRPCRouter({
     }),
   // Removed transcript retrieval endpoint to avoid exposing raw transcripts to the client
   delete: protectedProcedure
+    .use(rateLimited({ windowMs: 10_000, max: 20 }))
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
       const [existingConversation] = await ctx.db

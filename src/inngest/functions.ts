@@ -4,7 +4,7 @@ import { createAgent, openai, TextMessage } from "@inngest/agent-kit";
 import { db } from "@/db";
 import { agents, conversations, user } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
-import { StreamTranscriptItem } from "@/features/conversations";
+import { StreamTranscriptItem } from "@/features/conversations/types";
 
 const summarizer = createAgent({
   name: "summarizer",
@@ -41,13 +41,14 @@ export const conversationsProcessing = inngest.createFunction(
     });
 
     const transcript = await step.run("parse-transcript", async () => {
-      return JSONL.parse<StreamTranscriptItem>(response);
+      // JSONL.parse returns plain objects; ensure correct array typing
+      return JSONL.parse(response) as StreamTranscriptItem[];
     });
 
     const transcriptWithSpeakers = await step.run("add-speakers", async () => {
-      const speakerIds = [
-        ...new Set(transcript.map((item) => item.speaker_id)),
-      ];
+       const speakerIds = [
+         ...new Set(transcript.map((item) => item.speaker_id)),
+       ];
 
       const userSpeakers = await db
         .select()

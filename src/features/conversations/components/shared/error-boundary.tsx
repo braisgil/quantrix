@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle, ArrowLeft, RefreshCw, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
-import { TRPCQueryError, getTRPCErrorMessage } from '@/lib/types';
+import { TRPCQueryError, resolveErrorMessage } from '@/lib/types';
 
 interface ErrorBoundaryProps {
   error: Error | TRPCQueryError;
@@ -30,7 +30,7 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
   variant = 'card'
 }) => {
   const isNotFound = error?.message?.includes('not found') || error?.message?.includes('NOT_FOUND');
-  const errorMessage = 'getTRPCErrorMessage' in error ? getTRPCErrorMessage(error) : error.message;
+  const errorMessage = resolveErrorMessage(error);
   
   const handleRetry = onRetry || reset;
   

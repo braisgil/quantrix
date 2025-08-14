@@ -1,5 +1,5 @@
 import { ConversationStatus } from '../types';
-import type { ConversationGetMany } from '../types';
+import type { ConversationList } from '../types';
 import {
   CheckCircle2,
   Clock,
@@ -126,7 +126,7 @@ export const formatConversationDuration = (startedAt: string | null, endedAt: st
 /**
  * Calculates conversation statistics for dashboard display
  */
-export const calculateConversationStats = (conversations: ConversationGetMany) => {
+export const calculateConversationStats = (conversations: ConversationList) => {
   const totalConversations = conversations.length;
   const activeConversations = conversations.filter(c => c.status === ConversationStatus.Active).length;
   const completedConversations = conversations.filter(c => c.status === ConversationStatus.Completed).length;

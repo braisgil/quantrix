@@ -4,15 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import ConfirmDialog from '@/components/confirm-dialog';
 import { Clock, MessageSquare, Sparkles, Brain, Target, ExternalLink, Trash2 } from 'lucide-react';
-import type { AgentsGetMany } from '../../types';
+import type { AgentItem } from '../../types';
 import { getAgentIcon, formatAgentTotalDuration } from '../../utils/agent-helpers';
 import { formatCategoryName, getSubSubcategoryName } from '../../utils/category-helpers';
 // mutations are handled by parent; this component is presentational
 
 interface AgentListItemProps {
-  agent: AgentsGetMany[number];
-  onConfigure?: (agent: AgentsGetMany[number]) => void;
-  onDelete?: (agent: AgentsGetMany[number]) => void;
+  agent: AgentItem;
+  onConfigure?: (agent: AgentItem) => void;
+  onDelete?: (agent: AgentItem) => void;
   isDeleting?: boolean;
 }
 
@@ -125,4 +125,4 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
   );
 };
 
-export default AgentListItem;
+export { AgentListItem };

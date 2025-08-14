@@ -97,4 +97,4 @@ const AgentStatsCards: React.FC<AgentStatsCardsProps> = ({
   );
 };
 
-export default AgentStatsCards;
+export { AgentStatsCards };

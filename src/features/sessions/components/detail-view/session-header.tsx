@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { CardHeader } from "@/components/ui/card";
 import { FolderOpen, Bot, Clock } from "lucide-react";
 import { formatAgentTotalDuration } from "@/features/agents/utils/agent-helpers";
-import type { SessionGetOne } from "../../types";
+import type { SessionDetail } from "../../types";
 import { SessionStatus } from "../../types";
 import { 
   getSessionStatusIcon, 
@@ -12,7 +12,7 @@ import {
 } from "../../utils";
 
 interface SessionHeaderProps {
-  session: SessionGetOne;
+  session: SessionDetail;
 }
 
 export const SessionHeader = ({ session }: SessionHeaderProps) => {

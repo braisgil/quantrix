@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { format } from "date-fns";
 import { WizardLayout } from "../shared/wizard-layout";
-import { useSearchAgents } from "@/features/agents/api/use-search-agents";
+import { useSearchAgents } from "@/features/agents";
 import { useDebouncedSearch } from "@/hooks/use-debounced-search";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { StepProps } from "../../types/wizard";

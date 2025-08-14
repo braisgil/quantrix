@@ -1,12 +1,14 @@
 import { agents, conversations, sessions } from "@/db/schema";
-import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
+import { createTRPCRouter, protectedProcedure, rateLimited } from "@/trpc/init";
 import { agentsInsertSchema } from "../schema";
 import { and, getTableColumns, desc, eq, ilike, sql } from "drizzle-orm";
 import z from "zod";
 import { TRPCError } from "@trpc/server";
+import { buildIlikePattern } from "@/lib/utils";
 
 export const agentsRouter = createTRPCRouter({
   create: protectedProcedure
+  .use(rateLimited({ windowMs: 10_000, max: 10 }))
   .input(agentsInsertSchema)
   .mutation(async ({ input, ctx }) => {
     const [createdAgent] = await ctx.db
@@ -26,6 +28,7 @@ export const agentsRouter = createTRPCRouter({
     })
   )
   .query(async ({ ctx, input }) => {
+    const safeSearch = buildIlikePattern(input.search ?? undefined);
     const data = await ctx.db
       .select({
         ...getTableColumns(agents),
@@ -54,7 +57,7 @@ export const agentsRouter = createTRPCRouter({
       .where(
         and(
           eq(agents.userId, ctx.auth.user.id),
-          input.search ? ilike(agents.name, `%${input.search}%`) : undefined,
+          safeSearch ? ilike(agents.name, safeSearch) : undefined,
         )
       )
       .groupBy(agents.id)
@@ -104,6 +107,7 @@ export const agentsRouter = createTRPCRouter({
     return existingAgent;
   }),
   delete: protectedProcedure
+    .use(rateLimited({ windowMs: 10_000, max: 20 }))
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
       const [existingAgent] = await ctx.db

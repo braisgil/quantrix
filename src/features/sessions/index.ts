@@ -1,58 +1,16 @@
-// Views
-export { SessionListView } from "./views/session-list-view";
-export { SessionDetailView } from "./views/session-detail-view";
+// Public API for sessions feature - provides clean interface for external consumers
 
-// Components - List View
-export { SessionsList } from "./components/list-view/sessions-list";
-export { SessionListItem } from "./components/list-view/session-list-item";
-export { SessionsListHeader } from "./components/list-view/session-list-header";
-export { SessionsEmptyState } from "./components/list-view/sessions-empty-state";
+// Main views (most common use case)
+export { SessionListView } from './views/session-list-view';
+export { SessionDetailView } from './views/session-detail-view';
 
-// Components - Detail View
-export { 
-  SessionHeader,
-  SessionDetailsCard,
-  SessionConversationsList,
-  SessionChatCard
-} from "./components/detail-view";
+// API hooks for external use
+export { useQuerySession } from './api/use-query-session';
+export { useQuerySessions } from './api/use-query-sessions';
+export { useSearchSessions } from './api/use-search-sessions';
 
-// Components - Wizard
-export { SessionWizard } from "./components/wizard/components/session-wizard";
+// Public types
+export type { SessionList, SessionItem, SessionDetail, SessionStatus } from './types';
 
-// Components - Shared
-export { SessionNavigationHeader } from "./components/shared/session-navigation-header";
-
-// API Hooks
-export { useQuerySession } from "./api/use-query-session";
-export { useQuerySessions } from "./api/use-query-sessions";
-export { useSearchSessions } from "./api/use-search-sessions";
-export { useQuerySessionConversations } from "./api/use-query-session-conversations";
-
-// Types
-export type { 
-  Session, 
-  SessionStatus,
-  SessionGetMany,
-  SessionGetOne
-} from "./types";
-
-// Schema
-export { 
-  sessionsInsertSchema, 
-  sessionsUpdateSchema,
-  type SessionsInsertSchema,
-  type SessionsUpdateSchema
-} from "./schema";
-
-// Utilities
-export {
-  getSessionStatusIcon,
-  getSessionStatusColor,
-  getSessionStatusLabel,
-  formatSessionName,
-  formatConversationCount,
-  canCreateConversation,
-  canEditSession,
-  canArchiveSession,
-  canCompleteSession,
-} from "./utils";
+// Server exports for app router
+export { sessionsRouter } from './server/procedures';

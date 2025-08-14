@@ -7,7 +7,7 @@ import ConfirmDialog from '@/components/confirm-dialog';
 import { Clock, ExternalLink, Calendar, Bot, Trash2, PhoneCall } from 'lucide-react';
 import Link from 'next/link';
 import { format } from 'date-fns';
-import type { ConversationGetMany } from '../../types';
+import type { ConversationList } from '../../types';
 import { ConversationStatus } from '../../types';
 import { 
   getConversationStatusLabel, 
@@ -19,9 +19,9 @@ import {
 } from '../../utils/conversation-helpers';
 
 interface ConversationListItemProps {
-  conversation: ConversationGetMany[number];
-  onViewConversation: (conversation: ConversationGetMany[number]) => void;
-  onDelete?: (conversation: ConversationGetMany[number]) => void;
+  conversation: ConversationList[number];
+  onViewConversation: (conversation: ConversationList[number]) => void;
+  onDelete?: (conversation: ConversationList[number]) => void;
   isDeleting?: boolean;
 }
 
@@ -147,4 +147,4 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
   );
 };
 
-export default ConversationListItem; 
+export { ConversationListItem }; 

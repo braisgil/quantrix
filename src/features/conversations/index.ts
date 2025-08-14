@@ -1,54 +1,15 @@
-// Main feature exports - provides clean public API for conversations feature
+// Public API for conversations feature - provides clean interface for external consumers
 
-// Core types
-export type { ConversationGetMany, ConversationGetOne, ConversationStatus, StreamTranscriptItem } from './types';
+// Main views (most common use case)  
+export { ConversationDetailView } from './views';
 
-// API hooks
+// API hooks for external use
 export { useQueryConversation } from './api/use-query-conversation';
 export { useQueryConversations } from './api/use-query-conversations';
 export { useSearchConversations } from './api/use-search-conversations';
 
-// Note: Conversation wizard is now strictly session-scoped and managed within session contexts
+// Public types
+export type { ConversationList, ConversationItem, ConversationDetail, ConversationStatus } from './types';
 
-// Main view components
-export { ConversationDetailView } from './views';
-
-// Wizard components
-export { ConversationWizard } from './components/wizard';
-
-// Individual components for custom layouts
-export {
-  // Stats
-  ConversationsStatsCards,
-  
-  // List view
-  ConversationsListHeader,
-  ConversationListItem,
-  ConversationsEmptyState,
-  
-  // Detail view
-  ConversationHeader,
-  ConversationDetailsCard,
-  ConversationSummaryCard,
-  
-  // Shared utilities
-  ConversationSkeleton,
-  ErrorBoundary,
-  ConversationNavigationHeader,
-  
-  // Types
-  type ConversationSkeletonVariant,
-} from './components';
-
-// Utility functions
-export {
-  // Conversation helpers
-  getConversationIcon,
-  getConversationStatusLabel,
-  getConversationStatusColor,
-  formatConversationDuration,
-  calculateConversationStats,
-} from './utils';
-
-// Server-side exports (for app router)
-export { conversationRouter } from './server/procedures'; 
+// Server exports for app router
+export { conversationRouter } from './server/procedures';
