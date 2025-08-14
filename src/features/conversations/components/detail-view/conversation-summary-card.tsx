@@ -2,12 +2,12 @@
 
 import { FileText, Download, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { ConversationGetOne } from '../../types';
+import type { ConversationDetail } from '../../types';
 import ReactMarkdown from 'react-markdown';
 import { useState } from 'react';
 
 interface ConversationSummaryCardProps {
-  conversation: ConversationGetOne;
+  conversation: ConversationDetail;
 }
 
 export const ConversationSummaryCard: React.FC<ConversationSummaryCardProps> = ({ conversation }) => {

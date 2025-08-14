@@ -31,4 +31,4 @@ const ConversationsEmptyState: React.FC = () => {
   );
 };
 
-export default ConversationsEmptyState; 
+export { ConversationsEmptyState }; 

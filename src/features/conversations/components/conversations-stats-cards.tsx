@@ -85,4 +85,4 @@ const ConversationsStatsCards: React.FC<ConversationsStatsCardsProps> = ({
   );
 };
 
-export default ConversationsStatsCards; 
+export { ConversationsStatsCards }; 

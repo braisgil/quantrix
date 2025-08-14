@@ -31,4 +31,4 @@ const AgentsEmptyState: React.FC = () => {
   );
 };
 
-export default AgentsEmptyState;
+export { AgentsEmptyState };

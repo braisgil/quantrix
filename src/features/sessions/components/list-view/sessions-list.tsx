@@ -1,11 +1,11 @@
 import { SessionListItem } from "./session-list-item";
-import type { SessionGetMany } from "../../types";
+import type { SessionList, SessionItem } from "../../types";
 import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface SessionsListProps {
-  sessions: SessionGetMany;
-  onConfigureSession?: (session: SessionGetMany[0]) => void;
-  onDeleteSession?: (session: SessionGetMany[0]) => void;
+  sessions: SessionList;
+  onConfigureSession?: (session: SessionItem) => void;
+  onDeleteSession?: (session: SessionItem) => void;
   deletingSessionId?: string;
 }
 

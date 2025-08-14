@@ -30,4 +30,4 @@ const AgentsListHeader: React.FC<AgentsListHeaderProps> = ({ onCreateAgent }) =>
   );
 };
 
-export default AgentsListHeader;
+export { AgentsListHeader };

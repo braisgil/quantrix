@@ -5,10 +5,10 @@ import { CardHeader } from '@/components/ui/card';
 import { Brain, Target, Sparkles } from 'lucide-react';
 import { formatCategoryName, getSubSubcategoryName } from '../../utils/category-helpers';
 import { getAgentIcon } from '../../utils/agent-helpers';
-import type { AgentsGetOne } from '../../types';
+import type { AgentDetail } from '../../types';
 
 interface AgentHeaderProps {
-  agent: AgentsGetOne;
+  agent: AgentDetail;
 }
 
 export const AgentHeader = ({ agent }: AgentHeaderProps) => {

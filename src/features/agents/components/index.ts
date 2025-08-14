@@ -1,11 +1,11 @@
 // Stats components
-export { default as AgentStatsCards } from './agents-stats-cards';
+export { AgentStatsCards } from './agents-stats-cards';
 
 // List view components
-export { default as AgentsList } from './list-view/agents-list';
-export { default as AgentsListHeader } from './list-view/agents-list-header';
-export { default as AgentListItem } from './list-view/agent-list-item';
-export { default as AgentsEmptyState } from './list-view/agents-empty-state';
+export { AgentsList } from './list-view/agents-list';
+export { AgentsListHeader } from './list-view/agents-list-header';
+export { AgentListItem } from './list-view/agent-list-item';
+export { AgentsEmptyState } from './list-view/agents-empty-state';
 
 // Detail view components
 export { AgentHeader } from './detail-view/agent-header';

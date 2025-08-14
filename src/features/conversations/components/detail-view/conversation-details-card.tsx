@@ -3,7 +3,7 @@
 import { Badge } from '@/components/ui/badge';
 import { Clock, Calendar, MessageSquare, User } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import type { ConversationGetOne } from '../../types';
+import type { ConversationDetail } from '../../types';
 import { 
   formatConversationDuration, 
   isConversationJoinAvailable,
@@ -14,7 +14,7 @@ import {
 } from '../../utils/conversation-helpers';
 
 interface ConversationDetailsCardProps {
-  conversation: ConversationGetOne;
+  conversation: ConversationDetail;
 }
 
 export const ConversationDetailsCard: React.FC<ConversationDetailsCardProps> = ({ conversation }) => {

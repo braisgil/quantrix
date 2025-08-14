@@ -30,4 +30,4 @@ const ConversationsListHeader: React.FC<ConversationsListHeaderProps> = ({ onCre
   );
 };
 
-export default ConversationsListHeader; 
+export { ConversationsListHeader }; 

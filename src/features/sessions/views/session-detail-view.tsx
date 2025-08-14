@@ -43,7 +43,6 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
 
   const handleStartChat = () => {
     // TODO: Implement chat functionality
-    console.log('Start chat for session:', sessionId);
   };
 
   const handleDeleteSession = () => {

@@ -1,8 +1,10 @@
 import { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/trpc/routers/_app";
 
-export type SessionGetMany = inferRouterOutputs<AppRouter>["sessions"]["getMany"]["items"];
-export type SessionGetOne = inferRouterOutputs<AppRouter>["sessions"]["getOne"];
+// Unified, standardized types inferred from tRPC router
+export type SessionList = inferRouterOutputs<AppRouter>["sessions"]["getMany"]["items"];
+export type SessionItem = SessionList[number];
+export type SessionDetail = inferRouterOutputs<AppRouter>["sessions"]["getOne"];
 
 export enum SessionStatus {
   Active = "active",
@@ -10,16 +12,11 @@ export enum SessionStatus {
   Completed = "completed",
 }
 
+export const SESSION_STATUS_VALUES = [
+  SessionStatus.Active,
+  SessionStatus.Archived,
+  SessionStatus.Completed,
+] as const;
 
-
-// Type for session data from the database
-export interface Session {
-  id: string;
-  name: string;
-  description: string | null;
-  userId: string;
-  agentId: string;
-  status: SessionStatus;
-  createdAt: string;
-  updatedAt: string;
-}
+// Backward-compatible aliases (to be gradually migrated away from)
+// (Removed legacy aliases SessionGetMany/SessionGetOne)

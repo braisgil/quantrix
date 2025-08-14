@@ -2,15 +2,15 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from "@/component
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Phone, Plus } from "lucide-react";
 import { ConversationListItem } from "@/features/conversations/components";
-import { ConversationGetMany } from "@/features/conversations/types";
+import { ConversationList } from "@/features/conversations/types";
 import { Badge } from "@/components/ui/badge";
 
 interface SessionConversationsListProps {
-  conversations: ConversationGetMany;
+  conversations: ConversationList;
   onCreateConversation: () => void;
-  onDeleteConversation?: (conversation: ConversationGetMany[number]) => void;
+  onDeleteConversation?: (conversation: ConversationList[number]) => void;
   deletingConversationId?: string;
-  onViewConversation?: (conversation: ConversationGetMany[number]) => void;
+  onViewConversation?: (conversation: ConversationList[number]) => void;
 }
 
 

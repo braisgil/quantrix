@@ -1,11 +1,11 @@
 import { getIconConfig } from '../components/wizard/lib/icon-mappings';
 import { formatCategoryName } from './category-helpers';
-import type { AgentsGetMany, AgentsGetOne } from '../types';
+import type { AgentList, AgentItem, AgentDetail } from '../types';
 
 /**
  * Gets the appropriate icon component for an agent based on its category
  */
-export const getAgentIcon = (agent: AgentsGetMany[number] | AgentsGetOne) => {
+export const getAgentIcon = (agent: AgentItem | AgentDetail) => {
   const iconConfig = getIconConfig('subcategory', agent.category, agent.name);
   return iconConfig.component;
 };
@@ -13,7 +13,7 @@ export const getAgentIcon = (agent: AgentsGetMany[number] | AgentsGetOne) => {
 /**
  * Generates a short description for an agent from its instructions or category
  */
-export const getAgentDescription = (agent: AgentsGetMany[number] | AgentsGetOne) => {
+export const getAgentDescription = (agent: AgentItem | AgentDetail) => {
   // Try to extract meaningful description from instructions or use category/subcategory
   if (agent.instructions && agent.instructions.length > 0) {
     const description = agent.instructions.substring(0, 60);
@@ -34,7 +34,7 @@ export const formatAgentTotalDuration = (totalDurationSeconds: number | string) 
 /**
  * Calculates agent statistics for dashboard display
  */
-export const calculateAgentStats = (agents: AgentsGetMany) => {
+export const calculateAgentStats = (agents: AgentList) => {
   const activeAgents = agents.length;
   const totalConversations = agents.reduce((sum, agent) => {
     const count = typeof agent.conversationCount === 'string' 

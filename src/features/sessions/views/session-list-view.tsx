@@ -8,7 +8,7 @@ import { SessionsList } from "../components/list-view/sessions-list";
 import { SessionWizard } from "../components/wizard/components/session-wizard";
 import { SessionsEmptyState } from "../components/list-view/sessions-empty-state";
 import { useWizardState } from "../hooks/use-wizard-state";
-import { SessionGetMany } from "../types";
+import { SessionItem } from "../types";
 import { useDeleteSession } from "../api/use-delete-session";
 import { useState } from "react";
 
@@ -44,11 +44,11 @@ export const SessionListView = () => {
     );
   }
 
-  const handleConfigureSession = (session: SessionGetMany[number]) => {
+  const handleConfigureSession = (session: SessionItem) => {
     router.push(`/sessions/${session.id}`);
   };
 
-  const handleDeleteSession = (session: SessionGetMany[number]) => {
+  const handleDeleteSession = (session: SessionItem) => {
     setDeletingSessionId(session.id);
     deleteSessionMutation.mutate({ id: session.id }, {
       onSettled: () => setDeletingSessionId(undefined),

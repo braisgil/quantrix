@@ -4,7 +4,7 @@ import { createAgent, openai, TextMessage } from "@inngest/agent-kit";
 import { db } from "@/db";
 import { agents, conversations, user } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
-import { StreamTranscriptItem } from "@/features/conversations";
+import { StreamTranscriptItem } from "@/features/conversations/types";
 
 const summarizer = createAgent({
   name: "summarizer",

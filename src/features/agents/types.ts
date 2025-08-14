@@ -1,23 +1,9 @@
-import { AppRouter } from "@/trpc/routers/_app";
 import { inferRouterOutputs } from "@trpc/server";
 
-// Type for agent data from the database
-export interface Agent {
-  id: string;
-  name: string;
-  description: string | null;
-  userId: string;
-  instructions: string;
-  category: string;
-  subcategory: string;
-  subSubcategory: string;
-  customRule1: string;
-  customRule2: string;
-  additionalRule1: string | null;
-  additionalRule2: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
+import { AppRouter } from "@/trpc/routers/_app";
 
-export type AgentsGetMany = inferRouterOutputs<AppRouter>["agents"]["getMany"]["items"];
-export type AgentsGetOne = inferRouterOutputs<AppRouter>["agents"]["getOne"];
+
+// Unified, standardized types inferred from tRPC router
+export type AgentList = inferRouterOutputs<AppRouter>["agents"]["getMany"]["items"];
+export type AgentItem = AgentList[number];
+export type AgentDetail = inferRouterOutputs<AppRouter>["agents"]["getOne"];

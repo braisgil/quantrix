@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Info, Bot, Calendar, MessageSquare, Clock } from "lucide-react";
 import { format } from "date-fns";
-import type { SessionGetOne } from "../../types";
+import type { SessionDetail } from "../../types";
 import { SessionStatus } from "../../types";
 import { 
   getSessionStatusIcon, 
@@ -12,7 +12,7 @@ import {
 import { formatAgentTotalDuration } from "@/features/agents/utils/agent-helpers";
 
 interface SessionDetailsCardProps {
-  session: SessionGetOne;
+  session: SessionDetail;
 }
 
 export const SessionDetailsCard = ({ session }: SessionDetailsCardProps) => {
