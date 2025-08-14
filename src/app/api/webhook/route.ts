@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
     });
 
     realtimeClient.updateSession({
-      instructions: existingAgent.instructions,
+      instructions: `${existingAgent.instructions}\n\nContext:\n- Session Title: ${existingSession.name}\n- Conversation Title: ${existingConversation.name}\n\nUse the conversation title to tailor your responses and maintain topical relevance.`,
     });
   } else if (eventType === "call.session_participant_left") {
     const event = payload as CallSessionParticipantLeftEvent;
@@ -141,24 +141,21 @@ export async function POST(req: NextRequest) {
   } else if (eventType === "call.transcription_ready") {
     const event = payload as CallTranscriptionReadyEvent;
     const conversationId = event.call_cid.split(":")[1]; // call_cid is formatted as "type:id"
+    // Verify conversation exists, but do not persist transcript URL in DB
+    const [existingConversation] = await db
+      .select()
+      .from(conversations)
+      .where(eq(conversations.id, conversationId));
 
-    const [updatedConversation] = await db
-      .update(conversations)
-      .set({
-        transcriptUrl: event.call_transcription.url,
-      })
-      .where(eq(conversations.id, conversationId))
-      .returning();
-
-    if (!updatedConversation) {
+    if (!existingConversation) {
       return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
     }
 
     await inngest.send({
       name: "conversations/processing",
       data: {
-        conversationId: updatedConversation.id,
-        transcriptUrl: updatedConversation.transcriptUrl,
+        conversationId: existingConversation.id,
+        transcriptUrl: event.call_transcription.url,
       },
     });
   } else if (eventType === "call.recording_ready") {
@@ -197,9 +194,12 @@ export async function POST(req: NextRequest) {
     let agentName: string | null = null;
     let agentInstructions: string | null = null;
     let summariesText: string = "";
+    let conversationTitle: string | null = null;
+    let sessionTitle: string | null = null;
 
     if (existingConversation) {
       targetSessionId = existingConversation.sessionId;
+      conversationTitle = existingConversation.name;
 
       const [existingSession] = await db
         .select()
@@ -222,7 +222,8 @@ export async function POST(req: NextRequest) {
       agentId = existingAgent.id;
       agentName = existingAgent.name;
       agentInstructions = existingAgent.instructions;
-      summariesText = `${existingConversation.summary ?? ""}`.trim();
+      sessionTitle = existingSession.name;
+      summariesText = `${existingConversation.summary ? `${existingConversation.name}:\n${existingConversation.summary}` : ""}`.trim();
     } else {
       // Otherwise, treat the channel ID as a session-level chat, aggregating all completed conversations
       const [existingSession] = await db
@@ -244,6 +245,7 @@ export async function POST(req: NextRequest) {
       }
 
       targetSessionId = existingSession.id;
+      sessionTitle = existingSession.name;
       agentId = existingAgent.id;
       agentName = existingAgent.name;
       agentInstructions = existingAgent.instructions;
@@ -273,6 +275,8 @@ export async function POST(req: NextRequest) {
 You are an AI assistant helping the user revisit completed conversations from a session.
 
 Session ID: ${targetSessionId ?? "unknown"}
+Session Title: ${sessionTitle ?? "unknown"}
+${conversationTitle ? `\nCurrent Conversation Title: ${conversationTitle}\n` : ""}
 
 Summaries of completed conversations (use as primary factual context):
 ${summariesText || "(No completed conversation summaries are available yet.)"}

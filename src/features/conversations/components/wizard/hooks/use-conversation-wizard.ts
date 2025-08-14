@@ -14,6 +14,7 @@ export const useConversationWizard = ({ agentId, sessionId }: UseConversationWiz
     name: "",
     sessionId: sessionId,
     agentId: agentId,
+    isScheduled: false,
     scheduledDate: null,
     scheduledTime: null,
   });
@@ -41,6 +42,7 @@ export const useConversationWizard = ({ agentId, sessionId }: UseConversationWiz
       name: "",
       sessionId: sessionId,
       agentId: agentId,
+      isScheduled: false,
       scheduledDate: null,
       scheduledTime: null,
     });

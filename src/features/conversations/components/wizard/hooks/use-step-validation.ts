@@ -4,12 +4,12 @@ import type { ConversationWizardState, StepValidationConfig } from "../types/wiz
 const stepValidationConfig: StepValidationConfig = {
   0: (state: ConversationWizardState) => {
     // Validate conversation details step
-    return Boolean(
-      state.name.trim() &&
-      state.agentId &&
-      state.scheduledDate &&
-      state.scheduledTime
-    );
+    if (!state.name.trim() || !state.agentId) return false;
+    // If scheduled, date and time are required. If not scheduled, no date/time needed
+    if (state.isScheduled) {
+      return Boolean(state.scheduledDate && state.scheduledTime);
+    }
+    return true;
   },
 };
 

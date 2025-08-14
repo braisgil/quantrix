@@ -18,6 +18,9 @@ export default async function AgentPage({ params }: PageProps) {
     await queryClient.prefetchQuery(
       trpc.agents.getOne.queryOptions({ id: agentId })
     );
+    await queryClient.prefetchQuery(
+      trpc.sessions.getMany.queryOptions({ agentId })
+    );
   } catch {
     // Prefetch failed - client will handle it gracefully
   }

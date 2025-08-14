@@ -7,14 +7,16 @@ interface ConversationsStatsCardsProps {
   totalConversations: number;
   activeConversations: number;
   completedConversations: number;
-  upcomingConversations: number;
+  scheduledConversations: number;
+  availableConversations: number;
 }
 
 const ConversationsStatsCards: React.FC<ConversationsStatsCardsProps> = ({
   totalConversations,
   activeConversations,
   completedConversations,
-  upcomingConversations,
+  scheduledConversations,
+  availableConversations,
 }) => {
   const stats = [
     {
@@ -39,11 +41,18 @@ const ConversationsStatsCards: React.FC<ConversationsStatsCardsProps> = ({
       color: 'text-purple-500',
     },
     {
-      title: 'Upcoming',
-      value: upcomingConversations,
+      title: 'Scheduled',
+      value: scheduledConversations,
       icon: Clock,
       description: 'Scheduled sessions',
       color: 'text-yellow-500',
+    },
+    {
+      title: 'Available',
+      value: availableConversations,
+      icon: Play,
+      description: 'Available to join',
+      color: 'text-green-500',
     },
   ];
 

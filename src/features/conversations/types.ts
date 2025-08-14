@@ -2,10 +2,14 @@ import { inferRouterOutputs } from "@trpc/server";
 import type { AppRouter } from "@/trpc/routers/_app";
 
 export type ConversationGetMany = inferRouterOutputs<AppRouter>["conversations"]["getMany"]["items"];
+export type ConversationItem = ConversationGetMany[number];
 export type ConversationGetOne = inferRouterOutputs<AppRouter>["conversations"]["getOne"];
+export type ConversationItemWithAvailability = ConversationItem & { isJoinAvailable?: boolean };
+export type ConversationGetOneWithAvailability = ConversationGetOne & { isJoinAvailable?: boolean };
 
 export enum ConversationStatus {
-  Upcoming = "upcoming",
+  Scheduled = "scheduled",
+  Available = "available",
   Active = "active",
   Completed = "completed",
   Processing = "processing",

@@ -16,11 +16,11 @@ export const formatDateTime = (date: Date, time: string) => {
 };
 
 export const getFormData = (wizardState: ConversationWizardState) => {
-  const { name, sessionId, agentId, scheduledDate, scheduledTime } = wizardState;
+  const { name, sessionId, agentId, isScheduled, scheduledDate, scheduledTime } = wizardState;
   
   // Combine date and time into a single datetime
   let scheduledDateTime: Date | undefined = undefined;
-  if (scheduledDate && scheduledTime) {
+  if (isScheduled && scheduledDate && scheduledTime) {
     const [hours, minutes] = scheduledTime.split(':').map(Number);
     scheduledDateTime = new Date(scheduledDate);
     scheduledDateTime.setHours(hours, minutes, 0, 0);

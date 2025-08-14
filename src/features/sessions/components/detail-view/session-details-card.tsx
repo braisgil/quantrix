@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Info, Bot, Calendar, MessageSquare } from "lucide-react";
+import { Info, Bot, Calendar, MessageSquare, Clock } from "lucide-react";
 import { format } from "date-fns";
 import type { SessionGetOne } from "../../types";
 import { SessionStatus } from "../../types";
@@ -9,6 +9,7 @@ import {
   getSessionStatusColor, 
   getSessionStatusLabel
 } from "../../utils";
+import { formatAgentTotalDuration } from "@/features/agents/utils/agent-helpers";
 
 interface SessionDetailsCardProps {
   session: SessionGetOne;
@@ -60,6 +61,17 @@ export const SessionDetailsCard = ({ session }: SessionDetailsCardProps) => {
             <MessageSquare className="w-4 h-4 text-primary" />
             <span className="text-sm">
               {session.conversationCount || 0} {session.conversationCount === 1 ? "conversation" : "conversations"}
+            </span>
+          </div>
+        </div>
+
+        {/* Total Duration */}
+        <div className="space-y-2">
+          <p className="text-xs text-muted-foreground font-medium">Total Duration</p>
+          <div className="flex items-center gap-2">
+            <Clock className="w-4 h-4 text-primary" />
+            <span className="text-sm">
+              {formatAgentTotalDuration(session.totalDuration || 0)}
             </span>
           </div>
         </div>

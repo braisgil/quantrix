@@ -22,8 +22,8 @@ export const CallConnect = ({
   userName,
 }: CallConnectProps) => {
   const trpc = useTRPC();
-  const { mutateAsync: generateToken } = useMutation(
-    trpc.conversations.generateToken.mutationOptions(),
+  const { mutateAsync: generateCallToken } = useMutation(
+    trpc.conversations.generateCallToken.mutationOptions(),
   );
 
   const [client, setClient] = useState<StreamVideoClient>();
@@ -35,7 +35,7 @@ export const CallConnect = ({
         name: userName,
       },
       tokenProvider: async () => {
-        const token = await generateToken();
+        const token = await generateCallToken({ conversationId });
         return token as string;
       },
     });
@@ -46,7 +46,7 @@ export const CallConnect = ({
       _client.disconnectUser();
       setClient(undefined);
     };
-  }, [userId, userName, generateToken]);
+  }, [userId, userName, conversationId, generateCallToken]);
 
   const [call, setCall] = useState<Call>();
   useEffect(() => {

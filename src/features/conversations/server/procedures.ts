@@ -1,13 +1,12 @@
-import { agents, conversations, sessions, user } from "@/db/schema";
+import { agents, conversations, sessions } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { eq, and, getTableColumns, sql, ilike, desc, inArray } from "drizzle-orm";
+import { eq, and, getTableColumns, sql, ilike, desc } from "drizzle-orm";
 import { conversationsInsertSchema } from "../schema";
 import z from "zod";
-import { ConversationStatus, StreamTranscriptItem } from "../types";
+import { ConversationStatus } from "../types";
 import { streamVideo } from "@/lib/stream-video";
 import { streamChat } from "@/lib/stream-chat";
-import JSONL from "jsonl-parse-stringify";
 
 export const conversationRouter = createTRPCRouter({
   generateChatToken: protectedProcedure.mutation(async ({ ctx }) => {
@@ -19,26 +18,65 @@ export const conversationRouter = createTRPCRouter({
 
     return token;
   }),
-  generateToken: protectedProcedure.mutation(async ({ ctx }) => {
-    await streamVideo.upsertUsers([
-      {
-        id: ctx.auth.user.id,
-        name: ctx.auth.user.name,
-        role: "admin",
-      },
-    ]);
+  // Removed legacy generateToken in favor of generateCallToken that enforces availability
+  generateCallToken: protectedProcedure
+    .input(z.object({ conversationId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      // Verify conversation belongs to user
+      const [conversationRow] = await ctx.db
+        .select({
+          ...getTableColumns(conversations),
+        })
+        .from(conversations)
+        .where(
+          and(
+            eq(conversations.id, input.conversationId),
+            eq(conversations.userId, ctx.auth.user.id),
+          )
+        );
 
-    const expirationTime = Math.floor(Date.now() / 1000) + 3600; // 1 hour
-    const issuedAt = Math.floor(Date.now() / 1000) - 60;
+      if (!conversationRow) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Conversation not found" });
+      }
 
-    const token = streamVideo.generateUserToken({
-      user_id: ctx.auth.user.id,
-      exp: expirationTime,
-      validity_in_seconds: issuedAt,
-    });
+      // Enforce availability window on server
+      const now = new Date();
+      const availableAt = conversationRow.availableAt ? new Date(conversationRow.availableAt) : null;
+      // Compute availability without comparing against unreachable statuses
+      const status = conversationRow.status as ConversationStatus;
+      const isWithinWindow = availableAt ? now.getTime() >= availableAt.getTime() : false;
+      const isJoinAvailable =
+        status === ConversationStatus.Active ||
+        status === ConversationStatus.Available ||
+        (status === ConversationStatus.Scheduled && isWithinWindow);
 
-    return token;
-  }),
+      if (!isJoinAvailable) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "This call is not yet available. It will open 30 minutes before the scheduled time.",
+        });
+      }
+
+      // Prepare user in Stream and issue token
+      await streamVideo.upsertUsers([
+        {
+          id: ctx.auth.user.id,
+          name: ctx.auth.user.name,
+          role: "admin",
+        },
+      ]);
+
+      const expirationTime = Math.floor(Date.now() / 1000) + 3600; // 1 hour
+      const issuedAt = Math.floor(Date.now() / 1000) - 60;
+
+      const token = streamVideo.generateUserToken({
+        user_id: ctx.auth.user.id,
+        exp: expirationTime,
+        validity_in_seconds: issuedAt,
+      });
+
+      return token;
+    }),
   create: protectedProcedure
     .input(conversationsInsertSchema)
     .mutation(async ({ input, ctx }) => {
@@ -64,11 +102,25 @@ export const conversationRouter = createTRPCRouter({
         });
       }
 
+      // Validate scheduling rules: if scheduledDateTime is provided, it must be in the future
+      if (input.scheduledDateTime) {
+        const now = new Date();
+        const scheduled = new Date(input.scheduledDateTime);
+        if (scheduled.getTime() <= now.getTime()) {
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Scheduled time must be in the future" });
+        }
+      }
+
       const [createdConversation] = await ctx.db
         .insert(conversations)
         .values({
           ...input,
           userId: ctx.auth.user.id,
+          // Default state: scheduled with availableAt calculated
+          status: input.scheduledDateTime ? ConversationStatus.Scheduled : ConversationStatus.Available,
+          availableAt: input.scheduledDateTime
+            ? new Date(new Date(input.scheduledDateTime).getTime() - 30 * 60 * 1000)
+            : new Date(),
         })
         .returning();
 
@@ -108,29 +160,29 @@ export const conversationRouter = createTRPCRouter({
   getOne: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-    const [existingConversation] = await ctx.db
-      .select({
-        ...getTableColumns(conversations),
-        session: sessions,
-        agent: agents,
-        duration: sql<number>`EXTRACT(EPOCH FROM (ended_at - started_at))`.as("duration"),
-      })
-      .from(conversations)
-      .innerJoin(sessions, eq(conversations.sessionId, sessions.id))
-      .innerJoin(agents, eq(sessions.agentId, agents.id))
-      .where(
-        and(
-          eq(conversations.id, input.id),
-          eq(conversations.userId, ctx.auth.user.id),
-        )
-      );
+      const [existingConversation] = await ctx.db
+        .select({
+          ...getTableColumns(conversations),
+          session: sessions,
+          agent: agents,
+          duration: sql<number>`EXTRACT(EPOCH FROM (ended_at - started_at))`.as("duration"),
+        })
+        .from(conversations)
+        .innerJoin(sessions, eq(conversations.sessionId, sessions.id))
+        .innerJoin(agents, eq(sessions.agentId, agents.id))
+        .where(
+          and(
+            eq(conversations.id, input.id),
+            eq(conversations.userId, ctx.auth.user.id),
+          )
+        );
 
-    if (!existingConversation) {
-      throw new TRPCError({ code: "NOT_FOUND", message: "Meeting not found" });
-    }
+      if (!existingConversation) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Meeting not found" });
+      }
 
-    return existingConversation;
-  }),
+      return existingConversation;
+    }),
   getMany: protectedProcedure
     .input(
       z.object({
@@ -138,7 +190,8 @@ export const conversationRouter = createTRPCRouter({
         sessionId: z.string().nullish(),
         status: z
           .enum([
-            ConversationStatus.Upcoming,
+            ConversationStatus.Scheduled,
+            ConversationStatus.Available,
             ConversationStatus.Active,
             ConversationStatus.Completed,
             ConversationStatus.Processing,
@@ -170,87 +223,10 @@ export const conversationRouter = createTRPCRouter({
         .orderBy(desc(conversations.createdAt), desc(conversations.id))
 
       return {
-        items: data
+        items: data,
       };
     }),
-  getTranscript: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input, ctx }) => {
-      const [existingConversation] = await ctx.db
-        .select()
-        .from(conversations)
-        .where(
-          and(eq(conversations.id, input.id), eq(conversations.userId, ctx.auth.user.id))
-        );
-  
-      if (!existingConversation) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Conversation not found",
-        });
-      }
-  
-      if (!existingConversation.transcriptUrl) {
-        return [];
-      }
-  
-      const transcript = await fetch(existingConversation.transcriptUrl)
-        .then((res) => res.text())
-        .then((text) => JSONL.parse<StreamTranscriptItem>(text))
-        .catch(() => {
-          return [];
-        });
-  
-      const speakerIds = [
-        ...new Set(transcript.map((item) => item.speaker_id)),
-      ];
-  
-      const userSpeakers = await ctx.db
-        .select()
-        .from(user)
-        .where(inArray(user.id, speakerIds))
-        .then((users) =>
-          users.map((user) => ({
-            ...user,
-          }))
-        );
-  
-      const agentSpeakers = await ctx.db
-        .select()
-        .from(agents)
-        .where(inArray(agents.id, speakerIds))
-        .then((agents) =>
-          agents.map((agent) => ({
-            ...agent,
-          }))
-        );
-  
-      const speakers = [...userSpeakers, ...agentSpeakers];
-  
-      const transcriptWithSpeakers = transcript.map((item) => {
-        const speaker = speakers.find(
-          (speaker) => speaker.id === item.speaker_id
-        );
-  
-        if (!speaker) {
-          return {
-            ...item,
-            user: {
-              name: "Unknown",
-            },
-          };
-        }
-  
-        return {
-          ...item,
-          user: {
-            name: speaker.name,
-          },
-        };
-      })
-  
-      return transcriptWithSpeakers;
-    }),
+  // Removed transcript retrieval endpoint to avoid exposing raw transcripts to the client
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {
@@ -271,11 +247,11 @@ export const conversationRouter = createTRPCRouter({
         });
       }
 
-      // Only allow deletion of upcoming conversations
-      if (existingConversation.status !== ConversationStatus.Upcoming) {
+      // Allow deletion of any conversation except completed
+      if (existingConversation.status === ConversationStatus.Completed) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Only upcoming conversations can be deleted",
+          message: "Completed conversations cannot be deleted",
         });
       }
 

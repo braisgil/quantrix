@@ -106,7 +106,8 @@ export const sessions = pgTable("sessions", {
 }));
 
 export const conversationStatus = pgEnum("conversation_status", [
-  "upcoming",
+  "scheduled",
+  "available",
   "active",
   "completed",
   "processing",
@@ -124,11 +125,11 @@ export const conversations = pgTable("conversations", {
   sessionId: text("session_id")
     .notNull()
     .references(() => sessions.id, { onDelete: "cascade" }),
-  status: conversationStatus("status").notNull().default("upcoming"),
+  status: conversationStatus("status").notNull().default("scheduled"),
   scheduledDateTime: timestamp("scheduled_date_time"),
+  availableAt: timestamp("available_at"),
   startedAt: timestamp("started_at"),
   endedAt: timestamp("ended_at"),
-  transcriptUrl: text("transcript_url"),
   recordingUrl: text("recording_url"),
   summary: text("summary"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -137,5 +138,6 @@ export const conversations = pgTable("conversations", {
   userIdIdx: index('conversations_user_id_idx').on(table.userId),
   sessionIdIdx: index('conversations_session_id_idx').on(table.sessionId),
   statusIdx: index('conversations_status_idx').on(table.status),
+  availableAtIdx: index('conversations_available_at_idx').on(table.availableAt),
   createdAtIdx: index('conversations_created_at_idx').on(table.createdAt),
 }));

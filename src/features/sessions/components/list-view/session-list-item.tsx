@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ConfirmDialog from "@/components/confirm-dialog";
-import { FolderOpen, MessageSquare, Calendar, Bot, ExternalLink, Trash2 } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+import { FolderOpen, MessageSquare, Clock, Bot, ExternalLink, Trash2 } from "lucide-react";
+import { formatAgentTotalDuration } from "@/features/agents/utils/agent-helpers";
 import type { SessionGetMany } from "../../types";
 import { SessionStatus } from "../../types";
 import { 
@@ -79,10 +79,8 @@ export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: 
               <span>{formatConversationCount(session.conversationCount || 0)}</span>
             </div>
             <div className="flex items-center gap-2 bg-muted/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-border/50">
-              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
-              <span>
-                {formatDistanceToNow(new Date(session.createdAt), { addSuffix: true })}
-              </span>
+              <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-primary/70" />
+              <span>{formatAgentTotalDuration(session.totalDuration || 0)}</span>
             </div>
           </div>
         </div>

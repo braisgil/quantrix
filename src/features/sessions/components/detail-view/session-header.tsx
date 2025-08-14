@@ -2,8 +2,8 @@
 
 import { Badge } from "@/components/ui/badge";
 import { CardHeader } from "@/components/ui/card";
-import { FolderOpen, Bot, Calendar } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+import { FolderOpen, Bot, Clock } from "lucide-react";
+import { formatAgentTotalDuration } from "@/features/agents/utils/agent-helpers";
 import type { SessionGetOne } from "../../types";
 import { SessionStatus } from "../../types";
 import { 
@@ -20,9 +20,9 @@ export const SessionHeader = ({ session }: SessionHeaderProps) => {
   const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
   
   return (
-    <CardHeader className="text-center pb-0 sm:pb-0">
+    <CardHeader className="text-center pb-0 mb-6 sm:pb-0">
       {/* Header with Icon and Title */}
-      <div className="flex items-center justify-center gap-3 mb-4">
+      <div className="flex items-center justify-center gap-3 mb-0">
         <div className="relative matrix-glow">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center matrix-border">
           <FolderOpen className="w-4 h-4 text-primary-foreground" />
@@ -45,8 +45,8 @@ export const SessionHeader = ({ session }: SessionHeaderProps) => {
           {session.agent.name}
         </Badge>
         <Badge variant="secondary" className="matrix-border matrix-glow">
-          <Calendar className="h-3 w-3 mr-1" />
-          {formatDistanceToNow(new Date(session.createdAt), { addSuffix: true })}
+          <Clock className="h-3 w-3 mr-1" />
+          {formatAgentTotalDuration(session.totalDuration || 0)}
         </Badge>
       </div>
       
