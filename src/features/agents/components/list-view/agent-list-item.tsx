@@ -79,7 +79,7 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
             </div>
             <div className="flex items-center gap-2 bg-muted/50 px-3 py-2 rounded-lg border border-border/50">
               <Clock className="w-4 h-4 text-primary/70" />
-              <span>{formatAgentTotalDuration(agent.totalDuration)} conversation time</span>
+              <span>{formatAgentTotalDuration(agent.totalDuration)}</span>
             </div>
           </div>
         </div>
@@ -92,8 +92,8 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
           className="font-semibold w-full sm:w-auto"
           onClick={handleConfigure}
         >
-          <ExternalLink className="w-4 h-4 mr-2" />
-          View
+          <ExternalLink className="w-4 h-4" />
+          <span className="ml-2 sm:hidden">View</span>
         </Button>
         
         <ConfirmDialog
@@ -116,8 +116,8 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
             className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
             disabled={isDeleting}
           >
-            <Trash2 className="w-4 h-4 mr-2" />
-            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+            <Trash2 className="w-4 h-4" />
+            <span className="ml-2 sm:hidden">{isDeleting ? 'Deleting...' : 'Delete'}</span>
           </Button>
         </ConfirmDialog>
       </div>

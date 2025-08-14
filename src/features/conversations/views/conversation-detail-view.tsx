@@ -13,7 +13,12 @@ import { ConversationStatus } from '../types';
 import { useDeleteConversation } from '../api/use-delete-conversation';
 import { useRouter } from 'next/navigation';
 import { Clock, Calendar, FolderOpen } from 'lucide-react';
-import { isConversationJoinAvailable, formatConversationDuration } from '../utils/conversation-helpers';
+import { 
+  isConversationJoinAvailable, 
+  formatConversationDuration,
+  getEffectiveDisplayStatus,
+  getConversationStatusLabel,
+} from '../utils/conversation-helpers';
 import { format } from 'date-fns';
 
 interface ConversationDetailViewProps {
@@ -66,15 +71,18 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
                   <div className="text-muted-foreground">Availability</div>
                   <div className="text-lg font-semibold text-primary">
                     {(() => {
+                      const status = getEffectiveDisplayStatus(conversation);
+                      if (status === ConversationStatus.Completed) return 'Completed';
+                      if (status === ConversationStatus.Cancelled) return 'Cancelled';
                       if (isConversationJoinAvailable(conversation)) return 'Available';
-                      if (conversation.scheduledDateTime) {
+                      if (status === ConversationStatus.Scheduled && conversation.scheduledDateTime) {
                         try {
                           return format(new Date(conversation.scheduledDateTime), 'MMM d, yyyy h:mm a');
                         } catch {
                           return new Date(conversation.scheduledDateTime).toLocaleString();
                         }
                       }
-                      return conversation.status;
+                      return getConversationStatusLabel(status);
                     })()}
                   </div>
                 </div>

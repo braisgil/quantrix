@@ -42,10 +42,13 @@ export const conversationRouter = createTRPCRouter({
       // Enforce availability window on server
       const now = new Date();
       const availableAt = conversationRow.availableAt ? new Date(conversationRow.availableAt) : null;
+      // Compute availability without comparing against unreachable statuses
+      const status = conversationRow.status as ConversationStatus;
+      const isWithinWindow = availableAt ? now.getTime() >= availableAt.getTime() : false;
       const isJoinAvailable =
-        conversationRow.status === ConversationStatus.Active ||
-        conversationRow.status === ConversationStatus.Available ||
-        (availableAt ? now.getTime() >= availableAt.getTime() : true);
+        status === ConversationStatus.Active ||
+        status === ConversationStatus.Available ||
+        (status === ConversationStatus.Scheduled && isWithinWindow);
 
       if (!isJoinAvailable) {
         throw new TRPCError({

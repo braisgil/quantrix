@@ -33,7 +33,7 @@ export const Navbar = () => {
   return (
     <>
       <DashboardCommand open={commandOpen} setOpen={setCommandOpen} />
-      <nav className="flex px-6 gap-x-4 items-center py-4 border-b border-primary/20 bg-background/95 backdrop-blur-md">
+      <nav className="flex px-4 md:px-6 gap-x-2 md:gap-x-4 items-center py-4 border-b border-primary/20 bg-background/95 backdrop-blur-md">
         <Button 
           className="size-10 matrix-border hover:matrix-glow transition-all duration-300 hover:bg-primary/10" 
           variant="outline" 
@@ -46,17 +46,17 @@ export const Navbar = () => {
         </Button>
         
         <Button
-          className="h-10 w-[280px] justify-start font-normal text-muted-foreground hover:text-primary matrix-border hover:matrix-glow hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm"
+          className="h-10 flex-1 min-w-0 justify-start font-normal text-muted-foreground hover:text-primary matrix-border hover:matrix-glow hover:bg-primary/10 transition-all duration-300 backdrop-blur-sm md:max-w-[520px]"
           variant="outline"
           size="sm"
           onClick={() => setCommandOpen((open) => !open)}
         >
-          <div className="flex items-center space-x-3 w-full">
+          <div className="flex items-center space-x-3 w-full min-w-0">
             <div className="p-1 bg-primary/10 rounded">
               <Search className="size-4 text-primary" />
             </div>
-            <span className="flex-1 text-left">Search companions...</span>
-            <kbd className="ml-auto pointer-events-none inline-flex h-6 select-none items-center gap-1 rounded border border-primary/30 bg-primary/10 px-2 font-mono text-[10px] font-medium text-primary">
+            <span className="flex-1 text-left truncate">Search companions...</span>
+            <kbd className="ml-auto pointer-events-none hidden sm:inline-flex h-6 select-none items-center gap-1 rounded border border-primary/30 bg-primary/10 px-2 font-mono text-[10px] font-medium text-primary">
               <span className="text-xs">⌘</span>K
             </kbd>
           </div>

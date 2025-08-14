@@ -1,7 +1,7 @@
 import { sessions, agents, conversations } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { eq, and, getTableColumns, ilike, desc, count } from "drizzle-orm";
+import { eq, and, getTableColumns, ilike, desc, count, sql } from "drizzle-orm";
 import { sessionsInsertSchema, sessionsUpdateSchema } from "../schema";
 import z from "zod";
 import { SessionStatus } from "../types";
@@ -111,6 +111,21 @@ export const sessionsRouter = createTRPCRouter({
           ...getTableColumns(sessions),
           agent: agents,
           conversationCount: count(conversations.id),
+          totalDuration: sql<number>`
+            COALESCE(
+              NULLIF(
+                SUM(
+                  CASE 
+                    WHEN ${conversations.startedAt} IS NOT NULL 
+                      AND ${conversations.endedAt} IS NOT NULL 
+                      AND ${conversations.endedAt} > ${conversations.startedAt}
+                    THEN EXTRACT(EPOCH FROM (${conversations.endedAt} - ${conversations.startedAt}))
+                    ELSE 0 
+                  END
+                ), 0
+              ), 0
+            )
+          `.as("totalDuration"),
         })
         .from(sessions)
         .innerJoin(agents, eq(sessions.agentId, agents.id))
@@ -155,6 +170,21 @@ export const sessionsRouter = createTRPCRouter({
           ...getTableColumns(sessions),
           agent: agents,
           conversationCount: count(conversations.id),
+          totalDuration: sql<number>`
+            COALESCE(
+              NULLIF(
+                SUM(
+                  CASE 
+                    WHEN ${conversations.startedAt} IS NOT NULL 
+                      AND ${conversations.endedAt} IS NOT NULL 
+                      AND ${conversations.endedAt} > ${conversations.startedAt}
+                    THEN EXTRACT(EPOCH FROM (${conversations.endedAt} - ${conversations.startedAt}))
+                    ELSE 0 
+                  END
+                ), 0
+              ), 0
+            )
+          `.as("totalDuration"),
         })
         .from(sessions)
         .innerJoin(agents, eq(sessions.agentId, agents.id))

@@ -1,5 +1,5 @@
 import { ConversationStatus } from '../types';
-import type { ConversationGetMany, ConversationItem, ConversationGetOne } from '../types';
+import type { ConversationGetMany } from '../types';
 import {
   CheckCircle2,
   Clock,
@@ -117,20 +117,10 @@ export const getConversationStatusBadgeClasses = (status: ConversationStatus): s
 /**
  * Formats the duration of a conversation
  */
+import { formatDurationBetween } from "@/utils/duration";
+
 export const formatConversationDuration = (startedAt: string | null, endedAt: string | null) => {
-  if (!startedAt) return 'Not started';
-  if (!endedAt) return 'In progress';
-  
-  const start = new Date(startedAt);
-  const end = new Date(endedAt);
-  const durationMs = end.getTime() - start.getTime();
-  const minutes = Math.floor(durationMs / (1000 * 60));
-  const seconds = Math.floor((durationMs % (1000 * 60)) / 1000);
-  
-  if (minutes > 0) {
-    return `${minutes}m ${seconds}s`;
-  }
-  return `${seconds}s`;
+  return formatDurationBetween(startedAt, endedAt);
 };
 
 /**
@@ -162,10 +152,22 @@ export const isConversationJoinAvailable = <T extends { status: ConversationStat
   conversation: T,
   referenceNow: Date = new Date(),
 ) => {
+  // Never join completed/cancelled/processing conversations
+  if (
+    conversation.status === ConversationStatus.Completed ||
+    conversation.status === ConversationStatus.Cancelled ||
+    conversation.status === ConversationStatus.Processing
+  ) {
+    return false;
+  }
+
+  // Active and Available are always joinable
   if (conversation.status === ConversationStatus.Active) return true;
   if (conversation.status === ConversationStatus.Available) return true;
+
+  // For Scheduled, only joinable once within availability window
   const availableAt = conversation.availableAt ? new Date(conversation.availableAt) : null;
-  if (!availableAt) return true;
+  if (!availableAt) return false;
   return referenceNow.getTime() >= availableAt.getTime();
 };
 
