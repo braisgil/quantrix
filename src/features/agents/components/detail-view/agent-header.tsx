@@ -15,9 +15,9 @@ export const AgentHeader = ({ agent }: AgentHeaderProps) => {
   const IconComponent = getAgentIcon(agent);
   
   return (
-    <CardHeader className="text-center pb-0 sm:pb-0 px-0">
+    <CardHeader className="text-center pb-0 mb-6 sm:pb-0">
       {/* Header with Icon and Title */}
-      <div className="flex items-center justify-center gap-3 mb-4">
+      <div className="flex items-center justify-center gap-3 mb-0">
         <div className="relative matrix-glow">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center matrix-border">
           <IconComponent className="w-4 h-4 text-primary-foreground" />
@@ -44,6 +44,13 @@ export const AgentHeader = ({ agent }: AgentHeaderProps) => {
           {getSubSubcategoryName(agent.category, agent.subcategory, agent.subSubcategory)}
         </Badge>
       </div>
+
+      {/* Purpose / Description */}
+      {agent.description && (
+        <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
+          {agent.description}
+        </p>
+      )}
     </CardHeader>
   );
 }; 

@@ -1,13 +1,12 @@
-import { agents, conversations, sessions, user } from "@/db/schema";
+import { agents, conversations, sessions } from "@/db/schema";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
-import { eq, and, getTableColumns, sql, ilike, desc, inArray } from "drizzle-orm";
+import { eq, and, getTableColumns, sql, ilike, desc } from "drizzle-orm";
 import { conversationsInsertSchema } from "../schema";
 import z from "zod";
-import { ConversationStatus, StreamTranscriptItem } from "../types";
+import { ConversationStatus } from "../types";
 import { streamVideo } from "@/lib/stream-video";
 import { streamChat } from "@/lib/stream-chat";
-import JSONL from "jsonl-parse-stringify";
 
 export const conversationRouter = createTRPCRouter({
   generateChatToken: protectedProcedure.mutation(async ({ ctx }) => {
@@ -224,84 +223,7 @@ export const conversationRouter = createTRPCRouter({
         items: data,
       };
     }),
-  getTranscript: protectedProcedure
-    .input(z.object({ id: z.string() }))
-    .query(async ({ input, ctx }) => {
-      const [existingConversation] = await ctx.db
-        .select()
-        .from(conversations)
-        .where(
-          and(eq(conversations.id, input.id), eq(conversations.userId, ctx.auth.user.id))
-        );
-  
-      if (!existingConversation) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Conversation not found",
-        });
-      }
-  
-      if (!existingConversation.transcriptUrl) {
-        return [];
-      }
-  
-      const transcript = await fetch(existingConversation.transcriptUrl)
-        .then((res) => res.text())
-        .then((text) => JSONL.parse<StreamTranscriptItem>(text))
-        .catch(() => {
-          return [];
-        });
-  
-      const speakerIds = [
-        ...new Set(transcript.map((item) => item.speaker_id)),
-      ];
-  
-      const userSpeakers = await ctx.db
-        .select()
-        .from(user)
-        .where(inArray(user.id, speakerIds))
-        .then((users) =>
-          users.map((user) => ({
-            ...user,
-          }))
-        );
-  
-      const agentSpeakers = await ctx.db
-        .select()
-        .from(agents)
-        .where(inArray(agents.id, speakerIds))
-        .then((agents) =>
-          agents.map((agent) => ({
-            ...agent,
-          }))
-        );
-  
-      const speakers = [...userSpeakers, ...agentSpeakers];
-  
-      const transcriptWithSpeakers = transcript.map((item) => {
-        const speaker = speakers.find(
-          (speaker) => speaker.id === item.speaker_id
-        );
-  
-        if (!speaker) {
-          return {
-            ...item,
-            user: {
-              name: "Unknown",
-            },
-          };
-        }
-  
-        return {
-          ...item,
-          user: {
-            name: speaker.name,
-          },
-        };
-      })
-  
-      return transcriptWithSpeakers;
-    }),
+  // Removed transcript retrieval endpoint to avoid exposing raw transcripts to the client
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ input, ctx }) => {

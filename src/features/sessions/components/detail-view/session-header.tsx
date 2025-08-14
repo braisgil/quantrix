@@ -20,9 +20,9 @@ export const SessionHeader = ({ session }: SessionHeaderProps) => {
   const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
   
   return (
-    <CardHeader className="text-center pb-0 sm:pb-0">
+    <CardHeader className="text-center pb-0 mb-6 sm:pb-0">
       {/* Header with Icon and Title */}
-      <div className="flex items-center justify-center gap-3 mb-4">
+      <div className="flex items-center justify-center gap-3 mb-0">
         <div className="relative matrix-glow">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center matrix-border">
           <FolderOpen className="w-4 h-4 text-primary-foreground" />

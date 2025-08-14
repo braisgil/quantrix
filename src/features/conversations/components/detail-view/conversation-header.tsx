@@ -23,16 +23,16 @@ export const ConversationHeader: React.FC<ConversationHeaderProps> = ({ conversa
   const statusBadgeClasses = getConversationStatusBadgeClasses(effectiveStatus as ConversationStatus);
 
   return (
-    <CardHeader className="text-center pb-0 sm:pb-0 px-0">
+    <CardHeader className="text-center pb-0 mb-6 sm:pb-0">
       {/* Header with Icon and Title */}
-      <div className="flex items-center justify-center gap-3 mb-4">
+      <div className="flex items-center justify-center gap-3 mb-0">
         <div className="relative matrix-glow">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center matrix-border">
           <MessageSquare className="w-4 h-4 text-primary-foreground" />
           </div>
           <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-primary rounded-full animate-pulse"></div>
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow truncate">
+        <h1 className="text-2xl sm:text-3xl font-bold quantrix-gradient matrix-text-glow">
           {conversation.name}
         </h1>
       </div>

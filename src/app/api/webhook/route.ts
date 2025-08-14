@@ -141,24 +141,21 @@ export async function POST(req: NextRequest) {
   } else if (eventType === "call.transcription_ready") {
     const event = payload as CallTranscriptionReadyEvent;
     const conversationId = event.call_cid.split(":")[1]; // call_cid is formatted as "type:id"
+    // Verify conversation exists, but do not persist transcript URL in DB
+    const [existingConversation] = await db
+      .select()
+      .from(conversations)
+      .where(eq(conversations.id, conversationId));
 
-    const [updatedConversation] = await db
-      .update(conversations)
-      .set({
-        transcriptUrl: event.call_transcription.url,
-      })
-      .where(eq(conversations.id, conversationId))
-      .returning();
-
-    if (!updatedConversation) {
+    if (!existingConversation) {
       return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
     }
 
     await inngest.send({
       name: "conversations/processing",
       data: {
-        conversationId: updatedConversation.id,
-        transcriptUrl: updatedConversation.transcriptUrl,
+        conversationId: existingConversation.id,
+        transcriptUrl: event.call_transcription.url,
       },
     });
   } else if (eventType === "call.recording_ready") {
