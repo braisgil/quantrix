@@ -18,27 +18,39 @@ const AgentStatsCards: React.FC<AgentStatsCardsProps> = ({
       {/* Ultra-compact stats bar for mobile/tablet */}
       <div className="lg:hidden">
         <Card className="matrix-card shadow-none">
-          <CardContent className="p-2 sm:p-3">
-            <div className="grid grid-cols-3 divide-x divide-border">
-              <div className="flex items-center justify-center gap-1 px-1">
-                <Bot className="w-3 h-3 text-primary" />
-                <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-semibold text-primary">{activeAgents}</span>
-                  <span className="text-xs text-muted-foreground">Agents</span>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-primary/10 rounded-lg matrix-glow">
+                  <Bot className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <div className="text-base sm:text-lg font-bold text-primary">{activeAgents}</div>
+                  <div className="text-xs text-muted-foreground">Agents</div>
                 </div>
               </div>
-              <div className="flex items-center justify-center gap-1 px-1">
-                <Phone className="w-3 h-3 text-primary" />
-                <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-semibold text-primary">{totalConversations}</span>
-                  <span className="text-xs text-muted-foreground">Convos</span>
+              
+              <div className="w-px h-12 bg-border/30"></div>
+              
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-primary/10 rounded-lg matrix-glow">
+                  <Phone className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <div className="text-base sm:text-lg font-bold text-primary">{totalConversations}</div>
+                  <div className="text-xs text-muted-foreground">Convos</div>
                 </div>
               </div>
-              <div className="flex items-center justify-center gap-1 px-1">
-                <Clock className="w-3 h-3 text-primary" />
-                <div className="flex flex-col leading-tight">
-                  <span className="text-sm font-semibold text-primary">{totalDurationFormatted}</span>
-                  <span className="text-xs text-muted-foreground">Duration</span>
+              
+              <div className="w-px h-12 bg-border/30"></div>
+              
+              <div className="flex items-center space-x-2">
+                <div className="p-2 bg-primary/10 rounded-lg matrix-glow">
+                  <Clock className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <div className="text-base sm:text-lg font-bold text-primary">{totalDurationFormatted}</div>
+                  <div className="text-xs text-muted-foreground">Time</div>
                 </div>
               </div>
             </div>
