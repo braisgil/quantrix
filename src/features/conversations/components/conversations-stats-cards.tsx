@@ -27,13 +27,6 @@ const ConversationsStatsCards: React.FC<ConversationsStatsCardsProps> = ({
       color: 'text-blue-500',
     },
     {
-      title: 'Active',
-      value: activeConversations,
-      icon: Play,
-      description: 'Currently running',
-      color: 'text-green-500',
-    },
-    {
       title: 'Completed',
       value: completedConversations,
       icon: CheckCircle,
