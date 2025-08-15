@@ -24,5 +24,13 @@ export {
   isValidCustomRule,
 } from './custom-rule-helpers';
 
+// Category search helpers
+export {
+  searchCategories,
+  highlightSearchTerm,
+  getSearchMatchSummary,
+} from './category-search';
+
 // Types
 export type { CustomRuleOption } from './custom-rule-helpers';
+export type { CategorySearchResult } from './category-search';

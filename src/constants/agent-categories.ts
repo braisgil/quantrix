@@ -77,12 +77,22 @@ export const AGENT_CATEGORIES = {
             id: "emerging-technologies",
             name: "Emerging Technologies",
             options: [
-              "Machine Learning Fundamentals", "Deep Learning with TensorFlow", "AI Ethics & Applications",
-              "Blockchain Development", "Cryptocurrency Understanding", "IoT Device Programming",
-              "Cloud Computing AWS/Azure", "DevOps & CI/CD Pipelines", "Docker Containerization",
-              "Kubernetes Orchestration", "Cybersecurity Fundamentals", "Ethical Hacking Basics",
-              "Quantum Computing Concepts", "AR/VR Development", "Game Development Unity",
-              "Data Science with Python", "Big Data Analytics", "Automation & Scripting"
+              "Machine Learning Fundamentals", "Deep Learning with TensorFlow/PyTorch", "AI Ethics & Applications",
+              "Large Language Models (LLMs)", "Computer Vision Applications", "Natural Language Processing",
+              "Generative AI & Creative Tools", "AI Agent Development", "Prompt Engineering Mastery",
+              "Custom AI Model Training", "MLOps & Model Deployment", "Reinforcement Learning",
+              "Blockchain Development", "Web3 & Decentralized Apps", "Smart Contract Programming",
+              "Cryptocurrency Trading & Analysis", "NFT Creation & Marketing", "DeFi Protocol Understanding",
+              "IoT Device Programming", "Edge Computing", "5G Technology Applications",
+              "Cloud Computing AWS/Azure/GCP", "Serverless Architecture", "Microservices Design",
+              "DevOps & CI/CD Pipelines", "Docker Containerization", "Kubernetes Orchestration",
+              "Infrastructure as Code", "Site Reliability Engineering", "Cloud Security Best Practices",
+              "Cybersecurity Fundamentals", "Ethical Hacking & Penetration Testing", "Zero Trust Architecture",
+              "Information Security Management", "Digital Forensics", "Threat Intelligence",
+              "Quantum Computing Concepts", "AR/VR/MR Development", "Metaverse Platform Creation",
+              "Game Development Unity/Unreal", "Data Science with Python/R", "Big Data Analytics",
+              "Automation & Scripting", "Robotic Process Automation", "Low-Code/No-Code Development",
+              "API Development & Integration", "Headless CMS Development", "Progressive Web Apps"
             ]
           }
         }
@@ -167,12 +177,36 @@ export const AGENT_CATEGORIES = {
             id: "digital-design",
             name: "Digital Design",
             options: [
-              "UI/UX Design Principles", "Graphic Design Mastery", "Web Design Modern Trends",
-              "Brand Identity Creation", "Digital Illustration", "3D Modeling & Animation",
-              "Video Editing Professional", "Motion Graphics", "Game Art Design",
-              "Architectural Visualization", "Product Design Innovation", "Typography Excellence",
-              "Color Theory Application", "Design Thinking Process", "Photoshop Advanced Techniques",
-              "Adobe Creative Suite Mastery", "Figma Design Systems", "Blender 3D Creation"
+              "UI/UX Design Principles", "User Research & Testing", "Design Systems Creation",
+              "Graphic Design Mastery", "Brand Identity Creation", "Logo Design Psychology",
+              "Web Design Modern Trends", "Responsive Design Mobile-First", "Accessibility Design",
+              "Digital Illustration", "Character Design", "Concept Art Creation",
+              "3D Modeling & Animation", "Blender 3D Creation", "Cinema 4D Mastery",
+              "Video Editing Professional", "After Effects Animation", "Motion Graphics",
+              "Social Media Design Templates", "Content Creator Graphics", "Thumbnail Design",
+              "Game Art Design", "NFT Art Creation", "Digital Asset Design",
+              "Architectural Visualization", "Product Design Innovation", "Packaging Design",
+              "Typography Excellence", "Font Design Custom", "Lettering & Calligraphy",
+              "Color Theory Application", "Design Thinking Process", "Creative Problem Solving",
+              "Photoshop Advanced Techniques", "Adobe Creative Suite Mastery", "Figma Design Systems",
+              "Canva Pro Techniques", "Procreate Digital Art", "AI-Assisted Design Tools"
+            ]
+          },
+          "content-creation": {
+            id: "content-creation",
+            name: "Content Creation & Digital Media",
+            options: [
+              "YouTube Channel Strategy", "Video Content Planning", "Live Streaming Setup",
+              "Podcast Production Complete", "Audio Editing & Mixing", "Voice Over Training",
+              "Social Media Content Strategy", "Instagram Reels Creation", "TikTok Content Mastery",
+              "LinkedIn Content Marketing", "Twitter/X Engagement", "Pinterest Marketing",
+              "Blog Writing & SEO", "Newsletter Creation", "Email Course Development",
+              "Online Course Creation", "Educational Content Design", "Webinar Hosting",
+              "Photography for Content", "Smartphone Photography", "Photo Editing Mobile",
+              "Influencer Brand Building", "Personal Brand Strategy", "Community Management",
+              "Content Calendar Planning", "Viral Content Psychology", "Audience Growth Strategies",
+              "Monetization Strategies", "Sponsorship Negotiations", "Affiliate Marketing Content",
+              "Stock Content Creation", "Template & Resource Design", "Digital Product Creation"
             ]
           },
           "photography-media": {
@@ -275,9 +309,13 @@ export const AGENT_CATEGORIES = {
               "Team Leadership Excellence", "Project Management PMP Style", "Change Management",
               "Performance Management", "Conflict Resolution Workplace", "Decision Making Frameworks",
               "Strategic Planning", "Budget Management", "Risk Assessment", "Quality Management",
-              "Agile Management Practices", "Remote Team Leadership", "Cross-Cultural Management",
-              "Innovation Management", "Crisis Leadership", "Succession Planning", "Mentoring Skills",
-              "Executive Presence", "Board Presentation Skills", "Organizational Development"
+              "Agile Management Practices",               "Remote Team Leadership", "Hybrid Team Leadership", "Digital Collaboration Tools",
+              "Cross-Cultural Management", "Distributed Team Communication", "Asynchronous Work Management",
+              "Innovation Management", "Design Thinking Leadership", "Digital Transformation",
+              "Crisis Leadership", "Business Continuity Planning", "Remote Crisis Management",
+              "Succession Planning", "Mentoring Skills", "Reverse Mentoring Programs",
+              "Executive Presence", "Virtual Executive Presence", "Board Presentation Skills",
+              "Organizational Development", "Change Management Digital Age", "Culture Building Remote Teams"
             ]
           },
           "industry-expertise": {
@@ -350,11 +388,128 @@ export const AGENT_CATEGORIES = {
             id: "stress-anxiety-management",
             name: "Stress & Anxiety Support",
             options: [
-              "Mindfulness Meditation Daily", "Cognitive Behavioral Techniques", "Breathing Exercises Advanced",
+              "Mindfulness Meditation Daily", "Guided Meditation Apps", "Body Scan Techniques",
+              "Cognitive Behavioral Techniques", "Dialectical Behavior Therapy Skills", "Acceptance & Commitment Therapy",
+              "Breathing Exercises Advanced", "4-7-8 Breathing Method", "Box Breathing Techniques",
               "Progressive Muscle Relaxation", "Anxiety Coping Strategies", "Panic Attack Management",
-              "Workplace Stress Reduction", "Sleep Hygiene Optimization", "Time Management Stress",
-              "Social Anxiety Solutions", "Test Anxiety Strategies", "Performance Anxiety", "PTSD Support",
-              "Trauma-Informed Self-Care", "Resilience Building", "Emotional Regulation"
+              "Workplace Stress Reduction", "Remote Work Stress Management", "Burnout Prevention",
+              "Sleep Hygiene Optimization", "Digital Sunset Routines", "Screen Time & Sleep",
+              "Time Management Stress", "Digital Overwhelm Solutions", "Information Overload Management",
+              "Social Anxiety Solutions", "Virtual Social Anxiety", "Online Communication Confidence",
+              "Test Anxiety Strategies", "Performance Anxiety", "Imposter Syndrome Solutions",
+              "PTSD Support", "Trauma-Informed Self-Care", "Secondary Trauma Prevention",
+              "Resilience Building", "Emotional Regulation", "Stress Inoculation Training",
+              "Digital Detox Strategies", "Social Media Mental Health", "News Consumption Balance"
+            ]
+          },
+          "digital-wellness": {
+            id: "digital-wellness",
+            name: "Digital Wellness & Technology Balance",
+            options: [
+              "Screen Time Management", "Digital Detox Planning", "Healthy Tech Boundaries",
+              "Social Media Wellness", "FOMO & Comparison Management", "Online Bullying Recovery",
+              "Gaming Addiction Support", "Internet Usage Balance", "Smartphone Addiction Recovery",
+              "Digital Minimalism", "Tech-Free Zones Creation", "Mindful Technology Use",
+              "Online Privacy Protection", "Digital Identity Management", "Cyberbullying Prevention",
+              "Remote Work-Life Balance", "Virtual Meeting Fatigue", "Email Overwhelm Solutions",
+              "Children's Screen Time", "Family Tech Agreements", "Digital Parenting Strategies",
+              "Information Diet Planning", "News Anxiety Management", "Algorithm Awareness",
+              "Digital Sabbath Planning", "Tech Neck Prevention", "Blue Light Management",
+              "Online Learning Balance", "Virtual Relationship Health", "Digital Communication Skills"
+            ]
+          },
+          "depression-support": {
+            id: "depression-support",
+            name: "Depression Support & Mood Health",
+            options: [
+              "Understanding Depression", "CBT for Depression Techniques", "Behavioral Activation Planning",
+              "Mood Tracking & Journaling", "Routine Building & Structure", "Sleep & Depression Management",
+              "Exercise for Mood Support", "Nutrition & Mood Basics", "Self-Compassion Practices",
+              "Managing Rumination", "Challenging Negative Thoughts", "Cognitive Restructuring",
+              "Anhedonia Recovery Strategies", "Seasonal Affective Disorder Support", "Motivation Reboot",
+              "Crisis/Safety Planning", "When to Seek Professional Help", "Medication Adherence Support (Non-Clinical)",
+              "Mindfulness for Depression", "Meaning & Purpose Exploration"
+            ]
+          },
+          "grief-bereavement": {
+            id: "grief-bereavement",
+            name: "Grief & Bereavement",
+            options: [
+              "Understanding Grief Models", "Coping with Acute Grief", "Complicated Grief Signs",
+              "Rituals & Memorialization", "Anniversaries & Triggers", "Supporting Grieving Children",
+              "Grief After Breakup/Divorce", "Pregnancy & Infant Loss Support", "Pet Loss Grief",
+              "Workplace Grief Navigation", "Community & Support Groups", "Storytelling & Memory Work",
+              "Letters & Unsent Conversations", "Meaning Reconstruction", "Self-Care During Grief",
+              "Returning to Daily Life", "Spiritual & Values-Based Support", "Cultural Grief Practices"
+            ]
+          },
+          "loneliness-connection": {
+            id: "loneliness-connection",
+            name: "Loneliness & Social Connection",
+            options: [
+              "Understanding Loneliness", "Identifying Isolation Patterns", "Social Anxiety Overlap",
+              "Building Social Micro-Habits", "Joining Communities & Clubs", "Volunteering for Connection",
+              "Hobby-Based Socializing", "Initiating Contact Skills", "Follow-Up & Keep-in-Touch Systems",
+              "Weekly Social Routines", "From Online to Offline Safely", "Setting Boundaries While Connecting",
+              "Compassion & Self-Talk for Loneliness", "Cognitive Reframing", "Gratitude & Savoring Practices",
+              "Loneliness at Work", "Urban Loneliness Strategies", "Finding Your People"
+            ]
+          },
+          "conversation-skills": {
+            id: "conversation-skills",
+            name: "Conversation Skills & Socialising",
+            options: [
+              "Small Talk Starters", "Asking Better Questions", "Active Listening Techniques",
+              "Reflective & Empathic Responses", "Storytelling for Connection", "Maintaining Conversation Threads",
+              "Turn-Taking & Pausing", "Nonverbal Communication", "Reading Social Cues",
+              "Assertive Yet Kind Communication", "Humor Calibration", "Group Conversation Dynamics",
+              "Meeting New People Comfortably", "Networking Event Skills", "House Party Navigation",
+              "Online Chat Etiquette", "Texting Cadence & Tone", "Graceful Conversation Exits"
+            ]
+          },
+          "addiction-recovery": {
+            id: "addiction-recovery",
+            name: "Addiction Recovery & Habit Change",
+            options: [
+              "Understanding Addiction Cycle", "Stages of Change (Transtheoretical)", "Triggers & Cravings Plan",
+              "Urge Surfing Techniques", "Delay/Distraction/Decision Skills", "Relapse Prevention Planning",
+              "High-Risk Situations Mapping", "Sober Support Systems", "Accountability Structures",
+              "Harm Reduction Strategies", "Recovery Routines & Rituals", "Sleep & Recovery",
+              "Nutrition & Recovery Support", "Movement & Stress Relief", "Mindfulness in Recovery",
+              "Values-Based Living (ACT)", "Replacing Addictive Habits", "Digital Addiction Boundaries",
+              "Alcohol Moderation/Abstinence Tools", "Nicotine Cessation Planning",
+              "Gambling Harm Reduction", "Pornography & Compulsive Behavior Boundaries",
+              "When to Seek Professional Help", "Mutual Aid Groups Overview (AA/SMART/etc)"
+            ]
+          },
+          "anxiety-advanced": {
+            id: "anxiety-advanced",
+            name: "Anxiety Advanced Skills",
+            options: [
+              "Worry Time Scheduling", "Cognitive Defusion (ACT)", "Exposure Hierarchies Design",
+              "Interoceptive Exposure", "Safety Behaviors Reduction", "Intolerance of Uncertainty Work",
+              "Perfectionism & Anxiety", "Health Anxiety Tools", "OCD Basics & ERP Introduction",
+              "Social Anxiety Exposure Planning", "Public Speaking Desensitization", "Driving/Travel Anxiety Steps",
+              "Panic Cycle Education", "Dizziness & Breath Sensations Work", "Grounding Techniques Advanced",
+              "Compassion-Focused Techniques", "Acceptance vs Control Strategies", "Values-Oriented Actions",
+              "Relapse Prevention for Anxiety", "Progress Tracking & Reflection"
+            ]
+          },
+          "relationship-therapy": {
+            id: "relationship-therapy",
+            name: "Couples & Relationship Therapy Skills",
+            options: [
+              "Attachment Styles in Relationships", "Emotionally Focused Therapy (EFT) Concepts", "Primary vs Secondary Emotions",
+              "Gottman Method Foundations", "Love Maps & Bids for Connection", "Turning Toward vs Away",
+              "Four Horsemen & Antidotes", "Softened Start-Up & Repair Attempts", "Conflict De-escalation Tools",
+              "Nonviolent Communication (NVC) Skills", "Needs & Requests Language", "Fair Fighting Agreements",
+              "Listening to Understand", "Reflect/Validate/Empathize", "Time-outs & Reconnection Protocols",
+              "Gridlock to Dialogue", "Perpetual vs Solvable Problems", "Win-Win Compromise Frameworks",
+              "Trust & Commitment Building", "Shared Meaning & Rituals of Connection", "Weekly Relationship Meetings",
+              "Rebuilding Intimacy & Desire", "Desire Discrepancy Coaching", "Affair Recovery (Non-Clinical)",
+              "Financial Conversations Without Gridlock", "Household Roles & Mental Load", "Co-Parenting Alignment",
+              "Long-Distance Relationship Rituals", "Cultural/Religious Differences Navigation", "Major Life Transitions Planning",
+              "Prenuptial / Pre-commitment Checkups", "Values Alignment Exercises", "Boundary Setting as a Couple"
             ]
           },
           "personal-development": {
@@ -377,6 +532,104 @@ export const AGENT_CATEGORIES = {
               "Social Skills Development", "Networking Personal", "Community Engagement",
               "Elder Care Support", "Grief & Loss Processing", "Divorce Recovery", "Co-Parenting",
               "Blended Family Harmony", "Cultural Sensitivity"
+            ]
+          }
+        }
+      },
+      "sexual-health": {
+        id: "sexual-health",
+        name: "Sexual Health & Wellbeing",
+        description: "Improve sexual health, communication, safety, and intimacy with inclusive, evidence-informed guidance",
+        subSubcategories: {
+          "sexual-education": {
+            id: "sexual-education",
+            name: "Sexual Education & Body Literacy",
+            options: [
+              "Anatomy & Body Literacy", "Physiology & Arousal Basics", "Puberty & Lifespan Changes",
+              "Pleasure Education Basics", "Desire vs Arousal", "Myths & Misconceptions",
+              "Inclusive Sexual Education", "Disability-Inclusive Sexuality", "Cultural Considerations"
+            ]
+          },
+          "consent-communication": {
+            id: "consent-communication",
+            name: "Consent & Communication",
+            options: [
+              "Consent Models (FRIES)", "Boundary Setting & Respect", "Safer Sex Negotiation",
+              "Talking About Preferences", "Giving & Receiving Feedback", "Navigating Rejection Kindly",
+              "Difficult Conversations", "Aftercare & Check-Ins", "Repairing Misunderstandings"
+            ]
+          },
+          "sti-prevention": {
+            id: "sti-prevention",
+            name: "STI Prevention & Testing Basics",
+            options: [
+              "STI Overview & Risk Reduction", "Condoms & Barriers Usage", "Testing & Screening Planning",
+              "Vaccinations (HPV/Hepatitis) Overview", "Disclosure & Communication", "Resources & Clinics",
+              "PrEP/PEP Basics (Informational)", "Symptom Awareness & Timelines", "Partner Notification Basics"
+            ]
+          },
+          "contraception-fertility": {
+            id: "contraception-fertility",
+            name: "Contraception & Fertility Awareness",
+            options: [
+              "Contraception Methods Overview", "Choosing a Method Factors", "Pill/Patch/Ring Basics",
+              "IUD/Implant Basics", "Barrier Methods", "Emergency Contraception Basics",
+              "Fertility Awareness Methods", "Cycle Tracking & Ovulation", "Preconception Health Basics"
+            ]
+          },
+          
+          "sexual-function": {
+            id: "sexual-function",
+            name: "Sexual Function & Performance",
+            options: [
+              "Low Desire/Loss of Libido", "Erectile Difficulties Basics", "Premature Ejaculation Strategies",
+              "Delayed Ejaculation Basics", "Anorgasmia Basics", "Pain with Sex (Informational)",
+              "Pelvic Floor Basics", "Performance Anxiety Tools", "Mind-Body Approaches"
+            ]
+          },
+          "intimacy-relationships": {
+            id: "intimacy-relationships",
+            name: "Intimacy & Relationship Skills",
+            options: [
+              "Attachment Styles & Intimacy", "Building Emotional Safety", "Desire Discrepancy Navigation",
+              "Scheduling Intimacy Kindly", "Novelty & Exploration", "Reconnecting After Conflict",
+              "Healing After Betrayal (Non-Clinical)", "Long-Term Intimacy Maintenance", "Affection & Love Languages"
+            ]
+          },
+          "lgbtq-health": {
+            id: "lgbtq-health",
+            name: "LGBTQ+ Sexual Health",
+            options: [
+              "Inclusive Safer Sex", "Orientation & Identity Basics", "Coming Out Considerations",
+              "Gender-Affirming Language & Respect", "Affirming Relationships", "Community Resources & Support",
+              "Safer Practices by Activity", "Healthcare Navigation Basics", "Allyship & Inclusivity"
+            ]
+          },
+          "wellness-lifestyle": {
+            id: "wellness-lifestyle",
+            name: "Lifestyle & Sexual Wellbeing",
+            options: [
+              "Sleep, Exercise & Libido", "Stress Reduction for Intimacy", "Nutrition & Sexual Health Basics",
+              "Body Image & Confidence", "Mindfulness & Sensate Focus", "Breathwork & Arousal Regulation",
+              "Substance Use & Sexual Health", "Medication Side Effects (Informational)", "Self-Care & Recovery"
+            ]
+          },
+          "digital-boundaries": {
+            id: "digital-boundaries",
+            name: "Digital Intimacy & Boundaries",
+            options: [
+              "Sexting Consent & Safety", "Privacy & Data Protection", "Revenge Porn Laws (Overview)",
+              "Sharing Images Ethically", "Porn Use & Habit Boundaries", "Dating App Safety & Etiquette",
+              "Digital Consent & Records", "Online Harassment Response", "Breakup & Digital Boundaries"
+            ]
+          },
+          "pregnancy-postpartum-sex": {
+            id: "pregnancy-postpartum-sex",
+            name: "Sex During Pregnancy & Postpartum",
+            options: [
+              "Body Changes & Comfort", "Medical Clearance Considerations (Informational)", "Birth Control Postpartum Basics",
+              "Pelvic Floor & Recovery Basics", "Communication Through Changes", "Gradual Return to Intimacy",
+              "Sleep, Fatigue & Desire", "Co-Parenting & Intimacy", "Support & Resources"
             ]
           }
         }
@@ -476,6 +729,56 @@ export const AGENT_CATEGORIES = {
           }
         }
       },
+      "modern-life-skills": {
+        id: "modern-life-skills",
+        name: "Digital Citizenship & Modern Skills",
+        description: "Navigate the digital world safely and effectively",
+        subSubcategories: {
+          "digital-literacy": {
+            id: "digital-literacy",
+            name: "Digital Citizenship & Information Literacy",
+            options: [
+              "Information Literacy Skills", "Fact-Checking & Verification", "Source Evaluation",
+              "Media Literacy Critical Thinking", "Fake News Detection", "Bias Recognition",
+              "Digital Research Methods", "Academic Source Evaluation", "Data Interpretation",
+              "Online Safety & Privacy", "Password Management", "Two-Factor Authentication",
+              "Phishing & Scam Prevention", "Identity Theft Protection", "Safe Social Media",
+              "Digital Footprint Management", "Online Reputation Building", "Privacy Settings",
+              "Children's Online Safety", "Digital Parenting", "Screen Time Guidelines",
+              "Cyberbullying Prevention", "Online Harassment Response", "Digital Citizenship Ethics",
+              "AI Literacy & Understanding", "Algorithm Awareness", "Bot Detection",
+              "Deepfake Recognition", "Digital Manipulation Awareness", "Tech Terms Understanding"
+            ]
+          },
+          "modern-communication": {
+            id: "modern-communication",
+            name: "Modern Communication Skills",
+            options: [
+              "Video Conferencing Mastery", "Virtual Presentation Skills", "Online Meeting Etiquette",
+              "Digital Collaboration Tools", "Remote Team Communication", "Asynchronous Communication",
+              "Email Productivity Systems", "Slack & Teams Mastery", "Project Management Tools",
+              "Digital Networking Skills", "LinkedIn Professional Use", "Online Relationship Building",
+              "Cross-Cultural Digital Communication", "Time Zone Management", "Virtual Event Planning",
+              "Online Customer Service", "Live Chat Management", "Social Media Customer Support",
+              "Digital Conflict Resolution", "Online Mediation Skills", "Virtual Crisis Communication"
+            ]
+          },
+          "life-management": {
+            id: "life-management",
+            name: "Modern Life Management",
+            options: [
+              "Digital Organization Systems", "Cloud Storage Management", "File Naming Systems",
+              "Productivity Apps Mastery", "Task Management Systems", "Calendar Optimization",
+              "Digital Minimalism", "App Decluttering", "Notification Management",
+              "Online Service Management", "Subscription Auditing", "Digital Estate Planning",
+              "Gig Economy Navigation", "Freelance Platform Mastery", "Side Hustle Management",
+              "Online Learning Optimization", "Virtual Skill Building", "Remote Certification",
+              "Digital Health Management", "Telemedicine Usage", "Health App Integration",
+              "Smart Home Management", "IoT Device Security", "Home Automation"
+            ]
+          }
+        }
+      },
       "travel-culture": {
         id: "travel-culture",
         name: "Travel & Cultural Exploration",
@@ -485,11 +788,16 @@ export const AGENT_CATEGORIES = {
             id: "travel-planning",
             name: "Travel Planning & Experiences",
             options: [
-              "Budget Travel Strategies", "Solo Travel Safety", "Family Travel Planning", "Cultural Etiquette Global",
-              "Photography Travel Tips", "Language Basics Survival", "Adventure Travel Planning",
-              "Sustainable Tourism", "Food Tourism Culture", "Historical Site Exploration",
-              "Local Experience Discovery", "Travel Insurance Guide", "Packing Optimization",
-              "Jet Lag Management", "Travel Technology Apps", "Emergency Travel Preparedness"
+              "Trip Itinerary Design", "Route Optimization & Hubs", "Seasonality & Weather Planning",
+              "Budget Travel Strategies", "Backpacking & Hostels", "Points/Miles & Award Travel",
+              "Solo Travel Safety", "Women Solo Travel Considerations", "Family Travel Planning",
+              "Multi-Generational Trips", "Accessible Travel Planning", "Pet-Friendly Travel",
+              "Cultural Etiquette Global", "Language Basics Survival", "Local Experience Discovery",
+              "Photography Travel Tips", "Food Tourism Culture", "Historical Site Exploration",
+              "Sustainable Tourism", "Eco-Friendly Stays & Transport", "Overtourism Avoidance",
+              "Travel Insurance Guide", "Packing Optimization", "Luggage Systems & Lists",
+              "Jet Lag Management", "Travel Technology Apps", "eSIMs & Connectivity Abroad",
+              "Emergency Travel Preparedness", "Document Safety & Copies"
             ]
           },
           "cultural-studies": {
@@ -535,6 +843,66 @@ export const AGENT_CATEGORIES = {
               "Storytelling Interactive", "Historical Role Playing", "Fantasy World Building",
               "Mystery Solving Games", "Adventure Planning", "Comedy Writing & Performance",
               "Magic Tricks & Illusions", "Cosplay Design & Creation", "Fan Fiction Writing"
+            ]
+          },
+          "cruises": {
+            id: "cruises",
+            name: "Cruises & Sea Travel",
+            options: [
+              "Choosing Cruise Lines", "River vs Ocean Cruises", "Cabin Selection Strategy",
+              "Shore Excursions Planning", "Sea Sickness Prevention", "Gratuities & Onboard Budgeting",
+              "Family & Multi-Gen Cruises", "Solo Cruising Tips", "Themed Cruises",
+              "Environmental Considerations", "Port Days Optimization", "Carry-On vs Checked for Cruises"
+            ]
+          },
+          "regions-europe": {
+            id: "regions-europe",
+            name: "Europe Travel Focus",
+            options: [
+              "Schengen & Borders Basics", "Rail Passes & Trains", "Budget Airlines & Baggage Rules",
+              "City Breaks Planning", "Mediterranean Islands", "Alpine Adventures",
+              "Eastern Europe Highlights", "Nordic Itineraries", "UK & Ireland Road/Train Trips",
+              "Museums & Cultural Passes", "Food Regions & Markets", "Christmas Markets Planning"
+            ]
+          },
+          "regions-americas": {
+            id: "regions-americas",
+            name: "Americas Travel Focus",
+            options: [
+              "US National Parks Road Trips", "City Passes & Transit", "Cross-Country Rail & Drives",
+              "Canada Rockies & Maritimes", "Mexico Beaches & Culture", "Central America Routes",
+              "South America Highlights", "Andes & Patagonia", "Amazon & Rainforest Considerations",
+              "Festivals & Events Planning", "Visa/ESTA/ETA Basics (Informational)", "Tipping & Etiquette"
+            ]
+          },
+          "regions-asia-africa-oceania": {
+            id: "regions-asia-africa-oceania",
+            name: "Asia, Africa & Oceania Travel Focus",
+            options: [
+              "Southeast Asia Routes", "Japan Rail & Etiquette", "China Highlights & Transport",
+              "India Golden Triangle & Beyond", "Middle East Stopovers & Culture", "East Africa Safaris Basics",
+              "North Africa Cities & Deserts", "Sub-Saharan Road Trips", "Australia East/West Coasts",
+              "New Zealand North/South Islands", "Pacific Islands Hopping", "Overland Border Crossings"
+            ]
+          },
+          "luxury-travel": {
+            id: "luxury-travel",
+            name: "Luxury & Premium Travel",
+            options: [
+              "Luxury Hotel Programs & Perks", "Business/First Award Booking", "Private Tours & Guides",
+              "Fine Dining & Reservations", "Wellness Retreats", "High-End Safari Planning",
+              "Yacht & Private Charter Basics", "Luxury Trains & Journeys", "Concierge & VIP Services",
+              "Travel Insurance for Luxury Trips", "Security & Privacy Considerations", "Sustainable Luxury"
+            ]
+          },
+          "budget-travel": {
+            id: "budget-travel",
+            name: "Backpacking & Budget Optimization",
+            options: [
+              "Ultra-Light Packing", "Budget Accommodations", "Street Food Safety", "Public Transport Mastery",
+              "Night Buses & Trains", "Hitchhiking Safety Basics", "Work Exchange & Volunteering",
+              "Slow Travel & Long Stays", "Digital Nomad Visas (Informational)", "Co-working & Wi-Fi Reliability",
+              "Travel Hacking Basics", "Error Fares & Deal Hunting", "Daily Budget Tracking"
             ]
           }
         }
@@ -608,12 +976,23 @@ export const AGENT_CATEGORIES = {
             id: "sports-recreation",
             name: "Sports & Recreation",
             options: [
-              "Golf Technique Improvement", "Tennis Strategy & Form", "Basketball Skills Development",
-              "Soccer Tactics & Training", "Baseball Statistics Analysis", "Football Strategy Understanding",
+              "Football (Soccer) Conversations & Analysis", "Basketball Conversations & Analysis", "American Football Discussions",
+              "Baseball Conversations & Sabermetrics", "Tennis Tours & Tactics", "Golf Tours & Strategy",
+              "Basketball Skills Development", "Soccer Tactics & Training", "Football Strategy Understanding",
+              "Tennis Strategy & Form", "Golf Technique Improvement", "Cricket Batting & Bowling Fundamentals",
+              "Coaching Practice Planning", "Game Strategy & Adjustments", "Set Plays & Inbounds Design",
+              "Press Break & Zone Offense", "High Press & Build-Up Play", "Special Teams Strategy",
+              "Right Equipment Selection", "Shoe & Cleat Fitting", "Rackets & String Tension Guidance",
+              "Golf Club Fitting Basics", "Protective Gear Selection", "Wearables & Fitness Trackers",
+              "Sports Analytics & Data", "Expected Goals (xG) & Models", "Basketball Advanced Metrics (PER/TS%)",
+              "American Football Analytics (EPA/Success Rate)", "Baseball Sabermetrics (wOBA/FIP)", "Tennis Match Data Insights",
+              "Sport-Specific Conditioning", "Speed & Agility Training", "In-Season vs Off-Season Planning",
+              "Team Sports Psychology", "Pre-Game Routines", "Clutch Performance Mindset",
+              "Officiating & Rules Interpretation", "Video Review & VAR/Replay", "Referee Fitness & Positioning",
+              "Sports Injury Prevention", "Warm-Up & Cool-Down Protocols", "Load Management & Recovery",
               "Swimming Stroke Perfection", "Cycling Performance Training", "Running Form & Endurance",
               "Martial Arts Philosophy", "Boxing Training Basics", "Yoga Advanced Poses",
-              "Dance Styles Learning", "Team Sports Psychology", "Sports Injury Prevention",
-              "Officiating & Coaching", "Sports History & Records", "Fantasy Sports Strategy"
+              "Dance Styles Learning", "Sports History & Records", "Fantasy Sports Strategy"
             ]
           }
         }
@@ -676,6 +1055,46 @@ export const AGENT_CATEGORIES = {
               "Health & Safety Regulations", "Financial Regulation Basics", "International Trade Law",
               "Antitrust & Competition Law", "Securities Law Overview", "Government Contracting"
             ]
+          },
+          "immigration-citizenship": {
+            id: "immigration-citizenship",
+            name: "Immigration, Visas & Citizenship",
+            options: [
+              "Visa Categories Overview", "Work Permit Pathways", "Study Visa Requirements",
+              "Family Reunification Routes", "Temporary vs Permanent Residency", "Points-Based Systems Basics",
+              "Sponsorship & Proof of Funds", "Document Checklist & Translations", "Apostille & Notarization",
+              "Biometrics Appointment Preparation", "Medical Exam Preparation", "Background Checks",
+              "Right to Work Verification", "Travel & Re-Entry Rules", "Bridging Visas & Overstays Basics",
+              "Asylum & Refugee Process Overview", "Immigration Interview Preparation", "Request for Evidence Response Tips",
+              "Schengen Visa Basics", "EU Settlement Scheme Overview", "UK Visa Routes (Skilled/Graduate/Talent) Basics",
+              "USCIS Forms Overview (I-130/I-485)", "Canada Express Entry Basics", "Australia Points System Overview"
+            ]
+          },
+          "bureaucracy-setup": {
+            id: "bureaucracy-setup",
+            name: "Bureaucracy & Administrative Setup",
+            options: [
+              "Local Residence Registration", "Tax Number/National Insurance Setup", "Healthcare Registration (GP/National)",
+              "Bank Account Opening Requirements", "Driver's License Exchange & IDP", "Public Transport Cards & Passes",
+              "Utilities Setup (Electricity/Water/Gas)", "Internet & Mobile Contracts", "Local Authority/Municipal Appointments",
+              "School Enrollment & Records", "Insurance Basics (Health/Liability)", "Police/Foreigners Registration",
+              "Certified Translations Workflow", "Apostille & Notarization Process", "Address Change Procedures",
+              "Voter Registration/Electoral Roll", "Council/Local Taxes & Fees", "Digital ID & Government Portals",
+              "Appointment Booking Strategies", "Document Storage & Checklists"
+            ]
+          },
+          "civics-naturalisation": {
+            id: "civics-naturalisation",
+            name: "Civics & Naturalisation Exam Prep",
+            options: [
+              "Life in the UK Test Overview", "Life in the UK Sample Questions", "UK Settlement/Naturalisation Basics",
+              "US Civics Test (100 Questions) Prep", "N-400 Interview Preparation", "US Civics Flashcards & Drills",
+              "Canada Citizenship Test Prep", "Rights & Responsibilities Study", "Provincial/Territorial Facts",
+              "Germany Einbürgerungstest Basics", "State/Länder Facts Study", "Integration Course Overview",
+              "Spain CCSE Exam Basics", "DELE Language Requirement Overview", "France Citizenship Interview Prep Basics",
+              "Australia Citizenship Test Prep", "Civics Practice Tests & Quizzes", "Study Plans & Flashcards",
+              "Language Requirements & Tests", "Good Character & Residence Basics", "Ceremony Expectations & Checklist"
+            ]
           }
         }
       },
@@ -702,6 +1121,77 @@ export const AGENT_CATEGORIES = {
               "Technology Ethics AI/Privacy", "Research Ethics Human Subjects", "Media Ethics Journalism",
               "Professional Ethics Codes", "Global Ethics Cultural Sensitivity", "Animal Ethics Rights",
               "Bioethics Genetic Engineering", "Neuroethics Brain Research", "Digital Ethics Online Behavior"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "sustainability-environment": {
+    id: "sustainability-environment",
+    name: "Sustainability & Environmental Action",
+    description: "Build a sustainable future through environmental awareness and actionable solutions",
+    subcategories: {
+      "environmental-awareness": {
+        id: "environmental-awareness",
+        name: "Environmental Understanding",
+        description: "Develop deep understanding of environmental challenges and solutions",
+        subSubcategories: {
+          "climate-science": {
+            id: "climate-science",
+            name: "Climate Science & Policy",
+            options: [
+              "Climate Change Science", "Carbon Footprint Analysis", "Greenhouse Gas Understanding",
+              "Climate Policy Analysis", "Paris Agreement Implementation", "Carbon Trading Systems",
+              "Climate Risk Assessment", "Weather Pattern Changes", "Ocean Acidification",
+              "Renewable Energy Systems", "Energy Transition Planning", "Grid Modernization",
+              "Climate Adaptation Strategies", "Resilience Building", "Disaster Preparedness",
+              "Environmental Justice", "Climate Equity Issues", "Green New Deal Policies"
+            ]
+          },
+          "biodiversity-conservation": {
+            id: "biodiversity-conservation",
+            name: "Biodiversity & Conservation",
+            options: [
+              "Ecosystem Services Understanding", "Wildlife Conservation", "Habitat Restoration",
+              "Endangered Species Protection", "Marine Conservation", "Forest Management",
+              "Urban Biodiversity", "Pollinator Protection", "Invasive Species Management",
+              "Conservation Technology", "Wildlife Tracking", "Genetic Diversity",
+              "Sustainable Agriculture", "Permaculture Design", "Regenerative Farming",
+              "Rewilding Projects", "Community Conservation", "Indigenous Conservation Practices"
+            ]
+          }
+        }
+      },
+      "sustainable-living": {
+        id: "sustainable-living",
+        name: "Sustainable Lifestyle",
+        description: "Implement sustainable practices in daily life and community",
+        subSubcategories: {
+          "personal-sustainability": {
+            id: "personal-sustainability",
+            name: "Personal Environmental Action",
+            options: [
+              "Zero Waste Lifestyle", "Plastic Reduction Strategies", "Sustainable Shopping",
+              "Energy Efficiency Home", "Water Conservation", "Sustainable Transportation",
+              "Eco-Friendly Products", "Minimalist Living", "Repair & Upcycling",
+              "Composting & Gardening", "Urban Gardening", "Container Gardening",
+              "Sustainable Fashion", "Ethical Consumption", "Local Food Systems",
+              "Green Technology Adoption", "Smart Home Energy", "Electric Vehicle Transition",
+              "Carbon Offset Programs", "Personal Sustainability Tracking", "Environmental Activism"
+            ]
+          },
+          "green-business": {
+            id: "green-business",
+            name: "Sustainable Business Practices",
+            options: [
+              "Corporate Sustainability", "ESG Reporting", "Sustainable Supply Chains",
+              "Circular Economy Business", "Green Marketing Ethics", "Sustainable Finance",
+              "Life Cycle Assessment", "Environmental Management Systems", "Green Certifications",
+              "Renewable Energy Business", "Sustainable Product Design", "Waste Reduction Business",
+              "Green Building Design", "LEED Certification", "Carbon Neutral Business",
+              "Environmental Impact Measurement", "Stakeholder Engagement", "Sustainability Communication",
+              "Green Innovation", "Cleantech Investment", "Impact Investing"
             ]
           }
         }
