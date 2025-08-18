@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import ConfirmDialog from "@/components/confirm-dialog";
-import { FolderOpen, MessageSquare, Clock, Bot, ExternalLink, Trash2 } from "lucide-react";
+import { FolderOpen, MessageSquare, Clock, Bot, ExternalLink, Trash2, Loader2 } from "lucide-react";
 import { formatAgentTotalDuration } from "@/features/agents/utils/agent-helpers";
 import type { SessionList } from "../../types";
 import { SessionStatus } from "../../types";
+import Link from "next/link";
 import { 
   getSessionStatusIcon, 
   getSessionStatusColor, 
@@ -22,14 +23,16 @@ interface SessionListItemProps {
   isDeleting?: boolean;
 }
 
-export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: SessionListItemProps) => {
+export const SessionListItem = ({ session, onDelete, isDeleting }: SessionListItemProps) => {
   const StatusIcon = getSessionStatusIcon(session.status as SessionStatus);
   const statusColor = getSessionStatusColor(session.status as SessionStatus);
   const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
-  const handleConfigure = () => {
-    onConfigure?.(session);
+  const handleView = () => {
+    if (isNavigating) return;
+    setIsNavigating(true);
   };
 
   const handleDelete = () => {
@@ -88,13 +91,21 @@ export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: 
       
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 sm:ml-6">
         <Button
+          asChild
           size="sm"
-          onClick={handleConfigure}
+          onClick={handleView}
           variant="view"
           className="font-semibold w-full sm:w-auto"
+          disabled={isNavigating}
         >
-          <ExternalLink className="w-4 h-4" />
-          <span className="ml-2 sm:hidden">View</span>
+          <Link href={`/sessions/${session.id}`}>
+            {isNavigating ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <ExternalLink className="w-4 h-4" />
+            )}
+            <span className="ml-2 sm:hidden">{isNavigating ? 'Loading…' : 'View'}</span>
+          </Link>
         </Button>
 
         <ConfirmDialog
@@ -113,7 +124,7 @@ export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: 
             className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
             disabled={isDeleting}
           >
-            <Trash2 className="w-4 h-4" />
+            {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
             <span className="ml-2 sm:hidden">{isDeleting ? 'Deleting...' : 'Delete'}</span>
           </Button>
         </ConfirmDialog>

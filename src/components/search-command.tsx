@@ -44,6 +44,8 @@ export const DashboardCommand = ({ open, setOpen }: Props) => {
   const showResults = isDebouncedSearchActive && !showLoading;
 
   const handleNavigation = (path: string) => {
+    // Emit a programmatic navigation start so the global progress UI shows up
+    window.dispatchEvent(new Event('quantrix:navigation-start'));
     router.push(path);
     setOpen(false);
   };
