@@ -23,14 +23,14 @@ interface SessionListItemProps {
   isDeleting?: boolean;
 }
 
-export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: SessionListItemProps) => {
+export const SessionListItem = ({ session, onDelete, isDeleting }: SessionListItemProps) => {
   const StatusIcon = getSessionStatusIcon(session.status as SessionStatus);
   const statusColor = getSessionStatusColor(session.status as SessionStatus);
   const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
 
-  const handleConfigure = () => {
+  const handleView = () => {
     if (isNavigating) return;
     setIsNavigating(true);
   };
@@ -93,7 +93,7 @@ export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: 
         <Button
           asChild
           size="sm"
-          onClick={handleConfigure}
+          onClick={handleView}
           variant="view"
           className="font-semibold w-full sm:w-auto"
           disabled={isNavigating}
@@ -124,7 +124,7 @@ export const SessionListItem = ({ session, onConfigure, onDelete, isDeleting }: 
             className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
             disabled={isDeleting}
           >
-            <Trash2 className="w-4 h-4" />
+            {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
             <span className="ml-2 sm:hidden">{isDeleting ? 'Deleting...' : 'Delete'}</span>
           </Button>
         </ConfirmDialog>

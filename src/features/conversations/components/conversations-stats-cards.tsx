@@ -13,7 +13,6 @@ interface ConversationsStatsCardsProps {
 
 const ConversationsStatsCards: React.FC<ConversationsStatsCardsProps> = ({
   totalConversations,
-  activeConversations,
   completedConversations,
   scheduledConversations,
   availableConversations,

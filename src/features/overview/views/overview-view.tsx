@@ -78,7 +78,7 @@ export const OverviewView = () => {
     });
   };
 
-  const sessionsStats = (() => {
+  const _sessionsStats = (() => {
     const totalSessions = sessions.length;
     const activeSessions = sessions.filter(s => s.status === 'active').length;
     const completedSessions = sessions.filter(s => s.status === 'completed').length;

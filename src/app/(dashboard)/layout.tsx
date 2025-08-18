@@ -7,6 +7,7 @@ import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
 import { Navbar } from '@/components/layout/navbar';
 import { SidebarCustom } from '@/components/layout/sidebar';
 import { GlobalErrorBoundary } from '@/components/error-boundary/global-error-boundary';
+import { NavigationProgress } from '@/components/navigation-progress';
 
 export default function DashboardLayout({
   children,
@@ -36,6 +37,7 @@ export default function DashboardLayout({
 
   return (
     <GlobalErrorBoundary>
+      <NavigationProgress />
       <SidebarProvider>
         <div className="flex min-h-screen w-full matrix-bg">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 blur-3xl pointer-events-none z-10"></div>

@@ -79,7 +79,7 @@ export function NavigationProgress() {
       <div className={`fixed inset-x-0 top-0 z-[100] transition-opacity duration-200 ${active ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
         <div className="relative h-0.5 sm:h-1 w-full overflow-hidden bg-primary/15 dark:bg-primary/20">
           <div
-            className="absolute inset-y-0 left-0 w-1/3 rounded-full bg-gradient-to-r from-primary/0 via-primary to-primary/0 opacity-90"
+            className="absolute inset-y-0 left-0 w-full rounded-full bg-gradient-to-r from-primary/0 via-primary to-primary/0 opacity-90"
             style={{ animation: 'navProgress 1.1s ease-in-out infinite' }}
           />
         </div>
@@ -95,8 +95,8 @@ export function NavigationProgress() {
 
       <style jsx>{`
         @keyframes navProgress {
-          0% { transform: translateX(-30%); }
-          100% { transform: translateX(130%); }
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
         }
       `}</style>
     </>

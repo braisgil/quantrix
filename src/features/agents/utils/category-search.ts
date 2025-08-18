@@ -1,7 +1,15 @@
 import { AGENT_CATEGORIES, type AgentCategoryId } from "../../../constants/agent-categories";
 
 type CategoryType = typeof AGENT_CATEGORIES[keyof typeof AGENT_CATEGORIES];
-type SubcategoryType = { name: string; description: string; subSubcategories?: Record<string, any> };
+type SubcategoryType = { 
+  name: string; 
+  description: string; 
+  subSubcategories?: Record<string, SubSubcategoryType> 
+};
+type SubSubcategoryType = { 
+  name: string; 
+  options?: string[] 
+};
 
 export interface CategorySearchResult {
   categoryId: AgentCategoryId;
@@ -57,7 +65,7 @@ export function searchCategories(searchTerm: string): CategorySearchResult[] {
     }
 
     // Check subcategories
-    for (const [subcategoryId, subcategory] of Object.entries(typedCategory.subcategories)) {
+    for (const [_subcategoryId, subcategory] of Object.entries(typedCategory.subcategories)) {
       const typedSubcategory = subcategory as SubcategoryType;
       const subcategoryMatches = 
         typedSubcategory.name.toLowerCase().includes(normalizedSearchTerm) ||
@@ -73,8 +81,8 @@ export function searchCategories(searchTerm: string): CategorySearchResult[] {
 
       // Check subSubcategories
       if (typedSubcategory.subSubcategories) {
-        for (const [subSubcategoryId, subSubcategory] of Object.entries(typedSubcategory.subSubcategories)) {
-          const typedSubSubcategory = subSubcategory as any; // Using any due to complex nested typing
+        for (const [_subSubcategoryId, subSubcategory] of Object.entries(typedSubcategory.subSubcategories)) {
+          const typedSubSubcategory = subSubcategory as SubSubcategoryType;
           const subSubcategoryMatches = 
             typedSubSubcategory.name?.toLowerCase().includes(normalizedSearchTerm);
 

@@ -27,7 +27,7 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
 
-  const handleConfigure = () => {
+  const handleView = () => {
     if (isNavigating) return;
     setIsNavigating(true);
   };
@@ -95,7 +95,7 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
           variant="view"
           className="font-semibold w-full sm:w-auto"
           disabled={isNavigating}
-          onClick={handleConfigure}
+          onClick={handleView}
         >
           <Link href={`/agents/${agent.id}`}>
             {isNavigating ? (
@@ -127,7 +127,7 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
             className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
             disabled={isDeleting}
           >
-            <Trash2 className="w-4 h-4" />
+            {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
             <span className="ml-2 sm:hidden">{isDeleting ? 'Deleting...' : 'Delete'}</span>
           </Button>
         </ConfirmDialog>

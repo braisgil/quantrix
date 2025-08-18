@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import ConfirmDialog from '@/components/confirm-dialog';
 import { Clock, ExternalLink, Calendar, Bot, Trash2, PhoneCall, Loader2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import type { ConversationList } from '../../types';
 import { ConversationStatus } from '../../types';
@@ -28,7 +27,6 @@ interface ConversationListItemProps {
 
 const ConversationListItem: React.FC<ConversationListItemProps> = ({
   conversation,
-  onViewConversation,
   onDelete,
   isDeleting,
 }) => {
@@ -40,7 +38,16 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isViewNavigating, setIsViewNavigating] = useState(false);
   const [isCallNavigating, setIsCallNavigating] = useState(false);
-  const router = useRouter();
+
+  const handleView = () => {
+    if (isViewNavigating) return;
+    setIsViewNavigating(true);
+  };
+
+  const handleCall = () => {
+    if (isCallNavigating) return;
+    setIsCallNavigating(true);
+  };
 
   const handleDelete = () => {
     onDelete?.(conversation);
@@ -103,10 +110,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
         <Button
           asChild
           size="sm"
-          onClick={() => {
-            if (isViewNavigating) return;
-            setIsViewNavigating(true);
-          }}
+          onClick={handleView}
           variant="view"
           className="font-semibold w-full sm:w-auto"
           disabled={isViewNavigating}
@@ -128,10 +132,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
             variant="call"
             className="font-semibold w-full sm:w-auto"
             disabled={isCallNavigating}
-            onClick={(e) => {
-              if (isCallNavigating) return;
-              setIsCallNavigating(true);
-            }}
+            onClick={handleCall}
           >
             <Link href={`/call/${conversation.id}`}>
               {isCallNavigating ? (
@@ -161,7 +162,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
               className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
               disabled={isDeleting}
             >
-              <Trash2 className="w-4 h-4" />
+              {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
               <span className="ml-2 sm:hidden">{isDeleting ? 'Deleting...' : 'Delete'}</span>
             </Button>
           </ConfirmDialog>

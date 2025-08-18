@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ConfirmDialog from '@/components/confirm-dialog';
-import { Trash2 } from 'lucide-react';
+import { Loader2, Trash2 } from 'lucide-react';
 
 interface AgentActionButtonsProps {
   agentName: string;
@@ -46,8 +46,7 @@ export const AgentActionButtons = ({
             className="bg-destructive hover:bg-destructive/90 text-white font-semibold w-full sm:w-auto"
             disabled={isDeleting}
           >
-            <Trash2 className="h-4 w-4 mr-2" />
-            <span>{isDeleting ? 'Deleting...' : 'Delete'}</span>
+            {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
           </Button>
         </ConfirmDialog>
       )}
