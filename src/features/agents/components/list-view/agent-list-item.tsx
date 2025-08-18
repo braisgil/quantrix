@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import ConfirmDialog from '@/components/confirm-dialog';
-import { Clock, MessageSquare, Sparkles, Brain, Target, ExternalLink, Trash2 } from 'lucide-react';
+import { Clock, MessageSquare, Sparkles, Brain, Target, ExternalLink, Trash2, Loader2 } from 'lucide-react';
 import type { AgentItem } from '../../types';
 import { getAgentIcon, formatAgentTotalDuration } from '../../utils/agent-helpers';
 import { formatCategoryName, getSubSubcategoryName } from '../../utils/category-helpers';
+import Link from 'next/link';
 // mutations are handled by parent; this component is presentational
 
 interface AgentListItemProps {
@@ -18,15 +19,17 @@ interface AgentListItemProps {
 
 const AgentListItem: React.FC<AgentListItemProps> = ({ 
   agent, 
-  onConfigure,
+  onConfigure: _onConfigure,
   onDelete,
   isDeleting,
 }) => {
   const IconComponent = getAgentIcon(agent);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const handleConfigure = () => {
-    onConfigure?.(agent);
+    if (isNavigating) return;
+    setIsNavigating(true);
   };
 
   const handleDelete = () => {
@@ -87,13 +90,21 @@ const AgentListItem: React.FC<AgentListItemProps> = ({
       
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 sm:ml-6">
         <Button 
+          asChild
           size="sm" 
           variant="view"
           className="font-semibold w-full sm:w-auto"
+          disabled={isNavigating}
           onClick={handleConfigure}
         >
-          <ExternalLink className="w-4 h-4" />
-          <span className="ml-2 sm:hidden">View</span>
+          <Link href={`/agents/${agent.id}`}>
+            {isNavigating ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <ExternalLink className="w-4 h-4" />
+            )}
+            <span className="ml-2 sm:hidden">{isNavigating ? 'Loading…' : 'View'}</span>
+          </Link>
         </Button>
         
         <ConfirmDialog

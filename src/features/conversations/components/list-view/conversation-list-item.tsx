@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import ConfirmDialog from '@/components/confirm-dialog';
-import { Clock, ExternalLink, Calendar, Bot, Trash2, PhoneCall } from 'lucide-react';
+import { Clock, ExternalLink, Calendar, Bot, Trash2, PhoneCall, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import type { ConversationList } from '../../types';
 import { ConversationStatus } from '../../types';
@@ -37,6 +38,9 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
   const duration = formatConversationDuration(conversation.startedAt, conversation.endedAt);
   const StatusIcon = getConversationIcon(conversation.status as ConversationStatus);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isViewNavigating, setIsViewNavigating] = useState(false);
+  const [isCallNavigating, setIsCallNavigating] = useState(false);
+  const router = useRouter();
 
   const handleDelete = () => {
     onDelete?.(conversation);
@@ -97,13 +101,24 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
       
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 mt-4 sm:mt-0 sm:ml-6">
         <Button
+          asChild
           size="sm"
-          onClick={() => onViewConversation(conversation)}
+          onClick={() => {
+            if (isViewNavigating) return;
+            setIsViewNavigating(true);
+          }}
           variant="view"
           className="font-semibold w-full sm:w-auto"
+          disabled={isViewNavigating}
         >
-          <ExternalLink className="w-4 h-4" />
-          <span className="ml-2 sm:hidden">View</span>
+          <Link href={`/conversations/${conversation.id}`}>
+            {isViewNavigating ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <ExternalLink className="w-4 h-4" />
+            )}
+            <span className="ml-2 sm:hidden">{isViewNavigating ? 'Loading…' : 'View'}</span>
+          </Link>
         </Button>
         
         {(conversation.status === ConversationStatus.Available || (conversation.status === ConversationStatus.Scheduled && isConversationJoinAvailable(conversation))) && (
@@ -112,10 +127,19 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
             size="sm"
             variant="call"
             className="font-semibold w-full sm:w-auto"
+            disabled={isCallNavigating}
+            onClick={(e) => {
+              if (isCallNavigating) return;
+              setIsCallNavigating(true);
+            }}
           >
             <Link href={`/call/${conversation.id}`}>
-              <PhoneCall className="w-4 h-4" />
-              <span className="ml-2 sm:hidden">Start</span>
+              {isCallNavigating ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <PhoneCall className="w-4 h-4" />
+              )}
+              <span className="ml-2 sm:hidden">{isCallNavigating ? 'Opening…' : 'Start'}</span>
             </Link>
           </Button>
         )}

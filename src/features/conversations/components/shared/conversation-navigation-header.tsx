@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ConversationActionButtons } from '../detail-view/conversation-action-buttons';
 
 type ConversationNavigationHeaderProps =
@@ -32,28 +32,31 @@ export const ConversationNavigationHeader: React.FC<ConversationNavigationHeader
   isDeleting,
   conversationName,
 }) => {
-  const router = useRouter();
-
-  const handleBackClick = () => {
-    if (onCancel) {
-      onCancel();
-    } else if (sessionId) {
-      router.push(`/sessions/${sessionId}`);
-    } else {
-      router.push('/sessions');
-    }
-  };
+  const backHref = sessionId ? `/sessions/${sessionId}` : '/sessions';
 
   return (
     <div className="flex items-center justify-between">
-      <Button 
-        variant="ghost" 
-        onClick={handleBackClick}
-        className="text-muted-foreground hover:text-foreground flex items-center gap-2"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        {sessionId ? 'Back to Session' : 'Back to Sessions'}
-      </Button>
+      {onCancel ? (
+        <Button 
+          variant="ghost" 
+          onClick={onCancel}
+          className="text-muted-foreground hover:text-foreground flex items-center gap-2"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          {sessionId ? 'Back to Session' : 'Back to Sessions'}
+        </Button>
+      ) : (
+        <Button 
+          asChild
+          variant="ghost"
+          className="text-muted-foreground hover:text-foreground flex items-center gap-2"
+        >
+          <Link href={backHref}>
+            <ArrowLeft className="w-4 h-4" />
+            {sessionId ? 'Back to Session' : 'Back to Sessions'}
+          </Link>
+        </Button>
+      )}
       {onDelete && (
         <ConversationActionButtons conversationName={conversationName} onDeleteConversation={onDelete} isDeleting={isDeleting} />
       )}
