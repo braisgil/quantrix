@@ -2,9 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Sparkles, MessageSquare } from "lucide-react";
-import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useTRPC } from "@/trpc/client";
+import type { z } from "zod";
+import type { conversationsInsertSchema } from "../../../schema";
 
 // Import refactored components
 import { useConversationWizard } from "../hooks/use-conversation-wizard";
@@ -21,15 +20,14 @@ interface ConversationWizardProps {
   sessionName: string;
   /** The agent ID associated with the session */
   agentId: string;
-  /** Callback when conversation is successfully created */
-  onSuccess?: () => void;
   /** Callback when user cancels the wizard */
   onCancel?: () => void;
+  /** Submit handler provided by parent */
+  onSubmit?: (data: z.infer<typeof conversationsInsertSchema>) => void;
+  isSubmitting?: boolean;
 }
 
-export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess, onCancel }: ConversationWizardProps) => {
-  const queryClient = useQueryClient();
-  const trpc = useTRPC();
+export const ConversationWizard = ({ sessionId, sessionName, agentId, onCancel, onSubmit, isSubmitting }: ConversationWizardProps) => {
   
   const {
     currentStep,
@@ -37,35 +35,10 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
     updateWizardState,
     nextStep,
     prevStep,
-    resetWizard,
     getFormData,
   } = useConversationWizard({ sessionId, agentId });
 
   const { canProceed } = useStepValidation(wizardState);
-
-  const createConversationMutation = useMutation(
-    trpc.conversations.create.mutationOptions({
-      onSuccess: async (_, variables) => {
-        await queryClient.invalidateQueries(
-          trpc.sessions.getSessionConversations.queryOptions({ sessionId })
-        );
-        await queryClient.invalidateQueries(
-          trpc.premium.getUsage.queryOptions()
-        );
-        const isScheduled = Boolean(variables.scheduledDateTime);
-        toast.success(
-          isScheduled
-            ? "Your conversation has been scheduled successfully!"
-            : "Your conversation is available now!"
-        );
-        resetWizard();
-        onSuccess?.();
-      },
-      onError: (error) => {
-        toast.error(error.message || "Failed to create your conversation");
-      },
-    })
-  );
 
   const handleNext = () => {
     if (canProceed(currentStep)) {
@@ -75,7 +48,9 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
 
   const handleSubmit = () => {
     const formData = getFormData();
-    createConversationMutation.mutate(formData);
+    if (onSubmit) {
+      onSubmit(formData);
+    }
   };
 
   const renderCurrentStep = () => {
@@ -189,11 +164,11 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
               ) : (
                 <Button 
                   onClick={handleSubmit}
-                  disabled={!canSubmit || createConversationMutation.isPending}
+                  disabled={!canSubmit || isSubmitting}
                   size="sm"
                   className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
                 >
-                  {createConversationMutation.isPending ? (
+                  {isSubmitting ? (
                     <>
                       <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
                       <span>Scheduling...</span>
@@ -229,11 +204,11 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
             ) : (
                 <Button 
                   onClick={handleSubmit}
-                  disabled={!canSubmit || createConversationMutation.isPending}
+                  disabled={!canSubmit || isSubmitting}
                   size="sm"
                   className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
                 >
-                  {createConversationMutation.isPending ? (
+                  {isSubmitting ? (
                     <>
                       <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
                       <span>Saving...</span>

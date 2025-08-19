@@ -24,11 +24,6 @@ export const useSessionWizard = () => {
     setCurrentStep((prev) => Math.max(prev - 1, 0));
   }, []);
 
-  const resetWizard = useCallback(() => {
-    setCurrentStep(0);
-    setWizardState(initialWizardState);
-  }, []);
-
   const getFormData = useCallback((): SessionsInsertSchema => {
     return {
       name: wizardState.name,
@@ -43,7 +38,6 @@ export const useSessionWizard = () => {
     updateWizardState,
     nextStep,
     prevStep,
-    resetWizard,
     getFormData,
   };
 };

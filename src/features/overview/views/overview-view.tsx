@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { useQueryAgents } from '@/features/agents/api/use-query-agents';
@@ -18,7 +17,6 @@ import type { SessionItem } from '@/features/sessions/types';
 import { useDeleteSession } from '@/features/sessions/api/use-delete-session';
 
 export const OverviewView = () => {
-  const router = useRouter();
 
   // Agents data and actions
   const { data: agentsData } = useQueryAgents();
@@ -26,10 +24,6 @@ export const OverviewView = () => {
   const { activeAgents, totalConversations: totalAgentConversations, totalDurationFormatted } = calculateAgentStats(agents);
   const deleteAgentMutation = useDeleteAgent();
   const [deletingAgentId, setDeletingAgentId] = useState<string | undefined>(undefined);
-
-  const handleConfigureAgent = (agent: AgentItem) => {
-    router.push(`/agents/${agent.id}`);
-  };
 
   const handleDeleteAgent = (agent: AgentItem) => {
     setDeletingAgentId(agent.id);
@@ -66,10 +60,6 @@ export const OverviewView = () => {
   const hasSessions = sessions.length > 0;
   const deleteSessionMutation = useDeleteSession();
   const [deletingSessionId, setDeletingSessionId] = useState<string | undefined>(undefined);
-
-  const handleConfigureSession = (session: SessionItem) => {
-    router.push(`/sessions/${session.id}`);
-  };
 
   const handleDeleteSession = (session: SessionItem) => {
     setDeletingSessionId(session.id);
@@ -116,7 +106,6 @@ export const OverviewView = () => {
         {hasAgents ? (
           <AgentsList
             agents={agents}
-            onConfigureAgent={handleConfigureAgent}
             onDeleteAgent={handleDeleteAgent}
             deletingAgentId={deletingAgentId}
           />
@@ -130,7 +119,6 @@ export const OverviewView = () => {
         <div>
           <SessionsList
             sessions={sessions.slice(0, 5)}
-            onConfigureSession={handleConfigureSession}
             onDeleteSession={handleDeleteSession}
             deletingSessionId={deletingSessionId}
           />

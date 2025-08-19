@@ -12,14 +12,12 @@ import Link from 'next/link';
 
 interface AgentListItemProps {
   agent: AgentItem;
-  onConfigure?: (agent: AgentItem) => void;
   onDelete?: (agent: AgentItem) => void;
   isDeleting?: boolean;
 }
 
 const AgentListItem: React.FC<AgentListItemProps> = ({ 
   agent, 
-  onConfigure: _onConfigure,
   onDelete,
   isDeleting,
 }) => {

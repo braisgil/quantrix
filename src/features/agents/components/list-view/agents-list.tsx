@@ -5,14 +5,12 @@ import { AgentListItem } from './agent-list-item';
 
 interface AgentsListProps {
   agents: AgentList;
-  onConfigureAgent?: (agent: AgentItem) => void;
   onDeleteAgent?: (agent: AgentItem) => void;
   deletingAgentId?: string;
 }
 
 const AgentsList: React.FC<AgentsListProps> = ({ 
   agents, 
-  onConfigureAgent,
   onDeleteAgent,
   deletingAgentId,
 }) => {
@@ -33,7 +31,6 @@ const AgentsList: React.FC<AgentsListProps> = ({
           <AgentListItem
             key={agent.id}
             agent={agent}
-            onConfigure={onConfigureAgent}
             onDelete={onDeleteAgent}
             isDeleting={deletingAgentId === agent.id}
           />

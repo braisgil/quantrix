@@ -10,6 +10,7 @@ import {
   SessionChatCard
 } from '../components/detail-view';
 import { ConversationWizard } from "@/features/conversations/components/wizard/components/conversation-wizard";
+import { useCreateConversation } from "@/features/conversations/api/use-create-conversation";
 import { useWizardState } from "../hooks/use-wizard-state";
 import { useDeleteConversation } from "@/features/conversations/api/use-delete-conversation";
 import { useState } from "react";
@@ -36,6 +37,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   const deleteConversationMutation = useDeleteConversation({ sessionId });
   const [deletingConversationId, setDeletingConversationId] = useState<string | undefined>(undefined);
   const deleteSessionMutation = useDeleteSession();
+  const createConversationMutation = useCreateConversation({ sessionId });
 
   const handleCreateConversation = () => {
     openWizard();
@@ -70,8 +72,15 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
         sessionId={sessionId}
         sessionName={session.name}
         agentId={session.agentId}
-        onSuccess={closeWizard}
         onCancel={closeWizard}
+        onSubmit={(data) => {
+          createConversationMutation.mutate(data, {
+            onSuccess: () => {
+              closeWizard();
+            },
+          });
+        }}
+        isSubmitting={createConversationMutation.isPending}
       />
     );
   }

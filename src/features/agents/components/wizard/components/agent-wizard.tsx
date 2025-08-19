@@ -3,11 +3,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2, Circle, Zap } from "lucide-react";
-import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useTRPC } from "@/trpc/client";
-
-// Import refactored components
 import { useAgentWizard } from "../hooks/use-agent-wizard";
 import { useStepValidation } from "../hooks/use-step-validation";
 import { StepBasicInfo } from "./steps/step-basic-info";
@@ -19,45 +14,25 @@ import { STEP_CONFIGS, getTotalSteps } from "../lib/step-config";
 import { getProgressPercentage } from "../lib/wizard-utils";
 import { cn } from "@/lib/utils";
 import { AgentNavigationHeader } from "../../shared/agent-navigation-header";
+import type { AgentInsert } from "@/features/agents/schema";
 
 interface AgentWizardProps {
-  onSuccess?: () => void;
   onCancel?: () => void;
+  onSubmit?: (data: AgentInsert) => void;
+  isSubmitting?: boolean;
 }
 
-export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
-  const queryClient = useQueryClient();
-  const trpc = useTRPC();
-  
+export const AgentWizard = ({ onCancel, onSubmit, isSubmitting }: AgentWizardProps) => {
   const {
     currentStep,
     wizardState,
     updateWizardState,
     nextStep,
     prevStep,
-    resetWizard,
     getFormData,
   } = useAgentWizard();
 
   const { canProceed } = useStepValidation(wizardState);
-
-  const createAgentMutation = useMutation(
-    trpc.agents.create.mutationOptions({
-    onSuccess: async () => {
-      await queryClient.invalidateQueries(
-        trpc.agents.getMany.queryOptions({})
-      );
-      await queryClient.invalidateQueries(
-        trpc.premium.getUsage.queryOptions()
-      );
-      toast.success("Your AI companion has been created successfully!");
-      resetWizard();
-      onSuccess?.();
-    },
-    onError: (error) => {
-      toast.error(error.message || "Failed to create your AI companion");
-    },
-  }));
 
   const handleNext = () => {
     if (canProceed(currentStep)) {
@@ -67,7 +42,9 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
 
   const handleSubmit = () => {
     const formData = getFormData();
-    createAgentMutation.mutate(formData);
+    if (onSubmit) {
+      onSubmit(formData);
+    }
   };
 
   const renderCurrentStep = () => {
@@ -223,11 +200,11 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
               ) : (
                 <Button 
                   onClick={handleSubmit}
-                  disabled={!canSubmit || createAgentMutation.isPending}
+                  disabled={!canSubmit || isSubmitting}
                   size="sm"
                   className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
                 >
-                  {createAgentMutation.isPending ? (
+                  {isSubmitting ? (
                     <>
                       <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
                       <span>Creating...</span>
@@ -263,11 +240,11 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
             ) : (
               <Button 
                 onClick={handleSubmit}
-                disabled={!canSubmit || createAgentMutation.isPending}
+                disabled={!canSubmit || isSubmitting}
                 size="sm"
                 className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
               >
-                {createAgentMutation.isPending ? (
+                {isSubmitting ? (
                   <>
                     <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
                     <span>Creating...</span>

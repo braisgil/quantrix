@@ -6,6 +6,7 @@ import { useQueryAgents } from "@/features/agents/api/use-query-agents";
 import { SessionsListHeader } from "../components/list-view/session-list-header";
 import { SessionsList } from "../components/list-view/sessions-list";
 import { SessionWizard } from "../components/wizard/components/session-wizard";
+import { useCreateSession } from "../api/use-create-session";
 import { SessionsEmptyState } from "../components/list-view/sessions-empty-state";
 import { useWizardState } from "../hooks/use-wizard-state";
 import { SessionItem } from "../types";
@@ -26,6 +27,7 @@ export const SessionListView = () => {
   const hasSessions = sessions.length > 0;
   const deleteSessionMutation = useDeleteSession();
   const [deletingSessionId, setDeletingSessionId] = useState<string | undefined>(undefined);
+  const createSessionMutation = useCreateSession();
 
   const handleCreateSession = () => {
     if (hasAgents) {
@@ -38,15 +40,18 @@ export const SessionListView = () => {
   if (showWizard) {
     return (
       <SessionWizard
-        onSuccess={closeWizard}
         onCancel={closeWizard}
+        onSubmit={(data) => {
+          createSessionMutation.mutate(data, {
+            onSuccess: () => {
+              closeWizard();
+            },
+          });
+        }}
+        isSubmitting={createSessionMutation.isPending}
       />
     );
   }
-
-  const handleConfigureSession = (session: SessionItem) => {
-    router.push(`/sessions/${session.id}`);
-  };
 
   const handleDeleteSession = (session: SessionItem) => {
     setDeletingSessionId(session.id);
@@ -64,7 +69,6 @@ export const SessionListView = () => {
       {hasSessions ? (
       <SessionsList
         sessions={sessions}
-        onConfigureSession={handleConfigureSession}
         onDeleteSession={handleDeleteSession}
         deletingSessionId={deletingSessionId}
       />
