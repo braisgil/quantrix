@@ -7,6 +7,7 @@ const AUTH_ROUTES = ['/sign-in', '/sign-up']
 const PROTECTED_ROUTE_PREFIXES = [
   '/agents',
   '/sessions',
+  '/upgrade',
   '/overview',
   '/call'
 ]

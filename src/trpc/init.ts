@@ -4,6 +4,10 @@ import { LRUCache } from 'lru-cache';
 import { headers } from 'next/headers';
 import { cache } from 'react';
 import { db } from '@/db';
+import { polarClient } from '@/lib/polar';
+import { agents, conversations, sessions } from '@/db/schema';
+import { MAX_FREE_AGENTS, MAX_FREE_CONVERSATIONS, MAX_FREE_SESSIONS } from '@/constants/premium';
+import { count, eq } from 'drizzle-orm';
 
 export const createTRPCContext = cache(async () => {
   /**
@@ -43,6 +47,116 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
 
   return next({ ctx: { ...ctx, auth: ctx.session } });
 });
+
+export const premiumProcedure = (entity: 'agents' | 'sessions' | 'conversations') =>
+  protectedProcedure.use(async ({ ctx, next }) => {
+    const customer = await polarClient.customers.getStateExternal({
+      externalId: ctx.auth.user.id,
+    });
+
+    const isFreeTier = customer.activeSubscriptions.length === 0;
+
+    const [agentRow] = await ctx.db
+      .select({ count: count(agents.id) })
+      .from(agents)
+      .where(eq(agents.userId, ctx.auth.user.id));
+
+    const [sessionRow] = await ctx.db
+      .select({ count: count(sessions.id) })
+      .from(sessions)
+      .where(eq(sessions.userId, ctx.auth.user.id));
+
+    const [conversationRow] = await ctx.db
+      .select({ count: count(conversations.id) })
+      .from(conversations)
+      .where(eq(conversations.userId, ctx.auth.user.id));
+
+    if (isFreeTier) {
+      const isFreeAgentLimitReached = agentRow.count >= MAX_FREE_AGENTS;
+      const isFreeSessionLimitReached = sessionRow.count >= MAX_FREE_SESSIONS;
+      const isFreeConversationLimitReached = conversationRow.count >= MAX_FREE_CONVERSATIONS;
+
+      const shouldThrowAgentError = entity === 'agents' && isFreeAgentLimitReached;
+      const shouldThrowSessionError = entity === 'sessions' && isFreeSessionLimitReached;
+      const shouldThrowConversationError = entity === 'conversations' && isFreeConversationLimitReached;
+
+      if (shouldThrowAgentError) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'You have reached the maximum number of free agents',
+        });
+      }
+      if (shouldThrowSessionError) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'You have reached the maximum number of free sessions',
+        });
+      }
+      if (shouldThrowConversationError) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'You have reached the maximum number of free conversations',
+        });
+      }
+    }
+
+    // eslint-disable-next-line no-debugger
+    debugger
+
+    return next({ ctx: { ...ctx, customer } });
+
+/*
+    // If user has any active subscription, allow
+    const isPremium = customer.activeSubscriptions.length > 0;
+    if (isPremium) {
+      return next({ ctx: { ...ctx, customer } });
+    }
+
+    // Count current usage for free users
+    const [agentRow] = await ctx.db
+      .select({ count: count(agents.id) })
+      .from(agents)
+      .where(eq(agents.userId, ctx.auth.user.id));
+
+    const [sessionRow] = await ctx.db
+      .select({ count: count(sessions.id) })
+      .from(sessions)
+      .where(eq(sessions.userId, ctx.auth.user.id));
+
+    const [conversationRow] = await ctx.db
+      .select({ count: count(conversations.id) })
+      .from(conversations)
+      .where(eq(conversations.userId, ctx.auth.user.id));
+
+    const isFreeAgentLimitReached = agentRow.count >= MAX_FREE_AGENTS;
+    const isFreeSessionLimitReached = sessionRow.count >= MAX_FREE_SESSIONS;
+    const isFreeConversationLimitReached = conversationRow.count >= MAX_FREE_CONVERSATIONS;
+
+    const shouldThrowAgentError = entity === 'agents' && isFreeAgentLimitReached;
+    const shouldThrowSessionError = entity === 'sessions' && isFreeSessionLimitReached;
+    const shouldThrowConversationError = entity === 'conversations' && isFreeConversationLimitReached;
+
+    if (shouldThrowAgentError) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You have reached the maximum number of free agents',
+      });
+    }
+    if (shouldThrowSessionError) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You have reached the maximum number of free sessions',
+      });
+    }
+    if (shouldThrowConversationError) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You have reached the maximum number of free conversations',
+      });
+    }
+*/
+
+  });
 
 // Simple in-memory rate limiter per user for write operations using TTL
 const rateLimitCache = new LRUCache<string, number>({

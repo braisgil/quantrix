@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { Zap, Brain, MessageSquare, Bot, FolderOpen } from "lucide-react";
-// import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-// import { useTRPC } from "@/trpc/client";
+import { useTRPC } from "@/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -13,10 +13,14 @@ import { Badge } from "@/components/ui/badge";
 // } from "@/modules/premium/constants";
 
 export const DashboardTrial = () => {
-  // const trpc = useTRPC();
-  // const { data } = useQuery(trpc.premium.getFreeUsage.queryOptions());
+  const trpc = useTRPC();
+  const { data } = useQuery(trpc.premium.getUsage.queryOptions());
+  const { data: subscription } = useQuery(trpc.premium.getCurrentSubscription.queryOptions());
+  const { data: products } = useQuery(trpc.premium.getProducts.queryOptions());
 
-  // if (!data) return null;
+  if (!data) return null;
+
+  // debugger review rerenders
 
   return (
     <div className="matrix-card border border-primary/20 rounded-lg w-full flex flex-col overflow-hidden">
