@@ -47,6 +47,9 @@ export const AgentWizard = ({ onSuccess, onCancel }: AgentWizardProps) => {
       await queryClient.invalidateQueries(
         trpc.agents.getMany.queryOptions({})
       );
+      await queryClient.invalidateQueries(
+        trpc.premium.getUsage.queryOptions()
+      );
       toast.success("Your AI companion has been created successfully!");
       resetWizard();
       onSuccess?.();

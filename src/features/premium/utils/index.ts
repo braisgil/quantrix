@@ -13,3 +13,8 @@ export {
   isFreePlan,
 } from './subscription-helpers';
 
+// Usage helpers
+export {
+  getFreeUsageMetrics,
+} from './usage-helpers';
+

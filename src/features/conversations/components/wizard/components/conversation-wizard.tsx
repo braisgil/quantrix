@@ -49,6 +49,9 @@ export const ConversationWizard = ({ sessionId, sessionName, agentId, onSuccess,
         await queryClient.invalidateQueries(
           trpc.sessions.getSessionConversations.queryOptions({ sessionId })
         );
+        await queryClient.invalidateQueries(
+          trpc.premium.getUsage.queryOptions()
+        );
         const isScheduled = Boolean(variables.scheduledDateTime);
         toast.success(
           isScheduled

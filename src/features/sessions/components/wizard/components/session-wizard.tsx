@@ -40,6 +40,9 @@ export const SessionWizard = ({ onSuccess, onCancel }: SessionWizardProps) => {
         await queryClient.invalidateQueries(
           trpc.sessions.getMany.queryOptions({})
         );
+        await queryClient.invalidateQueries(
+          trpc.premium.getUsage.queryOptions()
+        );
         toast.success("Your session has been created successfully!");
         resetWizard();
         onSuccess?.();

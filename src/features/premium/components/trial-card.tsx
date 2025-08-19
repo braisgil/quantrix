@@ -1,26 +1,21 @@
+"use client";
+
 import Link from "next/link";
 import { Zap, Brain, MessageSquare, Bot, FolderOpen } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
 
-import { useTRPC } from "@/trpc/client";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-
-// import {
-//   MAX_FREE_AGENTS,
-//   MAX_FREE_MEETINGS,
-// } from "@/modules/premium/constants";
+import { useQueryUsage } from "../api";
+import { getFreeUsageMetrics } from "../utils";
 
 export const DashboardTrial = () => {
-  const trpc = useTRPC();
-  const { data } = useQuery(trpc.premium.getUsage.queryOptions());
-  const { data: subscription } = useQuery(trpc.premium.getCurrentSubscription.queryOptions());
-  const { data: products } = useQuery(trpc.premium.getProducts.queryOptions());
+  const { data } = useQueryUsage();
 
+  // Hide on paid tiers: server returns null when there is an active subscription
   if (!data) return null;
 
-  // debugger review rerenders
+  const usage = getFreeUsageMetrics(data);
 
   return (
     <div className="matrix-card border border-primary/20 rounded-lg w-full flex flex-col overflow-hidden">
@@ -45,9 +40,9 @@ export const DashboardTrial = () => {
                 <Bot className="size-3 text-muted-foreground" />
                 AI Agents
               </p>
-              <p className="text-xs text-primary font-medium">0/1</p>
+              <p className="text-xs text-primary font-medium">{usage.agents.countLabel}</p>
             </div>
-            <Progress value={0} className="w-full h-1.5 matrix-border" />
+            <Progress value={usage.agents.progress} className="w-full h-1.5 matrix-border" />
           </div>
 
           <div className="flex flex-col gap-y-2">
@@ -56,9 +51,9 @@ export const DashboardTrial = () => {
                 <FolderOpen className="size-3 text-muted-foreground" />
                 Sessions
               </p>
-              <p className="text-xs text-primary font-medium">0/1</p>
+              <p className="text-xs text-primary font-medium">{usage.sessions.countLabel}</p>
             </div>
-            <Progress value={0} className="w-full h-1.5 matrix-border" />
+            <Progress value={usage.sessions.progress} className="w-full h-1.5 matrix-border" />
           </div>
 
           <div className="flex flex-col gap-y-2">
@@ -67,9 +62,9 @@ export const DashboardTrial = () => {
                 <MessageSquare className="size-3 text-muted-foreground" />
                 Conversations
               </p>
-              <p className="text-xs text-primary font-medium">0/3</p>
+              <p className="text-xs text-primary font-medium">{usage.conversations.countLabel}</p>
             </div>
-            <Progress value={0} className="w-full h-1.5 matrix-border" />
+            <Progress value={usage.conversations.progress} className="w-full h-1.5 matrix-border" />
           </div>
         </div>
       </div>
@@ -87,3 +82,39 @@ export const DashboardTrial = () => {
     </div>
   );
 };
+
+export const DashboardTrialLoading = () => {
+  return (
+    <div className="matrix-card border border-primary/20 rounded-lg w-full flex flex-col overflow-hidden">
+      <div className="p-4 flex flex-col gap-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-r from-primary/15 to-transparent rounded-lg matrix-glow">
+              <Brain className="size-4 text-primary" />
+            </div>
+            <div className="flex flex-col">
+              <p className="text-sm font-semibold text-foreground">Free plan</p>
+              <p className="text-xs text-muted-foreground">Limited access until you upgrade</p>
+            </div>
+          </div>
+          <Badge variant="outline" className="border-primary/40 text-primary">Trial</Badge>
+        </div>
+
+        <div className="flex flex-col gap-y-3">
+          {[0, 1, 2].map((key) => (
+            <div key={key} className="flex flex-col gap-y-2">
+              <div className="flex items-center justify-between">
+                <div className="h-4 w-24 bg-muted rounded" />
+                <div className="h-3 w-10 bg-muted rounded" />
+              </div>
+              <Progress value={0} className="w-full h-1.5 matrix-border" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="bg-primary/10 border-t border-primary/20 rounded-t-none text-primary font-semibold matrix-glow" />
+    </div>
+  );
+};
+
+
