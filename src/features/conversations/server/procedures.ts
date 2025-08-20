@@ -6,7 +6,7 @@ import { agents, conversations, sessions } from "@/db/schema";
 import { streamChat } from "@/lib/stream-chat";
 import { streamVideo } from "@/lib/stream-video";
 import { buildIlikePattern } from "@/lib/utils";
-import { createTRPCRouter, protectedProcedure, rateLimited } from "@/trpc/init";
+import { createTRPCRouter, premiumProcedure, protectedProcedure, rateLimited } from "@/trpc/init";
 
 import { conversationsInsertSchema } from "../schema";
 import { ConversationStatus } from "../types";
@@ -23,7 +23,6 @@ export const conversationRouter = createTRPCRouter({
 
     return token;
   }),
-  // Removed legacy generateToken in favor of generateCallToken that enforces availability
   generateCallToken: protectedProcedure
     .use(rateLimited({ windowMs: 10_000, max: 20 }))
     .input(z.object({ conversationId: z.string() }))
@@ -83,7 +82,7 @@ export const conversationRouter = createTRPCRouter({
 
       return token;
     }),
-  create: protectedProcedure
+  create: premiumProcedure("conversations")
     .use(rateLimited({ windowMs: 10_000, max: 10 }))
     .input(conversationsInsertSchema)
     .mutation(async ({ input, ctx }) => {
@@ -234,7 +233,6 @@ export const conversationRouter = createTRPCRouter({
         items: data,
       };
     }),
-  // Removed transcript retrieval endpoint to avoid exposing raw transcripts to the client
   delete: protectedProcedure
     .use(rateLimited({ windowMs: 10_000, max: 20 }))
     .input(z.object({ id: z.string() }))

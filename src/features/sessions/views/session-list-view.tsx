@@ -12,6 +12,7 @@ import { useWizardState } from "../hooks/use-wizard-state";
 import { SessionItem } from "../types";
 import { useDeleteSession } from "../api/use-delete-session";
 import { useState } from "react";
+import { useUsageLimits } from "@/features/premium/api/use-usage-limits";
 
 export const SessionListView = () => {
   const router = useRouter();
@@ -20,20 +21,27 @@ export const SessionListView = () => {
   const { data: sessionsData } = useQuerySessions({
   });
   const { data: agentsData } = useQueryAgents();
+  const { canCreate } = useUsageLimits();
   
   const sessions = sessionsData?.items || [];
   const agents = agentsData?.items || [];
   const hasAgents = agents.length > 0;
   const hasSessions = sessions.length > 0;
+
   const deleteSessionMutation = useDeleteSession();
   const [deletingSessionId, setDeletingSessionId] = useState<string | undefined>(undefined);
   const createSessionMutation = useCreateSession();
 
   const handleCreateSession = () => {
+    if (!hasAgents) {
+      router.push("/agents");
+      return;
+    }
+    if (!canCreate.sessions) {
+      return;
+    }
     if (hasAgents) {
       openWizard();
-    } else {
-      router.push("/agents");
     }
   };
 
@@ -65,6 +73,7 @@ export const SessionListView = () => {
       <SessionsListHeader
         onCreateSession={handleCreateSession}
         hasAgents={hasAgents}
+        canCreate={canCreate.sessions}
       />
       {hasSessions ? (
       <SessionsList

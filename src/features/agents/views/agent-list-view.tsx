@@ -8,16 +8,19 @@ import { AgentWizard } from '../components/wizard/components/agent-wizard';
 import { useWizardState } from '../hooks/use-wizard-state';
 import  { type AgentItem } from '../types';
 import { calculateAgentStats } from '../utils/agent-helpers';
+import { useUsageLimits } from '@/features/premium/api/use-usage-limits';
 import { useCreateAgent } from '../api/use-create-agent';
 
 export const AgentListView = () => {
   const { showWizard, openWizard, closeWizard } = useWizardState();
   const { data: agentsData } = useQueryAgents();
   const agents = agentsData.items || [];
+  const { canCreate } = useUsageLimits();
   const { activeAgents, totalConversations, totalDurationFormatted } = calculateAgentStats(agents);
   const deleteAgentMutation = useDeleteAgent();
   const createAgentMutation = useCreateAgent();
   const [deletingAgentId, setDeletingAgentId] = useState<string | undefined>(undefined);
+
 
   if (showWizard) {
     return (
@@ -37,6 +40,11 @@ export const AgentListView = () => {
     );
   }
 
+  const handleCreateAgent = () => {
+    if (!canCreate.agents) return;
+    openWizard();
+  };
+
   const handleDeleteAgent = (agent: AgentItem) => {
     setDeletingAgentId(agent.id);
     deleteAgentMutation.mutate({ id: agent.id }, {
@@ -46,7 +54,7 @@ export const AgentListView = () => {
 
   return (
     <div className="space-y-8">
-      <AgentsListHeader onCreateAgent={openWizard} />
+      <AgentsListHeader onCreateAgent={handleCreateAgent} canCreate={canCreate.agents} />
       <div className="space-y-8">
         {agents.length > 0 ? (
           <>
