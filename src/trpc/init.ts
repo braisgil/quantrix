@@ -5,9 +5,7 @@ import { headers } from 'next/headers';
 import { cache } from 'react';
 import { db } from '@/db';
 import { polarClient } from '@/lib/polar';
-import { agents, conversations, sessions } from '@/db/schema';
-import { MAX_FREE_AGENTS, MAX_FREE_CONVERSATIONS, MAX_FREE_SESSIONS } from '@/constants/premium';
-import { count, eq } from 'drizzle-orm';
+import { getDefaultLimits, getUsageCounts, computePlanLimitsForCustomer } from '@/features/premium/server/plan-limits';
 
 export const createTRPCContext = cache(async () => {
   /**
@@ -54,50 +52,37 @@ export const premiumProcedure = (entity: 'agents' | 'sessions' | 'conversations'
       externalId: ctx.auth.user.id,
     });
 
-    const isFreeTier = customer.activeSubscriptions.length === 0;
+    const { agentCount, sessionCount, conversationCount } = await getUsageCounts(ctx.db, ctx.auth.user.id);
 
-    const [agentRow] = await ctx.db
-      .select({ count: count(agents.id) })
-      .from(agents)
-      .where(eq(agents.userId, ctx.auth.user.id));
+    const defaultLimits = getDefaultLimits();
+    const planLimits = await computePlanLimitsForCustomer(customer, defaultLimits);
 
-    const [sessionRow] = await ctx.db
-      .select({ count: count(sessions.id) })
-      .from(sessions)
-      .where(eq(sessions.userId, ctx.auth.user.id));
+    // Enforce limits for the requested entity based on plan limits
+    const isAgentLimitReached = agentCount >= planLimits.agents;
+    const isSessionLimitReached = sessionCount >= planLimits.sessions;
+    const isConversationLimitReached = conversationCount >= planLimits.conversations;
 
-    const [conversationRow] = await ctx.db
-      .select({ count: count(conversations.id) })
-      .from(conversations)
-      .where(eq(conversations.userId, ctx.auth.user.id));
+    const shouldThrowAgentError = entity === 'agents' && isAgentLimitReached;
+    const shouldThrowSessionError = entity === 'sessions' && isSessionLimitReached;
+    const shouldThrowConversationError = entity === 'conversations' && isConversationLimitReached;
 
-    if (isFreeTier) {
-      const isFreeAgentLimitReached = agentRow.count >= MAX_FREE_AGENTS;
-      const isFreeSessionLimitReached = sessionRow.count >= MAX_FREE_SESSIONS;
-      const isFreeConversationLimitReached = conversationRow.count >= MAX_FREE_CONVERSATIONS;
-
-      const shouldThrowAgentError = entity === 'agents' && isFreeAgentLimitReached;
-      const shouldThrowSessionError = entity === 'sessions' && isFreeSessionLimitReached;
-      const shouldThrowConversationError = entity === 'conversations' && isFreeConversationLimitReached;
-
-      if (shouldThrowAgentError) {
-        throw new TRPCError({
-          code: 'FORBIDDEN',
-          message: 'You have reached the maximum number of free agents',
-        });
-      }
-      if (shouldThrowSessionError) {
-        throw new TRPCError({
-          code: 'FORBIDDEN',
-          message: 'You have reached the maximum number of free sessions',
-        });
-      }
-      if (shouldThrowConversationError) {
-        throw new TRPCError({
-          code: 'FORBIDDEN',
-          message: 'You have reached the maximum number of free conversations',
-        });
-      }
+    if (shouldThrowAgentError) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You have reached the maximum number of agents for your plan',
+      });
+    }
+    if (shouldThrowSessionError) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You have reached the maximum number of sessions for your plan',
+      });
+    }
+    if (shouldThrowConversationError) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You have reached the maximum number of conversations for your plan',
+      });
     }
 
     return next({ ctx: { ...ctx, customer } });
