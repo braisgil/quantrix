@@ -1,5 +1,3 @@
-import type { PremiumSubscription } from "../types";
-
 /**
  * Get display name for the current plan
  */

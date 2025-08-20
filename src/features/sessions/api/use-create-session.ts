@@ -13,7 +13,7 @@ export const useCreateSession = () => {
           trpc.sessions.getMany.queryOptions({})
         );
         await queryClient.invalidateQueries(
-          trpc.premium.getUsage.queryOptions()
+          trpc.premium.getUsageAndLimits.queryOptions()
         );
         toast.success('Your session has been created successfully!');
       },

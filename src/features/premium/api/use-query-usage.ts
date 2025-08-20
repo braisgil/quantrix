@@ -5,7 +5,7 @@ export const useQueryUsage = () => {
   const trpc = useTRPC();
   
   return useSuspenseQuery({
-    ...trpc.premium.getUsage.queryOptions(),
+    ...trpc.premium.getUsageAndLimits.queryOptions(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };

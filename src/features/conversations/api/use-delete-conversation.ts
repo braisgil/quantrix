@@ -11,7 +11,7 @@ export const useDeleteConversation = (options?: { sessionId?: string }) => {
     ...trpc.conversations.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.premium.getUsage.queryOptions()
+          trpc.premium.getUsageAndLimits.queryOptions()
         );
         // Keep invalidations aligned with project patterns
         await queryClient.invalidateQueries(

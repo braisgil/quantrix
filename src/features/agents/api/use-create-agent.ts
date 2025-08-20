@@ -13,7 +13,7 @@ export const useCreateAgent = () => {
           trpc.agents.getMany.queryOptions({})
         );
         await queryClient.invalidateQueries(
-          trpc.premium.getUsage.queryOptions()
+          trpc.premium.getUsageAndLimits.queryOptions()
         );
         toast.success('Your AI companion has been created successfully!');
       },

@@ -6,16 +6,14 @@ import { Zap, Brain, MessageSquare, Bot, FolderOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { useQueryUsage } from "../api";
-import { getFreeUsageMetrics } from "../utils";
+import { useQueryCurrentSubscription, useQueryUsage } from "../api";
+import { getUsageMetrics } from "../utils";
 
 export const DashboardTrial = () => {
   const { data } = useQueryUsage();
-
-  // Hide on paid tiers: server returns null when there is an active subscription
-  if (!data) return null;
-
-  const usage = getFreeUsageMetrics(data);
+  const { data: currentSubscription } = useQueryCurrentSubscription();
+  const [subscriptionName = "Free", subscriptionDescription = "Limited access until you upgrade"] = currentSubscription?.name.split(" – ") ?? ["Free", "Limited access until you upgrade"];
+  const usage = getUsageMetrics(data);
 
   return (
     <div className="matrix-card border border-primary/20 rounded-lg w-full flex flex-col overflow-hidden">
@@ -26,11 +24,10 @@ export const DashboardTrial = () => {
               <Brain className="size-4 text-primary" />
             </div>
             <div className="flex flex-col">
-              <p className="text-sm font-semibold text-foreground">Free plan</p>
-              <p className="text-xs text-muted-foreground">Limited access until you upgrade</p>
+              <p className="text-sm font-semibold text-foreground">{subscriptionName} plan</p>
+              <p className="text-xs text-muted-foreground">{subscriptionDescription}</p>
             </div>
           </div>
-          <Badge variant="outline" className="border-primary/40 text-primary">Trial</Badge>
         </div>
 
         <div className="flex flex-col gap-y-3">
@@ -76,7 +73,7 @@ export const DashboardTrial = () => {
       >
         <Link href="/upgrade" className="flex items-center space-x-2">
           <Zap className="size-4" />
-          <span>Upgrade to Quantum</span>
+          <span>Upgrade</span>
         </Link>
       </Button>
     </div>
@@ -93,11 +90,10 @@ export const DashboardTrialLoading = () => {
               <Brain className="size-4 text-primary" />
             </div>
             <div className="flex flex-col">
-              <p className="text-sm font-semibold text-foreground">Free plan</p>
-              <p className="text-xs text-muted-foreground">Limited access until you upgrade</p>
+              <div className="h-4 w-20 bg-muted rounded mb-1" />
+              <div className="h-3 w-32 bg-muted rounded" />
             </div>
           </div>
-          <Badge variant="outline" className="border-primary/40 text-primary">Trial</Badge>
         </div>
 
         <div className="flex flex-col gap-y-3">

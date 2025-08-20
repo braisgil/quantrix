@@ -5,7 +5,7 @@ import type { AppRouter } from "@/trpc/routers/_app";
 export type PremiumProducts = inferRouterOutputs<AppRouter>["premium"]["getProducts"];
 export type PremiumProduct = PremiumProducts[number];
 export type PremiumSubscription = inferRouterOutputs<AppRouter>["premium"]["getCurrentSubscription"];
-export type PremiumUsage = inferRouterOutputs<AppRouter>["premium"]["getUsage"];
+export type PremiumUsage = inferRouterOutputs<AppRouter>["premium"]["getUsageAndLimits"];
 
 // Component prop types
 export interface UpgradeHeaderProps {

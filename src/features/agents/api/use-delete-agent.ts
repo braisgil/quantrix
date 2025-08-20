@@ -10,7 +10,7 @@ export const useDeleteAgent = () => {
     ...trpc.agents.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
-          trpc.premium.getUsage.queryOptions()
+          trpc.premium.getUsageAndLimits.queryOptions()
         );
         await queryClient.invalidateQueries(
           trpc.agents.getMany.queryOptions({})

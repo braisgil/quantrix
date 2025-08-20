@@ -15,6 +15,6 @@ export {
 
 // Usage helpers
 export {
-  getFreeUsageMetrics,
+  getUsageMetrics,
 } from './usage-helpers';
 

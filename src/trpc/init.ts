@@ -100,9 +100,6 @@ export const premiumProcedure = (entity: 'agents' | 'sessions' | 'conversations'
       }
     }
 
-    // eslint-disable-next-line no-debugger
-    debugger
-
     return next({ ctx: { ...ctx, customer } });
 
 /*

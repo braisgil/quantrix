@@ -2,27 +2,24 @@ import { MAX_FREE_AGENTS, MAX_FREE_CONVERSATIONS, MAX_FREE_SESSIONS } from "@/co
 import { useQueryUsage } from "./use-query-usage";
 
 export const useUsageLimits = () => {
-  const query = useQueryUsage();
-  const usage = query.data; // null for paid tiers
-
-  const isFreeTier = usage !== null;
+  const { data: { agents, sessions, conversations } } = useQueryUsage();
 
   const counts = {
-    agents: usage?.agentCount ?? 0,
-    sessions: usage?.sessionCount ?? 0,
-    conversations: usage?.conversationCount ?? 0,
+    agents: agents?.count ?? 0,
+    sessions: sessions?.count ?? 0,
+    conversations: conversations?.count ?? 0,
   } as const;
 
   const limits = {
-    agents: MAX_FREE_AGENTS,
-    sessions: MAX_FREE_SESSIONS,
-    conversations: MAX_FREE_CONVERSATIONS,
+    agents: agents?.limit ?? MAX_FREE_AGENTS,
+    sessions: sessions?.limit ?? MAX_FREE_SESSIONS,
+    conversations: conversations?.limit ?? MAX_FREE_CONVERSATIONS,
   } as const;
 
   const reached = {
-    agents: isFreeTier && counts.agents >= limits.agents,
-    sessions: isFreeTier && counts.sessions >= limits.sessions,
-    conversations: isFreeTier && counts.conversations >= limits.conversations,
+    agents: counts.agents >= limits.agents,
+    sessions: counts.sessions >= limits.sessions,
+    conversations: counts.conversations >= limits.conversations,
   } as const;
 
   const canCreate = {
@@ -32,8 +29,6 @@ export const useUsageLimits = () => {
   } as const;
 
   return {
-    ...query,
-    isFreeTier,
     counts,
     limits,
     reached,

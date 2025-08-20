@@ -20,7 +20,7 @@ export const useCreateConversation = (options?: { sessionId?: string }) => {
           );
         }
         await queryClient.invalidateQueries(
-          trpc.premium.getUsage.queryOptions()
+          trpc.premium.getUsageAndLimits.queryOptions()
         );
         const isScheduled = Boolean((variables as { scheduledDateTime?: unknown } | undefined)?.scheduledDateTime);
         toast.success(
