@@ -8,6 +8,7 @@ const PROTECTED_ROUTE_PREFIXES = [
   '/agents',
   '/sessions',
   '/upgrade',
+  '/conversations',
   '/overview',
   '/call'
 ]
