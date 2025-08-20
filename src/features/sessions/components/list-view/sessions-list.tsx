@@ -4,12 +4,11 @@ import { CardContent, CardDescription, CardHeader, CardTitle } from "@/component
 
 interface SessionsListProps {
   sessions: SessionList;
-  onConfigureSession?: (session: SessionItem) => void;
   onDeleteSession?: (session: SessionItem) => void;
   deletingSessionId?: string;
 }
 
-export const SessionsList = ({ sessions, onConfigureSession, onDeleteSession, deletingSessionId }: SessionsListProps) => {
+export const SessionsList = ({ sessions, onDeleteSession, deletingSessionId }: SessionsListProps) => {
 
 
   return (
@@ -29,7 +28,6 @@ export const SessionsList = ({ sessions, onConfigureSession, onDeleteSession, de
         <SessionListItem
           key={session.id}
           session={session}
-          onConfigure={onConfigureSession}
           onDelete={onDeleteSession}
           isDeleting={deletingSessionId === session.id}
         />

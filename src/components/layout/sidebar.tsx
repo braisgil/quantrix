@@ -25,7 +25,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { DashboardTrial } from "../../features/dashboard/components/dashboard-trial";
+import { Suspense } from "react";
+import { DashboardTrial, DashboardTrialLoading } from "../../features/premium/components/trial-card";
 import { DashboardUserButton } from "../user-button";
 
 const neuralSections = [
@@ -191,7 +192,9 @@ export const SidebarCustom = () => {
       </SidebarContent>
       
       <SidebarFooter className="p-4 space-y-4">
-        <DashboardTrial />
+        <Suspense fallback={<DashboardTrialLoading />}>
+          <DashboardTrial />
+        </Suspense>
         <DashboardUserButton />
       </SidebarFooter>
     </Sidebar>

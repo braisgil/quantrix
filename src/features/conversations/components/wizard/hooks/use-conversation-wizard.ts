@@ -36,18 +36,6 @@ export const useConversationWizard = ({ agentId, sessionId }: UseConversationWiz
     }
   };
 
-  const resetWizard = () => {
-    setCurrentStep(0);
-    setWizardState({
-      name: "",
-      sessionId: sessionId,
-      agentId: agentId,
-      isScheduled: false,
-      scheduledDate: null,
-      scheduledTime: null,
-    });
-  };
-
   const getFormDataForSubmission = () => {
     return getFormData(wizardState);
   };
@@ -58,7 +46,6 @@ export const useConversationWizard = ({ agentId, sessionId }: UseConversationWiz
     updateWizardState,
     nextStep,
     prevStep,
-    resetWizard,
     getFormData: getFormDataForSubmission,
   };
 }; 

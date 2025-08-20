@@ -15,6 +15,9 @@ export default async function SessionsPage() {
     await queryClient.prefetchQuery(
       trpc.agents.getMany.queryOptions({})
     );
+    await queryClient.prefetchQuery(
+      trpc.premium.getUsageAndLimits.queryOptions()
+    );
   } catch {
     // Prefetch failed - client will handle it gracefully
   }

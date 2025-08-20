@@ -13,9 +13,10 @@ import {
 
 interface SessionHeaderProps {
   session: SessionDetail;
+  canCreate?: boolean;
 }
 
-export const SessionHeader = ({ session }: SessionHeaderProps) => {
+export const SessionHeader = ({ session, canCreate = true }: SessionHeaderProps) => {
   const StatusIcon = getSessionStatusIcon(session.status as SessionStatus);
   const statusLabel = getSessionStatusLabel(session.status as SessionStatus);
   
@@ -55,6 +56,13 @@ export const SessionHeader = ({ session }: SessionHeaderProps) => {
         <p className="text-sm text-muted-foreground max-w-2xl mx-auto">
           {session.description}
         </p>
+      )}
+      {(!canCreate) && (
+        <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg mt-3 max-w-2xl mx-auto">
+          <p className="text-sm text-yellow-600 dark:text-yellow-400">
+            You have reached the maximum number of free conversations.
+          </p>
+        </div>
       )}
     </CardHeader>
   );

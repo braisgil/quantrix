@@ -10,6 +10,9 @@ export const useDeleteSession = () => {
     ...trpc.sessions.delete.mutationOptions({
       onSuccess: async () => {
         await queryClient.invalidateQueries(
+          trpc.premium.getUsageAndLimits.queryOptions()
+        );
+        await queryClient.invalidateQueries(
           trpc.sessions.getMany.queryOptions({})
         );
         // Deleting a session may remove its conversations

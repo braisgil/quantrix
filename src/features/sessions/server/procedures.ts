@@ -1,5 +1,5 @@
 import { sessions, agents, conversations } from "@/db/schema";
-import { createTRPCRouter, protectedProcedure, rateLimited } from "@/trpc/init";
+import { createTRPCRouter, premiumProcedure, protectedProcedure, rateLimited } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
 import { eq, and, getTableColumns, ilike, desc, count, sql } from "drizzle-orm";
 import { sessionsInsertSchema, sessionsUpdateSchema } from "../schema";
@@ -8,7 +8,7 @@ import { SessionStatus } from "../types";
 import { buildIlikePattern } from "@/lib/utils";
 
 export const sessionsRouter = createTRPCRouter({
-  create: protectedProcedure
+  create: premiumProcedure("sessions")
     .use(rateLimited({ windowMs: 10_000, max: 10 }))
     .input(sessionsInsertSchema)
     .mutation(async ({ input, ctx }) => {

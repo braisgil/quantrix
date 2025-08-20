@@ -7,9 +7,10 @@ import React from 'react';
 interface SessionsListHeaderProps {
   onCreateSession: () => void;
   hasAgents: boolean;
+  canCreate?: boolean;
 }
 
-export const SessionsListHeader: React.FC<SessionsListHeaderProps> = ({ onCreateSession, hasAgents }) => {
+export const SessionsListHeader: React.FC<SessionsListHeaderProps> = ({ onCreateSession, hasAgents, canCreate = true }) => {
   return (
     <>
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
@@ -23,10 +24,10 @@ export const SessionsListHeader: React.FC<SessionsListHeaderProps> = ({ onCreate
         </div>
         <Button 
           onClick={onCreateSession}
-          disabled={!hasAgents}
-            className={hasAgents 
+          disabled={!hasAgents || !canCreate}
+            className={hasAgents && canCreate 
               ? "bg-primary hover:bg-primary/90 text-primary-foreground font-semibold matrix-glow w-full md:w-auto"
-              : "opacity-50 cursor-not-allowed"
+              : "opacity-50 cursor-not-allowed w-full md:w-auto"
             }
         >
           <Plus className="w-4 h-4 mr-2" />
@@ -37,6 +38,13 @@ export const SessionsListHeader: React.FC<SessionsListHeaderProps> = ({ onCreate
         <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
           <p className="text-sm text-yellow-600 dark:text-yellow-400">
             You need to create at least one AI agent before you can create sessions.
+          </p>
+        </div>
+      )}
+      {hasAgents && !canCreate && (
+        <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg mt-2">
+          <p className="text-sm text-yellow-600 dark:text-yellow-400">
+            You have reached the maximum number of free sessions.
           </p>
         </div>
       )}

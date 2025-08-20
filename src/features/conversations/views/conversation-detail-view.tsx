@@ -30,8 +30,6 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
   const router = useRouter();
   const deleteConversationMutation = useDeleteConversation({ sessionId: conversation?.sessionId });
 
-  // Removed start/edit actions; delete handled via header
-
   const handleDeleteConversation = () => {
     if (!conversation) return;
     deleteConversationMutation.mutate(
@@ -44,8 +42,6 @@ export const ConversationDetailView = ({ conversationId }: ConversationDetailVie
       }
     );
   };
-
-  // View transcript removed from action buttons; keep feature elsewhere if needed
 
   return (
     <div className="w-full max-w-7xl mx-auto space-y-6">

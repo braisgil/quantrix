@@ -18,7 +18,6 @@ import {
 
 interface SessionListItemProps {
   session: SessionList[number];
-  onConfigure?: (session: SessionList[number]) => void;
   onDelete?: (session: SessionList[number]) => void;
   isDeleting?: boolean;
 }

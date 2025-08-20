@@ -11,6 +11,7 @@ interface SessionConversationsListProps {
   onDeleteConversation?: (conversation: ConversationList[number]) => void;
   deletingConversationId?: string;
   onViewConversation?: (conversation: ConversationList[number]) => void;
+  canCreateConversation?: boolean;
 }
 
 
@@ -21,6 +22,7 @@ export const SessionConversationsList = ({
   onDeleteConversation,
   deletingConversationId,
   onViewConversation,
+  canCreateConversation = true,
 }: SessionConversationsListProps) => {
   
 
@@ -44,7 +46,10 @@ export const SessionConversationsList = ({
         {conversations.length > 0 && (
           <Button 
             onClick={onCreateConversation}
-            className="mt-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold matrix-glow w-full"
+            className={canCreateConversation 
+              ? "mt-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold matrix-glow w-full"
+              : "mt-3 opacity-50 cursor-not-allowed w-full"}
+            disabled={!canCreateConversation}
           >
             <Plus className="w-3 h-3 mr-2" />
             Add Conversation
@@ -69,7 +74,10 @@ export const SessionConversationsList = ({
             <Button 
               onClick={onCreateConversation}
               size="sm"
-              className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground"
+              className={canCreateConversation 
+                ? "matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground"
+                : "opacity-50 cursor-not-allowed"}
+              disabled={!canCreateConversation}
             >
               <Plus className="w-3 h-3 mr-2" />
               Create First Conversation

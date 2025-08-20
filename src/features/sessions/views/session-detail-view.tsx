@@ -10,12 +10,14 @@ import {
   SessionChatCard
 } from '../components/detail-view';
 import { ConversationWizard } from "@/features/conversations/components/wizard/components/conversation-wizard";
+import { useCreateConversation } from "@/features/conversations/api/use-create-conversation";
 import { useWizardState } from "../hooks/use-wizard-state";
 import { useDeleteConversation } from "@/features/conversations/api/use-delete-conversation";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDeleteSession } from "../api/use-delete-session";
 import { ConversationStatus } from "@/features/conversations/types";
+import { useUsageLimits } from "@/features/premium/api/use-usage-limits";
 
 interface SessionDetailViewProps {
   sessionId: string;
@@ -28,16 +30,20 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
   const { data: conversationsData } = useQuerySessionConversations({
     sessionId,
   });
+  const { canCreate } = useUsageLimits();
   
   const conversations = conversationsData?.items || [];
   const hasCompletedConversation = conversations.some(
     (c) => c.status === ConversationStatus.Completed
   );
+
   const deleteConversationMutation = useDeleteConversation({ sessionId });
   const [deletingConversationId, setDeletingConversationId] = useState<string | undefined>(undefined);
   const deleteSessionMutation = useDeleteSession();
+  const createConversationMutation = useCreateConversation({ sessionId });
 
   const handleCreateConversation = () => {
+    if (!canCreate.conversations) return;
     openWizard();
   };
 
@@ -70,8 +76,15 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
         sessionId={sessionId}
         sessionName={session.name}
         agentId={session.agentId}
-        onSuccess={closeWizard}
         onCancel={closeWizard}
+        onSubmit={(data) => {
+          createConversationMutation.mutate(data, {
+            onSuccess: () => {
+              closeWizard();
+            },
+          });
+        }}
+        isSubmitting={createConversationMutation.isPending}
       />
     );
   }
@@ -87,7 +100,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
 
       {/* Main Session Detail Card */}
       <div className="px-0">
-        <SessionHeader session={session} />
+        <SessionHeader session={session} canCreate={canCreate.conversations}/>
 
         <CardContent className="pb-4 sm:pb-6 px-0">
           {/* 
@@ -101,6 +114,7 @@ export const SessionDetailView = ({ sessionId }: SessionDetailViewProps) => {
                 onCreateConversation={handleCreateConversation}
                 onDeleteConversation={handleDeleteConversation}
                 deletingConversationId={deletingConversationId}
+                canCreateConversation={canCreate.conversations}
                 onViewConversation={(conversation) => {
                   router.push(`/conversations/${conversation.id}`);
                 }}

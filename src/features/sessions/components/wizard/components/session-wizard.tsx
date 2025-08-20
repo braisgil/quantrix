@@ -2,9 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Sparkles, FolderOpen } from "lucide-react";
-import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useTRPC } from "@/trpc/client";
+import type { SessionsInsertSchema } from "../../../schema";
 
 // Import refactored components
 import { useSessionWizard } from "../hooks/use-session-wizard";
@@ -14,13 +12,12 @@ import { SessionNavigationHeader } from "../../shared/session-navigation-header"
 import { cn } from "@/lib/utils";
 
 interface SessionWizardProps {
-  onSuccess?: () => void;
   onCancel?: () => void;
+  onSubmit?: (data: SessionsInsertSchema) => void;
+  isSubmitting?: boolean;
 }
 
-export const SessionWizard = ({ onSuccess, onCancel }: SessionWizardProps) => {
-  const queryClient = useQueryClient();
-  const trpc = useTRPC();
+export const SessionWizard = ({ onCancel, onSubmit, isSubmitting }: SessionWizardProps) => {
   
   const {
     currentStep,
@@ -28,27 +25,10 @@ export const SessionWizard = ({ onSuccess, onCancel }: SessionWizardProps) => {
     updateWizardState,
     nextStep,
     prevStep,
-    resetWizard,
     getFormData,
   } = useSessionWizard();
 
   const { canProceed } = useStepValidation(wizardState);
-
-  const createSessionMutation = useMutation(
-    trpc.sessions.create.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(
-          trpc.sessions.getMany.queryOptions({})
-        );
-        toast.success("Your session has been created successfully!");
-        resetWizard();
-        onSuccess?.();
-      },
-      onError: (error) => {
-        toast.error(error.message || "Failed to create your session");
-      },
-    })
-  );
 
   const handleNext = () => {
     if (canProceed(currentStep)) {
@@ -58,7 +38,9 @@ export const SessionWizard = ({ onSuccess, onCancel }: SessionWizardProps) => {
 
   const handleSubmit = () => {
     const formData = getFormData();
-    createSessionMutation.mutate(formData);
+    if (onSubmit) {
+      onSubmit(formData);
+    }
   };
 
   const renderCurrentStep = () => {
@@ -167,11 +149,11 @@ export const SessionWizard = ({ onSuccess, onCancel }: SessionWizardProps) => {
               ) : (
                 <Button 
                   onClick={handleSubmit}
-                  disabled={!canSubmit || createSessionMutation.isPending}
+                  disabled={!canSubmit || isSubmitting}
                   size="sm"
                   className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
                 >
-                  {createSessionMutation.isPending ? (
+                  {isSubmitting ? (
                     <>
                       <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
                       <span>Creating...</span>
@@ -207,11 +189,11 @@ export const SessionWizard = ({ onSuccess, onCancel }: SessionWizardProps) => {
             ) : (
               <Button 
                 onClick={handleSubmit}
-                disabled={!canSubmit || createSessionMutation.isPending}
+                disabled={!canSubmit || isSubmitting}
                 size="sm"
                 className="matrix-glow bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-4 text-xs"
               >
-                {createSessionMutation.isPending ? (
+                {isSubmitting ? (
                   <>
                     <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin mr-1" />
                     <span>Creating...</span>

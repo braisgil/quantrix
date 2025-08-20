@@ -22,6 +22,9 @@ export default async function SessionDetailPage({ params }: SessionDetailPagePro
     await queryClient.prefetchQuery(
       trpc.sessions.getSessionConversations.queryOptions({ sessionId })
     );
+    await queryClient.prefetchQuery(
+      trpc.premium.getUsageAndLimits.queryOptions()
+    );
   } catch {
     // Prefetch failed - client will handle it gracefully
   }
