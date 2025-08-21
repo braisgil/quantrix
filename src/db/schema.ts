@@ -131,7 +131,6 @@ export const conversations = pgTable("conversations", {
   availableAt: timestamp("available_at"),
   startedAt: timestamp("started_at"),
   endedAt: timestamp("ended_at"),
-  recordingUrl: text("recording_url"),
   summary: text("summary"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
@@ -141,4 +140,122 @@ export const conversations = pgTable("conversations", {
   statusIdx: index('conversations_status_idx').on(table.status),
   availableAtIdx: index('conversations_available_at_idx').on(table.availableAt),
   createdAtIdx: index('conversations_created_at_idx').on(table.createdAt),
+}));
+
+// Credit and usage tracking tables
+export const creditTransactionType = pgEnum("credit_transaction_type", [
+  "purchase",
+  "usage",
+  "refund",
+  "adjustment",
+  "expiration"
+]);
+
+export const usageServiceType = pgEnum("usage_service_type", [
+  "openai_gpt4o",
+  "openai_gpt4o_mini",
+  "stream_video_call",
+  "stream_chat_message",
+  "stream_transcription",
+]);
+
+export const creditBalances = pgTable("credit_balances", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: "cascade" }),
+  availableCredits: text("available_credits").notNull().default("0"), // Using text for precision decimal
+  totalPurchased: text("total_purchased").notNull().default("0"),
+  totalUsed: text("total_used").notNull().default("0"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  userIdIdx: index('credit_balances_user_id_idx').on(table.userId),
+}));
+
+export const creditTransactions = pgTable("credit_transactions", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  type: creditTransactionType("type").notNull(),
+  amount: text("amount").notNull(), // Positive for credits added, negative for credits used
+  balanceBefore: text("balance_before").notNull(),
+  balanceAfter: text("balance_after").notNull(),
+  description: text("description"),
+  metadata: text("metadata"), // JSON string for additional data
+  polarCheckoutId: text("polar_checkout_id"),
+  polarTransactionId: text("polar_transaction_id"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => ({
+  userIdIdx: index('credit_transactions_user_id_idx').on(table.userId),
+  typeIdx: index('credit_transactions_type_idx').on(table.type),
+  createdAtIdx: index('credit_transactions_created_at_idx').on(table.createdAt),
+  polarCheckoutIdx: index('credit_transactions_polar_checkout_idx').on(table.polarCheckoutId),
+}));
+
+export const usageEvents = pgTable("usage_events", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  service: usageServiceType("service").notNull(),
+  quantity: text("quantity").notNull(), // Units depend on service (tokens, minutes, messages, etc.)
+  unitCost: text("unit_cost").notNull(), // Cost per unit in credits
+  totalCost: text("total_cost").notNull(), // Total cost in credits
+  resourceId: text("resource_id"), // Reference to conversation, session, etc.
+  resourceType: text("resource_type"), // "conversation", "session", "chat"
+  metadata: text("metadata"), // JSON string for service-specific data
+  polarEventId: text("polar_event_id"), // ID of the event sent to Polar
+  processed: boolean("processed").notNull().default(false),
+  processedAt: timestamp("processed_at"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => ({
+  userIdIdx: index('usage_events_user_id_idx').on(table.userId),
+  serviceIdx: index('usage_events_service_idx').on(table.service),
+  processedIdx: index('usage_events_processed_idx').on(table.processed),
+  resourceIdx: index('usage_events_resource_idx').on(table.resourceId, table.resourceType),
+  createdAtIdx: index('usage_events_created_at_idx').on(table.createdAt),
+}));
+
+export const servicePricing = pgTable("service_pricing", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  service: usageServiceType("service").notNull().unique(),
+  unitPrice: text("unit_price").notNull(), // Base price per unit in USD
+  creditConversionRate: text("credit_conversion_rate").notNull(), // Credits per USD (after profit margin)
+  profitMargin: text("profit_margin").notNull().default("0.20"), // Default 20% profit margin
+  isActive: boolean("is_active").notNull().default(true),
+  metadata: text("metadata"), // JSON string for additional pricing rules
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  serviceIdx: index('service_pricing_service_idx').on(table.service),
+  isActiveIdx: index('service_pricing_is_active_idx').on(table.isActive),
+}));
+
+export const creditPackages = pgTable("credit_packages", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  polarProductId: text("polar_product_id").notNull().unique(),
+  credits: text("credits").notNull(), // Number of credits in the package
+  price: text("price").notNull(), // Price in USD
+  bonusCredits: text("bonus_credits").notNull().default("0"), // Extra credits for bulk purchases
+  name: text("name").notNull(),
+  description: text("description"),
+  isActive: boolean("is_active").notNull().default(true),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  polarProductIdIdx: index('credit_packages_polar_product_id_idx').on(table.polarProductId),
+  isActiveIdx: index('credit_packages_is_active_idx').on(table.isActive),
 }));

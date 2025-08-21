@@ -6,18 +6,18 @@ import {
   MessageNewEvent,
   CallEndedEvent,
   CallTranscriptionReadyEvent,
-  CallRecordingReadyEvent,
   CallSessionParticipantLeftEvent,
   CallSessionStartedEvent,
 } from "@stream-io/node-sdk";
 
 import { db } from "@/db";
-import { agents, conversations, sessions } from "@/db/schema";
+import { agents, conversations, sessions, usageEvents } from "@/db/schema";
 import { streamVideo } from "@/lib/stream-video";
 
 import { inngest } from "@/inngest/client";
 
 import { streamChat } from "@/lib/stream-chat";
+import { UsageTracker } from "@/lib/credits/usage-tracker";
 
 const openaiClient = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
 
@@ -131,6 +131,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing conversationId" }, { status: 400 });
     }
 
+    // Get conversation to calculate duration
+    const [existingConversation] = await db
+      .select()
+      .from(conversations)
+      .where(eq(conversations.id, conversationId));
+
+    if (existingConversation && existingConversation.startedAt) {
+      const durationMs = new Date().getTime() - existingConversation.startedAt.getTime();
+      const durationMinutes = durationMs / 1000 / 60;
+
+      // Track video call usage
+      await UsageTracker.stream.trackVideoCall({
+        userId: existingConversation.userId,
+        durationMinutes,
+        conversationId,
+      });
+    }
+
     await db
       .update(conversations)
       .set({
@@ -151,6 +169,30 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Conversation not found" }, { status: 404 });
     }
 
+    // Idempotency: avoid double-counting if this conversation already has a transcription usage event
+    const [existingTranscriptionUsage] = await db
+      .select({ id: usageEvents.id })
+      .from(usageEvents)
+      .where(
+        and(
+          eq(usageEvents.resourceId, conversationId),
+          eq(usageEvents.service, "stream_transcription")
+        )
+      )
+      .limit(1);
+
+    // Track transcription usage (estimate based on conversation duration)
+    if (!existingTranscriptionUsage && existingConversation.startedAt && existingConversation.endedAt) {
+      const durationMs = existingConversation.endedAt.getTime() - existingConversation.startedAt.getTime();
+      const durationMinutes = durationMs / 1000 / 60;
+
+      await UsageTracker.stream.trackTranscription({
+        userId: existingConversation.userId,
+        durationMinutes,
+        conversationId,
+      });
+    }
+
     await inngest.send({
       name: "conversations/processing",
       data: {
@@ -158,16 +200,6 @@ export async function POST(req: NextRequest) {
         transcriptUrl: event.call_transcription.url,
       },
     });
-  } else if (eventType === "call.recording_ready") {
-    const event = payload as CallRecordingReadyEvent;
-    const conversationId = event.call_cid.split(":")[1]; // call_cid is formatted as "type:id"
-
-    await db
-      .update(conversations)
-      .set({
-        recordingUrl: event.call_recording.url,
-      })
-      .where(eq(conversations.id, conversationId));
   } else if (eventType === "message.new") {
     const event = payload as MessageNewEvent;
 
@@ -300,6 +332,24 @@ Be concise and helpful.
           content: message.text || "",
         }));
 
+      // Check if user has sufficient credits
+      const estimatedCost = await UsageTracker.openai.estimateCost({
+        model: "gpt-4o",
+        estimatedInputTokens: 2000, // Estimate based on typical chat context
+        estimatedOutputTokens: 500,
+      });
+
+      if (!(await UsageTracker.canAfford(userId, estimatedCost.credits))) {
+        channel.sendMessage({
+          text: "You have insufficient credits to continue this conversation. Please purchase more credits.",
+          user: {
+            id: agentId,
+            name: agentName,
+          },
+        });
+        return NextResponse.json({ status: "insufficient_credits" });
+      }
+
       const GPTResponse = await openaiClient.chat.completions.create({
         messages: [
           { role: "system", content: instructions },
@@ -307,6 +357,25 @@ Be concise and helpful.
           { role: "user", content: text },
         ],
         model: "gpt-4o",
+      });
+
+      // Track OpenAI usage
+      if (GPTResponse.usage) {
+        await UsageTracker.openai.trackCompletion({
+          userId,
+          model: "gpt-4o",
+          usage: GPTResponse.usage,
+          conversationId: existingConversation?.id,
+          sessionId: targetSessionId || undefined,
+        });
+      }
+
+      // Track Stream chat message usage
+      await UsageTracker.stream.trackChatMessage({
+        userId,
+        messageCount: 1,
+        channelId,
+        sessionId: targetSessionId || undefined,
       });
 
       const GPTResponseText = GPTResponse.choices[0].message.content;
