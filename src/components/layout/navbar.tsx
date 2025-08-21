@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { PanelLeftCloseIcon, PanelLeftIcon, Search, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { useSidebar } from "@/components/ui/sidebar";
+import { CreditBalanceCompact } from "@/features/credits/components";
 
 import { DashboardCommand } from "../search-command";
 
@@ -13,6 +15,7 @@ export const Navbar = () => {
   const { state, toggleSidebar, isMobile } = useSidebar();
   const { theme, setTheme } = useTheme();
   const [commandOpen, setCommandOpen] = useState(false);
+  const router = useRouter();
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -65,6 +68,10 @@ export const Navbar = () => {
         {!isMobile && <div className="flex-1" />}
         
         <div className="flex items-center space-x-3">
+          <CreditBalanceCompact 
+            onClick={() => router.push("/credits")}
+            className="matrix-border hover:matrix-glow transition-all duration-300 hover:bg-primary/10"
+          />
           <Button 
             variant="outline" 
             size="icon"

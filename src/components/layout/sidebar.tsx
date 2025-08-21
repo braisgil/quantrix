@@ -8,6 +8,7 @@ import {
   Zap,
   LayoutDashboard,
   FolderOpen,
+  Coins,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -48,6 +49,11 @@ const neuralSections = [
 ];
 
 const quantumSections = [
+  {
+    icon: Coins,
+    label: "Credits",
+    href: "/credits",
+  },
   {
     icon: Zap,
     label: "Upgrade",

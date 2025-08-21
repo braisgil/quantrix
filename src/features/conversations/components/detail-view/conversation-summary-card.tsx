@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, Download, ExternalLink } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { ConversationDetail } from '../../types';
 import ReactMarkdown from 'react-markdown';
@@ -11,7 +11,6 @@ interface ConversationSummaryCardProps {
 }
 
 export const ConversationSummaryCard: React.FC<ConversationSummaryCardProps> = ({ conversation }) => {
-  const hasRecording = !!conversation.recordingUrl;
   const hasSummary = !!conversation.summary;
   const [isExpanded, setIsExpanded] = useState(false);
   const isLong = (conversation.summary || '').length > 280;
@@ -77,22 +76,7 @@ export const ConversationSummaryCard: React.FC<ConversationSummaryCardProps> = (
           <div className="space-y-2">
             <h4 className="text-sm font-medium text-foreground">Resources</h4>
             <div className="flex flex-wrap gap-2">
-              {hasRecording && (
-                <Button
-                  size="sm"
-                  variant="call"
-                  onClick={() => conversation.recordingUrl && window.open(conversation.recordingUrl, '_blank')}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Recording
-                  <ExternalLink className="w-3 h-3 ml-1" />
-                </Button>
-              )}
-              {!hasRecording && (
-                <span className="text-sm text-muted-foreground">
-                  No resources available for this conversation.
-                </span>
-              )}
+              <span className="text-sm text-muted-foreground">No resources available for this conversation.</span>
             </div>
           </div>
         </div>
