@@ -102,9 +102,9 @@ npm run dev:inngest
 |---------|------|-----------|------------------|
 | GPT-4o | Per million tokens | $2.50 input / $10 output | ~3,125 / ~12,500 |
 | GPT-4o Mini | Per million tokens | $0.15 input / $0.60 output | ~188 / ~750 |
-| Video Calls | Per minute | $0.004 | ~5 |
-| Chat Messages | Per message | $0.0002 | ~0.16 |
-| Transcription | Per minute | $0.006 | ~7.5 |
+| Video Calls | Per participant minute | $0.0004 | ~0.5 |
+| Chat Messages | Per message | $0.001 | ~1.25 |
+| Transcription | Per minute | $0.009 | ~11.25 |
 
 ## Usage Tracking
 
@@ -119,14 +119,14 @@ The system automatically tracks:
 ### GetStream.io Usage
 
 The system tracks:
-- Video call duration (rounded up to nearest minute)
-- Chat messages sent
+- Video call participant minutes (duration × 2 participants: user + AI agent)
+- Chat messages sent  
 - Transcription duration
 
 ### Webhook Integration
 
 Usage is tracked through webhook events:
-- `call.session_ended`: Track video call duration
+- `call.session_ended`: Track video call duration × 2 participants (user + AI agent)
 - `call.transcription_ready`: Track transcription usage
 - `message.new`: Track chat message usage
 

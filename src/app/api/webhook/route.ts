@@ -141,7 +141,7 @@ export async function POST(req: NextRequest) {
       const durationMs = new Date().getTime() - existingConversation.startedAt.getTime();
       const durationMinutes = durationMs / 1000 / 60;
 
-      // Track video call usage
+      // Track video call usage (always 2 participants: user + AI agent)
       await UsageTracker.stream.trackVideoCall({
         userId: existingConversation.userId,
         durationMinutes,

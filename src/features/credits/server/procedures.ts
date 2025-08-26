@@ -37,6 +37,16 @@ export const creditsRouter = createTRPCRouter({
       totalPurchased: balance.totalPurchased.toNumber(),
       totalUsed: balance.totalUsed.toNumber(),
       displayAvailable: balance.availableCredits.toFixed(2),
+      // Free credits information
+      availableFreeCredits: balance.availableFreeCredits.toNumber(),
+      totalFreeCreditsGranted: balance.totalFreeCreditsGranted.toNumber(),
+      totalFreeCreditsUsed: balance.totalFreeCreditsUsed.toNumber(),
+      freeCreditAllocation: balance.freeCreditAllocation.toNumber(),
+      lastFreeAllocationDate: balance.lastFreeAllocationDate?.toISOString(),
+      nextFreeAllocationDate: balance.nextFreeAllocationDate?.toISOString(),
+      // Combined totals
+      totalAvailableCredits: balance.availableCredits.plus(balance.availableFreeCredits).toNumber(),
+      displayTotalAvailable: balance.availableCredits.plus(balance.availableFreeCredits).toFixed(2),
     };
   }),
 
@@ -419,7 +429,7 @@ export const creditsRouter = createTRPCRouter({
     }),
 
   /**
-   * Check if user has sufficient credits
+   * Check if user has sufficient credits (including free credits)
    */
   checkSufficientCredits: protectedProcedure
     .input(
@@ -429,15 +439,47 @@ export const creditsRouter = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const balance = await CreditMeteringService.getUserBalance(ctx.auth.user.id);
-      const hasSufficient = balance.availableCredits.greaterThanOrEqualTo(input.requiredCredits);
+      const totalAvailable = balance.availableCredits.plus(balance.availableFreeCredits);
+      const hasSufficient = totalAvailable.greaterThanOrEqualTo(input.requiredCredits);
 
       return {
         hasSufficient,
         availableCredits: balance.availableCredits.toNumber(),
+        availableFreeCredits: balance.availableFreeCredits.toNumber(),
+        totalAvailableCredits: totalAvailable.toNumber(),
         requiredCredits: input.requiredCredits,
         shortfall: hasSufficient
           ? 0
-          : new Decimal(input.requiredCredits).minus(balance.availableCredits).toNumber(),
+          : new Decimal(input.requiredCredits).minus(totalAvailable).toNumber(),
       };
+    }),
+
+  /**
+   * Initialize free credits for a new user (called after registration)
+   */
+  initializeFreeCredits: protectedProcedure
+    .mutation(async ({ ctx }) => {
+      try {
+        await CreditMeteringService.initializeUserCredits(ctx.auth.user.id);
+        const balance = await CreditMeteringService.getUserBalance(ctx.auth.user.id);
+        
+        return {
+          success: true,
+          availableFreeCredits: balance.availableFreeCredits.toNumber(),
+          nextAllocationDate: balance.nextFreeAllocationDate?.toISOString(),
+        };
+      } catch (error) {
+        // Don't throw error if credits are already initialized
+        if (error instanceof Error && error.message.includes('already exists')) {
+          const balance = await CreditMeteringService.getUserBalance(ctx.auth.user.id);
+          return {
+            success: true,
+            availableFreeCredits: balance.availableFreeCredits.toNumber(),
+            nextAllocationDate: balance.nextFreeAllocationDate?.toISOString(),
+            alreadyInitialized: true,
+          };
+        }
+        throw error;
+      }
     }),
 });

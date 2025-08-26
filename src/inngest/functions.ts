@@ -160,3 +160,6 @@ export const conversationsProcessing = inngest.createFunction(
     });
   }
 );
+
+// Note: Free credit replenishment is handled automatically and on-demand
+// in CreditMeteringService.getUserBalance() - no cron job needed!

@@ -59,7 +59,7 @@ export class OpenAIUsageTracker {
  */
 export class StreamUsageTracker {
   /**
-   * Track video call usage
+   * Track video call usage (always 2 participants: user + AI agent)
    */
   static async trackVideoCall(params: {
     userId: string;
@@ -68,15 +68,21 @@ export class StreamUsageTracker {
   }) {
     const { userId, durationMinutes, conversationId } = params;
 
+    // Always 2 participants: user + AI agent
+    const participantCount = 2;
+    const participantMinutes = durationMinutes * participantCount;
+
     return await CreditMeteringService.trackUsage({
       userId,
       service: "stream_video_call",
-      quantity: Math.ceil(durationMinutes), // Round up to nearest minute
+      quantity: Math.ceil(participantMinutes), // Round up to nearest participant minute
       resourceId: conversationId,
       resourceType: "conversation",
       metadata: {
         durationMinutes,
-        roundedMinutes: Math.ceil(durationMinutes),
+        participantCount,
+        participantMinutes,
+        roundedParticipantMinutes: Math.ceil(participantMinutes),
       },
     });
   }
@@ -131,10 +137,12 @@ export class StreamUsageTracker {
 
 
   /**
-   * Estimate costs for Stream services
+   * Estimate costs for Stream video call services (always 2 participants: user + AI agent)
    */
   static async estimateVideoCallCost(durationMinutes: number) {
-    return await CreditMeteringService.estimateStreamCost("video_call", Math.ceil(durationMinutes));
+    const participantCount = 2;
+    const participantMinutes = durationMinutes * participantCount;
+    return await CreditMeteringService.calculateCreditCost("stream_video_call", participantMinutes);
   }
 
   static async estimateChatCost(messageCount: number) {
@@ -155,11 +163,12 @@ export class UsageTracker {
   static stream = StreamUsageTracker;
 
   /**
-   * Check if user has sufficient credits for an operation
+   * Check if user has sufficient credits for an operation (including free credits)
    */
   static async canAfford(userId: string, estimatedCredits: number): Promise<boolean> {
     const balance = await CreditMeteringService.getUserBalance(userId);
-    return balance.availableCredits.greaterThanOrEqualTo(estimatedCredits);
+    const totalAvailable = balance.availableCredits.plus(balance.availableFreeCredits);
+    return totalAvailable.greaterThanOrEqualTo(estimatedCredits);
   }
 
   /**

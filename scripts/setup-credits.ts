@@ -63,7 +63,7 @@ async function main() {
     console.log("📦 Creating types...");
     await runSQL(`
       CREATE TYPE credit_transaction_type AS ENUM (
-        'purchase', 'usage', 'refund', 'adjustment', 'expiration'
+        'purchase', 'usage', 'refund', 'adjustment', 'expiration', 'free_allocation', 'free_usage'
       )
     `, "credit_transaction_type");
 
@@ -85,6 +85,12 @@ async function main() {
         available_credits TEXT NOT NULL DEFAULT '0',
         total_purchased TEXT NOT NULL DEFAULT '0',
         total_used TEXT NOT NULL DEFAULT '0',
+        free_credit_allocation TEXT NOT NULL DEFAULT '500',
+        available_free_credits TEXT NOT NULL DEFAULT '0',
+        total_free_credits_granted TEXT NOT NULL DEFAULT '0',
+        total_free_credits_used TEXT NOT NULL DEFAULT '0',
+        last_free_allocation_date TIMESTAMP,
+        next_free_allocation_date TIMESTAMP,
         created_at TIMESTAMP NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP NOT NULL DEFAULT NOW()
       )
@@ -151,6 +157,7 @@ async function main() {
     // eslint-disable-next-line no-console
     console.log("\n🔍 Creating indexes...");
     await runSQL(`CREATE INDEX IF NOT EXISTS credit_balances_user_id_idx ON credit_balances(user_id)`, "credit_balances_user_id_idx");
+    await runSQL(`CREATE INDEX IF NOT EXISTS credit_balances_next_free_allocation_idx ON credit_balances(next_free_allocation_date)`, "credit_balances_next_free_allocation_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS credit_transactions_user_id_idx ON credit_transactions(user_id)`, "credit_transactions_user_id_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS credit_transactions_type_idx ON credit_transactions(type)`, "credit_transactions_type_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS credit_transactions_created_at_idx ON credit_transactions(created_at)`, "credit_transactions_created_at_idx");
@@ -172,9 +179,9 @@ async function main() {
     const pricingData = [
       ['openai_gpt4o', '0.01', '800', '0.20', '{"inputPricePerMillion": 2.50, "outputPricePerMillion": 10.00}'],
       ['openai_gpt4o_mini', '0.0006', '800', '0.20', '{"inputPricePerMillion": 0.15, "outputPricePerMillion": 0.60}'],
-      ['stream_video_call', '0.004', '800', '0.20', '{"pricePerMinute": 0.004}'],
-      ['stream_chat_message', '0.0002', '800', '0.20', '{"pricePerMessage": 0.0002}'],
-      ['stream_transcription', '0.006', '800', '0.20', '{"pricePerMinute": 0.006}']
+      ['stream_video_call', '0.0004', '800', '0.20', '{"pricePerParticipantMinute": 0.0004}'],
+      ['stream_chat_message', '0.001', '800', '0.20', '{"pricePerMessage": 0.001}'],
+      ['stream_transcription', '0.009', '800', '0.20', '{"pricePerMinute": 0.009}']
     ];
 
     for (const [service, price, rate, margin, meta] of pricingData) {
@@ -228,19 +235,51 @@ async function main() {
     // eslint-disable-next-line no-console
     console.log("\n👥 Initializing credit balances...");
     // First get all users
-    const users = await sql`SELECT id FROM "user"`;
+    const users = await sql`SELECT id, created_at FROM "user"`;
     let initialized = 0;
     for (const user of users) {
       const id = nanoid();
+      const userCreatedAt = new Date(user.created_at);
+      const nextAllocation = new Date(userCreatedAt);
+      // Set next allocation to same day next month (preserves day of month)
+      nextAllocation.setMonth(nextAllocation.getMonth() + 1);
+
       await sql`
-        INSERT INTO credit_balances (id, user_id, available_credits, total_purchased, total_used)
-        VALUES (${id}, ${user.id}, '0', '0', '0')
-        ON CONFLICT (user_id) DO NOTHING
+        INSERT INTO credit_balances (
+          id, user_id, available_credits, total_purchased, total_used,
+          free_credit_allocation, available_free_credits, total_free_credits_granted,
+          total_free_credits_used, last_free_allocation_date, next_free_allocation_date
+        )
+        VALUES (
+          ${id}, ${user.id}, '0', '0', '0',
+          '500', '500', '500', '0', ${userCreatedAt}, ${nextAllocation}
+        )
+        ON CONFLICT (user_id) DO UPDATE SET
+          available_free_credits = CASE 
+            WHEN credit_balances.available_free_credits = '0' AND credit_balances.total_free_credits_granted = '0'
+            THEN '500'
+            ELSE credit_balances.available_free_credits
+          END,
+          total_free_credits_granted = CASE 
+            WHEN credit_balances.total_free_credits_granted = '0'
+            THEN '500'
+            ELSE credit_balances.total_free_credits_granted
+          END,
+          last_free_allocation_date = CASE 
+            WHEN credit_balances.last_free_allocation_date IS NULL
+            THEN ${userCreatedAt}
+            ELSE credit_balances.last_free_allocation_date
+          END,
+          next_free_allocation_date = CASE 
+            WHEN credit_balances.next_free_allocation_date IS NULL
+            THEN ${nextAllocation}
+            ELSE credit_balances.next_free_allocation_date
+          END
       `;
       initialized++;
     }
     // eslint-disable-next-line no-console
-    console.log(`  ✅ Initialized balances for ${initialized} users`);
+    console.log(`  ✅ Initialized balances and free credits for ${initialized} users`);
 
     // Create trigger function
     // eslint-disable-next-line no-console

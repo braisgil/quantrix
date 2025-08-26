@@ -148,7 +148,9 @@ export const creditTransactionType = pgEnum("credit_transaction_type", [
   "usage",
   "refund",
   "adjustment",
-  "expiration"
+  "expiration",
+  "free_allocation",
+  "free_usage"
 ]);
 
 export const usageServiceType = pgEnum("usage_service_type", [
@@ -170,10 +172,18 @@ export const creditBalances = pgTable("credit_balances", {
   availableCredits: text("available_credits").notNull().default("0"), // Using text for precision decimal
   totalPurchased: text("total_purchased").notNull().default("0"),
   totalUsed: text("total_used").notNull().default("0"),
+  // Free credits tracking
+  freeCreditAllocation: text("free_credit_allocation").notNull().default("500"), // Monthly allocation amount
+  availableFreeCredits: text("available_free_credits").notNull().default("0"), // Current free credits
+  totalFreeCreditsGranted: text("total_free_credits_granted").notNull().default("0"), // Total ever granted
+  totalFreeCreditsUsed: text("total_free_credits_used").notNull().default("0"), // Total free credits consumed
+  lastFreeAllocationDate: timestamp("last_free_allocation_date"), // When free credits were last granted
+  nextFreeAllocationDate: timestamp("next_free_allocation_date"), // When next replenishment is due
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (table) => ({
   userIdIdx: index('credit_balances_user_id_idx').on(table.userId),
+  nextFreeAllocationIdx: index('credit_balances_next_free_allocation_idx').on(table.nextFreeAllocationDate),
 }));
 
 export const creditTransactions = pgTable("credit_transactions", {
