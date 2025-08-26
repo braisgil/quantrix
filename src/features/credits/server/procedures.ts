@@ -7,6 +7,7 @@ import { creditPackages, creditTransactions, usageEvents, servicePricing } from 
 import { eq, and, gte, sql } from "drizzle-orm";
 import { polarClient } from "@/lib/polar";
 import Decimal from "decimal.js";
+import { SmartCreditManager } from "@/lib/credits/smart-credit-manager";
 
 
 
@@ -47,6 +48,25 @@ export const creditsRouter = createTRPCRouter({
       // Combined totals
       totalAvailableCredits: balance.availableCredits.plus(balance.availableFreeCredits).toNumber(),
       displayTotalAvailable: balance.availableCredits.plus(balance.availableFreeCredits).toFixed(2),
+    };
+  }),
+
+  /**
+   * Get comprehensive credit status (balance, status, warnings, recommendations)
+   */
+  getStatus: protectedProcedure.query(async ({ ctx }) => {
+    const status = await SmartCreditManager.getCreditStatus(ctx.auth.user.id);
+    return {
+      balance: {
+        total: status.balance.total.toNumber(),
+        paid: status.balance.paid.toNumber(),
+        free: status.balance.free.toNumber(),
+        reserved: status.balance.reserved.toNumber(),
+        available: status.balance.available.toNumber(),
+      },
+      status: status.status,
+      warnings: status.warnings,
+      recommendations: status.recommendations,
     };
   }),
 

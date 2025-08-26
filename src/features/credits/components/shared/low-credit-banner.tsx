@@ -4,7 +4,7 @@ import React from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, ShoppingCart } from "lucide-react";
-import { useQueryCreditBalanceNonSuspense } from "../../api";
+import { useQueryCreditStatusNonSuspense } from "../../api";
 import { cn } from "@/lib/utils";
 
 interface LowCreditBannerProps {
@@ -20,20 +20,21 @@ export const LowCreditBanner = ({
   className,
   variant = "warning"
 }: LowCreditBannerProps) => {
-  const { data: balance } = useQueryCreditBalanceNonSuspense();
+  const { data: status } = useQueryCreditStatusNonSuspense();
 
-  if (!balance || balance.availableCredits >= threshold) {
+  const available = status?.balance?.available ?? 0;
+  if (!status || available >= threshold) {
     return null;
   }
 
-  const isCritical = balance.availableCredits < 50;
+  const isCritical = status.status === "critical" || status.status === "overdraft";
   const currentVariant = isCritical ? "critical" : variant;
   
   const getMessage = () => {
     if (isCritical) {
-      return `Critical: Only ${balance.availableCredits.toFixed(0)} credits remaining. Purchase more to continue using AI services.`;
+      return `Critical: Only ${available.toFixed(0)} credits remaining. Purchase more to continue using AI services.`;
     }
-    return `Low balance: You have ${balance.availableCredits.toFixed(0)} credits remaining. Consider purchasing more soon.`;
+    return `Low balance: You have ${available.toFixed(0)} credits remaining. Consider purchasing more soon.`;
   };
 
   return (

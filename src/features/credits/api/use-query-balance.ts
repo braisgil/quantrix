@@ -6,7 +6,7 @@ export const useQueryCreditBalance = () => {
   
   return useSuspenseQuery({
     ...trpc.credits.getBalance.queryOptions(),
-    staleTime: 30 * 1000, // 30 seconds
+    staleTime: 60 * 1000, // cache balance for 60s; callers can refetch on-demand
   });
 };
 
@@ -16,7 +16,7 @@ export const useQueryCreditBalanceNonSuspense = () => {
   
   return useQuery({
     ...trpc.credits.getBalance.queryOptions(),
-    staleTime: 30 * 1000, // 30 seconds
+    staleTime: 60 * 1000, // cache balance for 60s; callers can refetch on-demand
   });
 };
 

@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/tooltip";
 import { Coins, AlertCircle } from "lucide-react";
 import { useQueryCreditBalanceNonSuspense } from "../../api";
-import { cn } from "@/lib/utils";
+import { cn, formatCredits } from "@/lib/utils";
 import { CreditBalanceCompactSkeleton } from "../skeletons";
 
-interface CreditBalanceCompactProps {
+export interface CreditBalanceCompactProps {
   className?: string;
   onClick?: () => void;
   showWarning?: boolean;
@@ -32,10 +32,7 @@ export const CreditBalanceCompact = ({
   }
 
   const isLowBalance = balance && balance.availableCredits < 100;
-  const formattedBalance = balance?.availableCredits.toLocaleString(undefined, {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }) || "0";
+  const formattedBalance = formatCredits(balance?.availableCredits || 0);
 
   return (
     <TooltipProvider>
@@ -61,9 +58,7 @@ export const CreditBalanceCompact = ({
         <TooltipContent>
           <div className="space-y-1">
             <p className="font-medium">Credit Balance</p>
-            <p className="text-xs text-muted-foreground">
-              Available: {balance?.displayAvailable || "0.00"}
-            </p>
+            <p className="text-xs text-muted-foreground">Available: {balance?.displayAvailable || "0.00"}</p>
             {isLowBalance && (
               <p className="text-xs text-destructive font-medium">
                 Low balance - Purchase more credits

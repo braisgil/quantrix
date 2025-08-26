@@ -5,6 +5,25 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+// Credit formatting helpers for consistent display
+export function formatCredits(value: number, options?: { decimals?: number }) {
+  const decimals = options?.decimals ?? 0;
+  return value.toLocaleString(undefined, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+}
+
+export function formatCurrencyUSD(value: number, options?: { decimals?: number }) {
+  const decimals = options?.decimals ?? 2;
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  }).format(value);
+}
+
 // Sanitizes free-text search inputs for use in ilike/LIKE queries.
 // - trims, collapses whitespace
 // - removes control characters

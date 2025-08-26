@@ -12,5 +12,13 @@ export { useQueryPurchaseConfirmation } from './api/use-query-purchase-confirmat
 export { useInitiateCreditPurchase, useConfirmCreditPurchase } from './api/use-purchase-credits';
 export { useConfirmPurchaseOnce } from './api/use-confirm-purchase';
 
+// Smart credit management
+export { useSmartCreditGuard } from './hooks/use-smart-credit-guard';
+
+// Core credit services
+export { CreditMeteringService } from '@/lib/credits/metering';
+export { SmartCreditManager } from '@/lib/credits/smart-credit-manager';
+
 // Components for external use
 export { CreditBalanceCompact, LowCreditBanner } from './components/shared';
+export { SmartCreditBanner, SmartCreditIndicator } from './components/smart-credit-banner';

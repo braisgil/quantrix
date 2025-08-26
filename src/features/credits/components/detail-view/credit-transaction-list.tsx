@@ -12,7 +12,9 @@ import {
   RefreshCw, 
   Settings,
   XCircle,
-  Clock
+  Clock,
+  Gift,
+  Sparkles
 } from "lucide-react";
 import { useQueryCreditTransactions } from "../../api";
 import { cn } from "@/lib/utils";
@@ -24,6 +26,8 @@ const TRANSACTION_ICONS = {
   refund: RefreshCw,
   adjustment: Settings,
   expiration: XCircle,
+  free_allocation: Gift,
+  free_usage: Sparkles,
 };
 
 const TRANSACTION_COLORS = {
@@ -32,6 +36,8 @@ const TRANSACTION_COLORS = {
   refund: "text-blue-500",
   adjustment: "text-yellow-500",
   expiration: "text-gray-500",
+  free_allocation: "text-emerald-500",
+  free_usage: "text-purple-500",
 };
 
 interface CreditTransactionListProps {

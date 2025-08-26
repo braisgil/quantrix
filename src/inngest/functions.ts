@@ -5,7 +5,8 @@ import { db } from "@/db";
 import { agents, conversations, user } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { StreamTranscriptItem } from "@/features/conversations/types";
-import { UsageTracker } from "@/lib/credits/usage-tracker";
+import { CreditMeteringService } from "@/lib/credits/metering";
+import { SmartCreditManager } from "@/lib/credits/smart-credit-manager";
 
 const summarizer = createAgent({
   name: "summarizer",
@@ -112,22 +113,25 @@ export const conversationsProcessing = inngest.createFunction(
     const estimatedOutputTokens = 1000; // Summary is typically shorter
 
     // Check if user has sufficient credits
-    const estimatedCost = await UsageTracker.openai.estimateCost({
-      model: "gpt-4o",
+    const _estimatedCost = await CreditMeteringService.estimateOpenAICost(
+      "gpt-4o",
       estimatedInputTokens,
-      estimatedOutputTokens,
-    });
+      estimatedOutputTokens
+    );
 
-    if (!(await UsageTracker.canAfford(conversation.userId, estimatedCost.credits))) {
-      // Mark conversation as failed due to insufficient credits
+    const balance = await CreditMeteringService.getUserBalance(conversation.userId);
+    const totalAvailable = balance.availableCredits.plus(balance.availableFreeCredits);
+    // Guarantee summarization by allowing emergency fallback: if insufficient, still proceed and let tracking use emergency
+    // We only prevent if the user is deeply overdrawn (e.g., less than -200 credits), which shouldn't happen with our guards
+    const deeplyOverdrawn = totalAvailable.lessThan(-200);
+    if (deeplyOverdrawn) {
       await db
         .update(conversations)
         .set({
           status: "completed",
-          summary: "[Summary generation failed: Insufficient credits]",
+          summary: "[Summary generation skipped due to severe overdraft]",
         })
         .where(eq(conversations.id, event.data.conversationId));
-      
       throw new Error("Insufficient credits for summarization");
     }
 
@@ -138,15 +142,21 @@ export const conversationsProcessing = inngest.createFunction(
 
     // Track the actual usage (estimate based on output length)
     const actualOutputTokens = Math.ceil((output[0] as TextMessage).content.length / 4);
-    await UsageTracker.openai.trackCompletion({
+    await SmartCreditManager.trackUsageWithSmartFallback({
       userId: conversation.userId,
-      model: "gpt-4o",
-      usage: {
-        prompt_tokens: estimatedInputTokens,
-        completion_tokens: actualOutputTokens,
-        total_tokens: estimatedInputTokens + actualOutputTokens,
+      service: "openai_gpt4o",
+      quantity: estimatedInputTokens + actualOutputTokens,
+      resourceId: event.data.conversationId,
+      resourceType: "conversation",
+      metadata: {
+        model: "gpt-4o",
+        promptTokens: estimatedInputTokens,
+        completionTokens: actualOutputTokens,
+        totalTokens: estimatedInputTokens + actualOutputTokens,
+        inputTokens: estimatedInputTokens,
+        outputTokens: actualOutputTokens,
       },
-      conversationId: event.data.conversationId,
+      allowEmergencyCredits: true,
     });
 
     await step.run("save-summary", async () => {

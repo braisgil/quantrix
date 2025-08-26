@@ -132,6 +132,7 @@ export const conversations = pgTable("conversations", {
   startedAt: timestamp("started_at"),
   endedAt: timestamp("ended_at"),
   summary: text("summary"),
+  metadata: text("metadata"), // JSON string for credit reservations and other metadata
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (table) => ({

@@ -8,6 +8,7 @@ import { Navbar } from '@/components/layout/navbar';
 import { SidebarCustom } from '@/components/layout/sidebar';
 import { GlobalErrorBoundary } from '@/components/error-boundary/global-error-boundary';
 import { NavigationProgress } from '@/components/navigation-progress';
+import { LowCreditBanner } from '@/features/credits/components';
 
 export default function DashboardLayout({
   children,
@@ -45,6 +46,9 @@ export default function DashboardLayout({
           <SidebarInset className="flex flex-col flex-1 relative z-30">
             <Navbar />
             <main className="flex-1 p-6 matrix-container">
+              <div className="max-w-7xl mx-auto mb-4">
+                <LowCreditBanner threshold={120} />
+              </div>
               <div className="max-w-7xl mx-auto">
                 {children}
               </div>

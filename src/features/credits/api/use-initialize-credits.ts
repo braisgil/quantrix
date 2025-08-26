@@ -7,8 +7,8 @@ export const useInitializeCredits = () => {
 
   return useMutation({
     ...trpc.credits.initializeFreeCredits.mutationOptions({
-      onSuccess: async (data) => {
-        console.log("✅ Free credits initialized:", data);
+      onSuccess: async (_data) => {
+        // Successfully initialized free credits
         
         // Invalidate balance queries to refresh UI
         await queryClient.invalidateQueries(

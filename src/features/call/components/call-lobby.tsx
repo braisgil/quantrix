@@ -15,6 +15,7 @@ import { authClient } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { CallLobbyProps } from "../types";
+import { LowCreditBanner } from "@/features/credits/components";
 
 const DisabledVideoPreview = () => {
   const { data } = authClient.useSession();
@@ -58,6 +59,9 @@ export const CallLobby = ({ onJoin }: CallLobbyProps) => {
     <div className="flex flex-col items-center justify-center h-screen matrix-bg p-3 sm:p-4">
       <Card className="matrix-card border-primary/20 backdrop-blur-md w-full max-w-md sm:max-w-lg">
         <CardContent className="p-4 sm:p-6">
+          <div className="mb-3">
+            <LowCreditBanner threshold={120} />
+          </div>
           <div className="flex flex-col items-center justify-center gap-y-4 sm:gap-y-5">
             <div className="flex flex-col gap-y-1 text-center">
               <h2 className="text-lg sm:text-xl font-bold matrix-text-glow">Ready to join?</h2>

@@ -21,3 +21,4 @@ export {
 
 // Shared components (for external use)
 export * from "./shared";
+export type { CreditBalanceCompactProps } from "./shared";

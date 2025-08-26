@@ -7,6 +7,8 @@ import { streamChat } from "@/lib/stream-chat";
 import { streamVideo } from "@/lib/stream-video";
 import { buildIlikePattern } from "@/lib/utils";
 import { createTRPCRouter, premiumProcedure, protectedProcedure, rateLimited } from "@/trpc/init";
+import { SmartCreditGuard } from "@/lib/credits/smart-credit-guard";
+import { SmartCreditManager } from "@/lib/credits/smart-credit-manager";
 
 import { conversationsInsertSchema } from "../schema";
 import { ConversationStatus } from "../types";
@@ -60,6 +62,38 @@ export const conversationRouter = createTRPCRouter({
           code: "FORBIDDEN",
           message: "This call is not yet available. It will open 30 minutes before the scheduled time.",
         });
+      }
+
+      // Preflight credit check BEFORE issuing any token to avoid starting unaffordable calls
+      // Keep this conservative and side-effect free (no reservations here)
+      try {
+        const preflight = await SmartCreditGuard.preflightCheck({
+          userId: ctx.auth.user.id,
+          operations: {
+            videoCall: { estimatedDurationMinutes: 5 },
+            transcription: { estimatedDurationMinutes: 5 },
+            processing: { complexity: "medium" },
+          },
+          resourceId: conversationRow.id,
+          resourceType: "conversation",
+        });
+
+        if (!preflight.canAfford) {
+          // Allow very constrained start only if the user has a minimal available buffer (>= 30)
+          const creditStatus = await SmartCreditManager.getCreditStatus(ctx.auth.user.id);
+          const available = creditStatus.balance.available;
+          if (available.lessThan(30)) {
+            throw new TRPCError({
+              code: "PAYMENT_REQUIRED",
+              message: `Insufficient credits to start the call. You need at least 30 credits available to begin. Available: ${available.toFixed(0)}.`,
+            });
+          }
+        }
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Credit preflight check failed" });
       }
 
       // Prepare user in Stream and issue token

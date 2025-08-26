@@ -1,7 +1,7 @@
 "use client";
 
 import { useQueryCreditBalanceNonSuspense } from "../api";
-import { UsageTracker } from "@/lib/credits/usage-tracker";
+import { CreditMeteringService } from "@/lib/credits/metering";
 import { useCallback } from "react";
 
 interface CreditGuardOptions {
@@ -54,7 +54,11 @@ export const useCreditGuard = (options: CreditGuardOptions = {}): CreditGuardRes
     estimatedOutputTokens: number;
   }) => {
     try {
-      const costEstimate = await UsageTracker.openai.estimateCost(params);
+      const costEstimate = await CreditMeteringService.estimateOpenAICost(
+        params.model,
+        params.estimatedInputTokens,
+        params.estimatedOutputTokens
+      );
       return {
         canAfford: availableCredits >= costEstimate.credits,
         estimatedCost: costEstimate.credits,
