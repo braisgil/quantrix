@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { agents, conversations, user } from "@/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { StreamTranscriptItem } from "@/features/conversations/types";
+import { UsageTracker } from "@/lib/credits/usage-tracker";
 
 const summarizer = createAgent({
   name: "summarizer",
@@ -95,10 +96,58 @@ export const conversationsProcessing = inngest.createFunction(
       });
     });
 
+    // Get conversation to find user for credit tracking
+    const [conversation] = await db
+      .select()
+      .from(conversations)
+      .where(eq(conversations.id, event.data.conversationId));
+
+    if (!conversation) {
+      throw new Error("Conversation not found");
+    }
+
+    // Estimate tokens for summarization (rough estimate)
+    const transcriptText = JSON.stringify(transcriptWithSpeakers);
+    const estimatedInputTokens = Math.ceil(transcriptText.length / 4); // Rough estimate: 1 token ≈ 4 chars
+    const estimatedOutputTokens = 1000; // Summary is typically shorter
+
+    // Check if user has sufficient credits
+    const estimatedCost = await UsageTracker.openai.estimateCost({
+      model: "gpt-4o",
+      estimatedInputTokens,
+      estimatedOutputTokens,
+    });
+
+    if (!(await UsageTracker.canAfford(conversation.userId, estimatedCost.credits))) {
+      // Mark conversation as failed due to insufficient credits
+      await db
+        .update(conversations)
+        .set({
+          status: "completed",
+          summary: "[Summary generation failed: Insufficient credits]",
+        })
+        .where(eq(conversations.id, event.data.conversationId));
+      
+      throw new Error("Insufficient credits for summarization");
+    }
+
     const { output } = await summarizer.run(
       "Summarize the following transcript: " +
         JSON.stringify(transcriptWithSpeakers)
     );
+
+    // Track the actual usage (estimate based on output length)
+    const actualOutputTokens = Math.ceil((output[0] as TextMessage).content.length / 4);
+    await UsageTracker.openai.trackCompletion({
+      userId: conversation.userId,
+      model: "gpt-4o",
+      usage: {
+        prompt_tokens: estimatedInputTokens,
+        completion_tokens: actualOutputTokens,
+        total_tokens: estimatedInputTokens + actualOutputTokens,
+      },
+      conversationId: event.data.conversationId,
+    });
 
     await step.run("save-summary", async () => {
       await db
