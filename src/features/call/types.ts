@@ -1,5 +1,6 @@
 // Component Props Types
 export interface CallUIProps {
+  conversationId: string;
   conversationName: string;
 }
 

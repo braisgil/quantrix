@@ -4,6 +4,8 @@ import { polarClient } from "@/lib/polar";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { getDefaultLimits, getUsageCounts, computePlanLimitsForCustomer } from "./plan-limits";
 
+
+
 export const premiumRouter = createTRPCRouter({
   getCurrentSubscription: protectedProcedure.query(async ({ ctx }) => {
     const customer = await polarClient.customers.getStateExternal({
@@ -25,10 +27,12 @@ export const premiumRouter = createTRPCRouter({
 
   getProducts: protectedProcedure.query(async () => {
     const products = await polarClient.products.list({
-      isArchived: false,
-      isRecurring: true,
-      sorting: ["price_amount"],
+      // isArchived: false,
+      //isRecurring: true,
+      // sorting: ["price_amount"],
     });
+
+    // Debug removed
 
     return products.result.items;
   }),

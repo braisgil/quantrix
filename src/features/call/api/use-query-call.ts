@@ -5,4 +5,4 @@ export const useQueryCall = (id: string) => {
   const trpc = useTRPC();
   
   return useSuspenseQuery(trpc.conversations.getOne.queryOptions({ id }));
-}; 
+};

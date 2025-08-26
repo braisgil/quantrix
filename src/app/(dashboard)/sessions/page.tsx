@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { getQueryClient, trpc } from "@/trpc/server";
-import { ConversationSkeleton } from '@/features/conversations/components/shared/conversation-skeleton';
+import { SessionListSkeleton } from '@/features/sessions/components/skeletons';
 import { SessionListView } from '@/features/sessions/views/session-list-view';
 
 export default async function SessionsPage() {
@@ -23,7 +23,7 @@ export default async function SessionsPage() {
   }
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<ConversationSkeleton variant="list-item" />}>
+      <Suspense fallback={<SessionListSkeleton />}>
         <SessionListView />
       </Suspense>
     </HydrationBoundary>

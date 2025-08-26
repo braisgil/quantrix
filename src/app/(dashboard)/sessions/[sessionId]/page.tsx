@@ -2,7 +2,7 @@ import { SessionDetailView } from "@/features/sessions/views/session-detail-view
 import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
-import { ConversationSkeleton } from "@/features/conversations/components/shared/conversation-skeleton";
+import { SessionDetailSkeleton } from "@/features/sessions/components/skeletons";
 
 interface SessionDetailPageProps {
   params: Promise<{
@@ -30,7 +30,7 @@ export default async function SessionDetailPage({ params }: SessionDetailPagePro
   }
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<ConversationSkeleton variant="detail-view" />}>
+      <Suspense fallback={<SessionDetailSkeleton />}>
         <SessionDetailView sessionId={sessionId} />
       </Suspense>
     </HydrationBoundary>

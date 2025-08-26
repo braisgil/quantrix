@@ -7,6 +7,7 @@ import { streamChat } from "@/lib/stream-chat";
 import { streamVideo } from "@/lib/stream-video";
 import { buildIlikePattern } from "@/lib/utils";
 import { createTRPCRouter, premiumProcedure, protectedProcedure, rateLimited } from "@/trpc/init";
+import { CreditService } from "@/lib/credits/simple-credit-service";
 
 import { conversationsInsertSchema } from "../schema";
 import { ConversationStatus } from "../types";
@@ -60,6 +61,24 @@ export const conversationRouter = createTRPCRouter({
           code: "FORBIDDEN",
           message: "This call is not yet available. It will open 30 minutes before the scheduled time.",
         });
+      }
+
+      // Simple preflight credit check BEFORE issuing any token
+      try {
+        const { CreditService } = await import("@/lib/credits/simple-credit-service");
+        const creditCheck = await CreditService.canStartCall(ctx.auth.user.id, 30); // 30 min estimate
+        
+        if (!creditCheck.canStart) {
+          throw new TRPCError({
+            code: "PAYMENT_REQUIRED", 
+            message: creditCheck.error || "Insufficient credits to start the call",
+          });
+        }
+      } catch (error) {
+        if (error instanceof TRPCError) {
+          throw error;
+        }
+        throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Credit check failed" });
       }
 
       // Prepare user in Stream and issue token
@@ -146,8 +165,7 @@ export const conversationRouter = createTRPCRouter({
               closed_caption_mode: "auto-on",
             },
             recording: {
-              mode: "auto-on",
-              quality: "1080p",
+              mode: "disabled",
             },
           },
         },

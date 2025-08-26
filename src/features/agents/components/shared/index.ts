@@ -1,5 +1,4 @@
-// Agent loading and error states
-export { AgentSkeleton, type AgentSkeletonVariant } from './agent-skeleton';
+// Error handling
 export { ErrorBoundary } from './error-boundary';
 
 // Navigation components
