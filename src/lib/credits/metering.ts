@@ -1,7 +1,6 @@
 import { db } from "@/db";
 import { creditBalances, creditTransactions, usageEvents, servicePricing } from "@/db/schema";
 import { eq, and, sql, desc } from "drizzle-orm";
-// import { polarClient } from "@/lib/polar"; // TODO: Uncomment when Polar events API is available
 import Decimal from "decimal.js";
 
 type DecimalValue = InstanceType<typeof Decimal>;
@@ -196,7 +195,6 @@ export class CreditMeteringService {
         resourceId,
         resourceType,
         metadata: metadata ? JSON.stringify(metadata) : null,
-        processed: false,
       })
       .returning();
 
@@ -217,17 +215,6 @@ export class CreditMeteringService {
       }),
     });
 
-    // Send event to Polar for metering
-    await this.sendPolarMeteringEvent({
-      customerId: userId,
-      eventName: `usage.${service}`,
-      properties: {
-        quantity,
-        creditCost: creditCost.toNumber(),
-        resourceId,
-        resourceType,
-      },
-    });
 
     return usageEvent;
   }
@@ -280,40 +267,6 @@ export class CreditMeteringService {
   }
 
   // Note: reservation logic removed; credits are charged directly on usage
-
-  /**
-   * Send metering event to Polar
-   */
-  static async sendPolarMeteringEvent(params: {
-    customerId: string;
-    eventName: string;
-    properties: Record<string, string | number | boolean | undefined>;
-  }) {
-    try {
-      // Polar.sh metering API call
-      // Note: The exact API endpoint and format will depend on Polar's documentation
-      // This is a placeholder implementation
-      // Note: Polar events API may vary by SDK version
-      // This is a placeholder - adjust based on your Polar SDK version
-      // For now, we'll skip the event sending since the events API
-      // may not be available in the current SDK version
-      // TODO: Implement when Polar SDK events API is available
-      
-      // Placeholder logging for development
-      if (process.env.NODE_ENV === "development") {
-        console.warn("[Polar Event - Not Sent]", {
-          type: "usage",
-          customerId: params.customerId,
-          eventName: params.eventName,
-          properties: params.properties,
-          timestamp: new Date().toISOString(),
-        });
-      }
-    } catch (_error) {
-      console.error("Failed to send Polar metering event:", _error);
-      // Don't throw - we don't want to fail the transaction if Polar is down
-    }
-  }
 
   /**
    * Get usage history for a user

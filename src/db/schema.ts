@@ -213,14 +213,10 @@ export const usageEvents = pgTable("usage_events", {
   resourceId: text("resource_id"), // Reference to conversation, session, etc.
   resourceType: text("resource_type"), // "conversation", "session", "chat"
   metadata: text("metadata"), // JSON string for service-specific data
-  polarEventId: text("polar_event_id"), // ID of the event sent to Polar
-  processed: boolean("processed").notNull().default(false),
-  processedAt: timestamp("processed_at"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 }, (table) => ({
   userIdIdx: index('usage_events_user_id_idx').on(table.userId),
   serviceIdx: index('usage_events_service_idx').on(table.service),
-  processedIdx: index('usage_events_processed_idx').on(table.processed),
   resourceIdx: index('usage_events_resource_idx').on(table.resourceId, table.resourceType),
   createdAtIdx: index('usage_events_created_at_idx').on(table.createdAt),
 }));

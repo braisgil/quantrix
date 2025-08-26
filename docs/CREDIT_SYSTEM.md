@@ -2,33 +2,36 @@
 
 ## Overview
 
-This document describes the implementation of a dynamic credit-based subscription system that integrates OpenAI and GetStream.io usage with Polar.sh metering. Users purchase credits upfront, and these credits are consumed based on their usage of AI and streaming services.
+This document describes the implementation of a simplified prepaid credit system. Users purchase credits upfront through Polar.sh, and these credits are deducted immediately when they use OpenAI and GetStream.io services. The system provides real-time balance tracking and UI-based low credit warnings.
 
 ## Architecture
 
 ### Key Components
 
 1. **Credit Metering Service** (`src/lib/credits/metering.ts`)
-   - Manages credit balances
-   - Tracks usage events
-   - Calculates costs dynamically
-   - Integrates with Polar.sh for billing
+   - Manages credit balances with immediate deduction
+   - Tracks usage events for history and analytics
+   - Calculates costs dynamically based on service pricing
 
 2. **Usage Trackers** (`src/lib/credits/usage-tracker.ts`)
-   - OpenAI usage tracking (GPT-4o, GPT-4o Mini)
+   - OpenAI usage tracking (GPT-4o, GPT-4o Mini)  
    - GetStream.io usage tracking (video calls, chat, transcription)
+   - Provides cost estimation before expensive operations
 
 3. **Database Schema**
    - `credit_balances`: User credit balances
    - `credit_transactions`: Purchase and usage history
-   - `usage_events`: Detailed usage tracking
+   - `usage_events`: Detailed usage tracking for analytics
    - `service_pricing`: Dynamic pricing configuration
    - `credit_packages`: Available credit packages
 
-4. **Background Jobs** (Inngest functions)
-   - Process usage events every 5 minutes
-   - Reconcile balances daily
-   - Alert users on low credit balance
+4. **UI Components** (`src/features/credits/components/`)
+   - Real-time credit balance display with low balance warnings
+   - Credit purchase flow integration with Polar.sh
+   - Usage analytics and transaction history
+
+5. **Background Jobs** (Inngest functions)
+   - Conversation processing and summarization (uses credits)
 
 ## Setup Instructions
 
@@ -244,13 +247,50 @@ WHERE user_id = 'user_id'
 GROUP BY service;
 ```
 
+## Low Credit Warnings
+
+The system provides real-time low credit warnings through the UI instead of background notifications:
+
+### Components
+
+1. **CreditBalanceCompact**: Shows warning icon and red text when credits < 100
+2. **CreditBalanceCard**: Displays "Low balance" badge when credits < 100  
+3. **LowCreditBanner**: Prominent banner that appears when credits are low
+4. **useCreditGuard Hook**: Utility hook for checking credit availability
+
+### Usage Examples
+
+```tsx
+import { LowCreditBanner, useCreditGuard } from "@/features/credits";
+
+// Show banner when credits are low
+<LowCreditBanner 
+  threshold={100} 
+  onPurchaseClick={() => router.push('/credits')} 
+/>
+
+// Check credits before expensive operations
+const { canAfford, shouldWarn, estimateOpenAICost } = useCreditGuard();
+
+// Estimate cost before making API call
+const estimate = await estimateOpenAICost({
+  model: "gpt-4o",
+  estimatedInputTokens: 1000,
+  estimatedOutputTokens: 500,
+});
+
+if (!estimate.canAfford) {
+  // Show purchase modal or disable feature
+}
+```
+
 ## Troubleshooting
 
 ### Common Issues
 
-1. **Credits not deducted**: Check if usage events are being created and processed
+1. **Credits not deducted**: Check if usage events are being created and credit balance is updated
 2. **Polar checkout fails**: Verify Polar API keys and product IDs
-3. **Background jobs not running**: Ensure Inngest is running (`npm run dev:inngest`)
+3. **Conversation processing fails**: Ensure Inngest is running (`npm run dev:inngest`)
 4. **Insufficient credits error**: User needs to purchase more credits
 
 ### Debug Mode
@@ -269,8 +309,8 @@ console.log("Credit calculation:", {
 ## Security Considerations
 
 1. **Webhook Verification**: All webhooks are verified using signatures
-2. Removed reserved credits: operations charge directly on usage; no reservation phase
-3. **Reconciliation**: Daily reconciliation catches any discrepancies
+2. **Immediate Deduction**: Credits are deducted immediately when services are used
+3. **Transaction History**: All credit operations create audit trail records
 4. **Rate Limiting**: API calls are rate-limited per user
 
 ## Future Enhancements

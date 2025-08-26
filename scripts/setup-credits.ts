@@ -114,7 +114,6 @@ async function main() {
         metadata JSONB,
         resource_id TEXT,
         resource_type TEXT,
-        processed BOOLEAN NOT NULL DEFAULT false,
         created_at TIMESTAMP NOT NULL DEFAULT NOW()
       )
     `, "usage_events table");
@@ -158,7 +157,6 @@ async function main() {
     await runSQL(`CREATE INDEX IF NOT EXISTS credit_transactions_polar_checkout_idx ON credit_transactions(polar_checkout_id)`, "credit_transactions_polar_checkout_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS usage_events_user_id_idx ON usage_events(user_id)`, "usage_events_user_id_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS usage_events_service_idx ON usage_events(service)`, "usage_events_service_idx");
-    await runSQL(`CREATE INDEX IF NOT EXISTS usage_events_processed_idx ON usage_events(processed)`, "usage_events_processed_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS usage_events_resource_idx ON usage_events(resource_id, resource_type)`, "usage_events_resource_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS usage_events_created_at_idx ON usage_events(created_at)`, "usage_events_created_at_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS service_pricing_service_idx ON service_pricing(service)`, "service_pricing_service_idx");
