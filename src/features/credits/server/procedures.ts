@@ -30,6 +30,8 @@ export const creditsRouter = createTRPCRouter({
    * Get current credit balance for the authenticated user
    */
   getBalance: protectedProcedure.query(async ({ ctx }) => {
+    // Make sure free renewal has been applied before returning
+    await CreditMeteringService.ensureFreeCreditsRenewal(ctx.auth.user.id);
     const balance = await CreditMeteringService.getUserBalance(ctx.auth.user.id);
 
     return {
@@ -37,7 +39,19 @@ export const creditsRouter = createTRPCRouter({
       totalPurchased: balance.totalPurchased.toNumber(),
       totalUsed: balance.totalUsed.toNumber(),
       displayAvailable: balance.availableCredits.toFixed(2),
+      freeAvailable: balance.freeAvailable.toNumber(),
+      freeAllocation: balance.freeAllocation.toNumber(),
+      nextFreeRenewalAt: balance.nextFreeRenewalAt ? new Date(balance.nextFreeRenewalAt).toISOString() : null,
+      paidAvailable: balance.paidAvailable.toNumber(),
     };
+  }),
+
+  /**
+   * Get next free credits renewal date
+   */
+  getNextFreeRenewal: protectedProcedure.query(async ({ ctx }) => {
+    const date = await CreditMeteringService.getNextFreeRenewalDate(ctx.auth.user.id);
+    return { nextFreeRenewalAt: date ? date.toISOString() : null };
   }),
 
   /**

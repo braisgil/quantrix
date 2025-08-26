@@ -170,6 +170,11 @@ export const creditBalances = pgTable("credit_balances", {
   availableCredits: text("available_credits").notNull().default("0"), // Using text for precision decimal
   totalPurchased: text("total_purchased").notNull().default("0"),
   totalUsed: text("total_used").notNull().default("0"),
+  // Free monthly credits bucket
+  freeCreditsAvailable: text("free_credits_available").notNull().default("0"),
+  freeCreditsAllocation: text("free_credits_allocation").notNull().default("500"),
+  nextFreeRenewalAt: timestamp("next_free_renewal_at"),
+  totalFreeUsed: text("total_free_used").notNull().default("0"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (table) => ({

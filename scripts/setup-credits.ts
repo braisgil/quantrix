@@ -85,10 +85,34 @@ async function main() {
         available_credits TEXT NOT NULL DEFAULT '0',
         total_purchased TEXT NOT NULL DEFAULT '0',
         total_used TEXT NOT NULL DEFAULT '0',
+        free_credits_available TEXT NOT NULL DEFAULT '0',
+        free_credits_allocation TEXT NOT NULL DEFAULT '500',
+        next_free_renewal_at TIMESTAMP,
+        total_free_used TEXT NOT NULL DEFAULT '0',
         created_at TIMESTAMP NOT NULL DEFAULT NOW(),
         updated_at TIMESTAMP NOT NULL DEFAULT NOW()
       )
     `, "credit_balances table");
+
+    // Add new columns for monthly free credits (safe if already exist)
+    // eslint-disable-next-line no-console
+    console.log("\n🧩 Ensuring free credit columns exist...");
+    await runSQL(`
+      ALTER TABLE credit_balances
+        ADD COLUMN IF NOT EXISTS free_credits_available TEXT NOT NULL DEFAULT '0';
+    `, "add free_credits_available");
+    await runSQL(`
+      ALTER TABLE credit_balances
+        ADD COLUMN IF NOT EXISTS free_credits_allocation TEXT NOT NULL DEFAULT '500';
+    `, "add free_credits_allocation");
+    await runSQL(`
+      ALTER TABLE credit_balances
+        ADD COLUMN IF NOT EXISTS next_free_renewal_at TIMESTAMP;
+    `, "add next_free_renewal_at");
+    await runSQL(`
+      ALTER TABLE credit_balances
+        ADD COLUMN IF NOT EXISTS total_free_used TEXT NOT NULL DEFAULT '0';
+    `, "add total_free_used");
 
     await runSQL(`
       CREATE TABLE IF NOT EXISTS credit_transactions (
@@ -160,6 +184,17 @@ async function main() {
 
     await runSQL(`CREATE INDEX IF NOT EXISTS usage_events_resource_idx ON usage_events(resource_id, resource_type)`, "usage_events_resource_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS usage_events_created_at_idx ON usage_events(created_at)`, "usage_events_created_at_idx");
+    // Ensure idempotency for certain services (avoid duplicate charges)
+    await runSQL(`
+      CREATE UNIQUE INDEX IF NOT EXISTS usage_events_unique_video_call
+      ON usage_events(resource_id)
+      WHERE service = 'stream_video_call'
+    `, "usage_events_unique_video_call");
+    await runSQL(`
+      CREATE UNIQUE INDEX IF NOT EXISTS usage_events_unique_transcription
+      ON usage_events(resource_id)
+      WHERE service = 'stream_transcription'
+    `, "usage_events_unique_transcription");
     await runSQL(`CREATE INDEX IF NOT EXISTS service_pricing_service_idx ON service_pricing(service)`, "service_pricing_service_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS service_pricing_is_active_idx ON service_pricing(is_active)`, "service_pricing_is_active_idx");
     await runSQL(`CREATE INDEX IF NOT EXISTS credit_packages_polar_product_id_idx ON credit_packages(polar_product_id)`, "credit_packages_polar_product_id_idx");
@@ -193,6 +228,21 @@ async function main() {
         console.log(`  ✅ Configured pricing for ${service}`);
       }
     }
+
+    // Backfill defaults for existing users
+    // eslint-disable-next-line no-console
+    console.log("\n🧪 Backfilling free credit defaults for existing users...");
+    await runSQL(`
+      UPDATE credit_balances
+      SET
+        free_credits_allocation = COALESCE(NULLIF(free_credits_allocation, ''), '500'),
+        free_credits_available = CASE
+          WHEN free_credits_available IS NULL OR free_credits_available = '' THEN COALESCE(NULLIF(free_credits_allocation, ''), '500')
+          ELSE free_credits_available
+        END,
+        next_free_renewal_at = COALESCE(next_free_renewal_at, NOW() + INTERVAL '1 month'),
+        total_free_used = COALESCE(NULLIF(total_free_used, ''), '0')
+    `, "backfill free credit columns");
 
     // Insert credit packages
     // eslint-disable-next-line no-console
@@ -233,8 +283,16 @@ async function main() {
     for (const user of users) {
       const id = nanoid();
       await sql`
-        INSERT INTO credit_balances (id, user_id, available_credits, total_purchased, total_used)
-        VALUES (${id}, ${user.id}, '0', '0', '0')
+        INSERT INTO credit_balances (
+          id, user_id,
+          available_credits, total_purchased, total_used,
+          free_credits_available, free_credits_allocation, next_free_renewal_at, total_free_used
+        )
+        VALUES (
+          ${id}, ${user.id},
+          '0', '0', '0',
+          '500', '500', NOW() + INTERVAL '1 month', '0'
+        )
         ON CONFLICT (user_id) DO NOTHING
       `;
       initialized++;

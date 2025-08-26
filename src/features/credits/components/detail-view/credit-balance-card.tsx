@@ -34,9 +34,12 @@ export const CreditBalanceCard = ({
     return <CreditBalanceCardSkeleton />;
   }
 
-  const percentageUsed = balance 
-    ? (balance.totalUsed / (balance.totalPurchased || 1)) * 100
-    : 0;
+  // Show free vs paid usage explicitly to avoid confusing ratios
+  const paidAvailable = balance?.paidAvailable ?? 0;
+  const freeAvailable = balance?.freeAvailable ?? 0;
+  const freeAllocation = balance?.freeAllocation ?? 0;
+  const freeUsed = Math.max(0, freeAllocation - freeAvailable);
+  const freePercent = freeAllocation > 0 ? (freeUsed / freeAllocation) * 100 : 0;
 
   const isLowBalance = balance && balance.availableCredits < 100;
 
@@ -91,14 +94,26 @@ export const CreditBalanceCard = ({
 
         </div>
 
+        {/* Free usage */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Usage</span>
+            <span className="text-muted-foreground">Monthly free usage</span>
             <span className="font-medium">
-              {balance?.totalUsed.toFixed(2)} / {balance?.totalPurchased.toFixed(2)}
+              {Math.round(freeUsed)} / {Math.round(freeAllocation)}
             </span>
           </div>
-          <Progress value={percentageUsed} className="h-2" />
+          <Progress value={freePercent} className="h-2" />
+        </div>
+
+        {/* Paid balance */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">Paid credits available</span>
+            <span className="font-medium">
+              {Math.round(paidAvailable)}
+            </span>
+          </div>
+          <Progress value={Math.min(100, paidAvailable > 0 ? 100 : 0)} className="h-2" />
         </div>
 
         <div className="grid grid-cols-2 gap-3 pt-2">

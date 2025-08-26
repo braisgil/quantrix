@@ -122,7 +122,11 @@ export async function POST(req: NextRequest) {
     }
 
     const call = streamVideo.video.call("default", conversationId);
-    await call.end();
+    try {
+      await call.end();
+    } catch {
+      // If the call is already ended or network transient issue, don't fail the webhook
+    }
   } else if (eventType === "call.session_ended") {
     const event = payload as CallEndedEvent;
     const conversationId = event.call.custom?.conversationId;
@@ -141,12 +145,29 @@ export async function POST(req: NextRequest) {
       const durationMs = new Date().getTime() - existingConversation.startedAt.getTime();
       const durationMinutes = durationMs / 1000 / 60;
 
-      // Track video call usage
-      await UsageTracker.stream.trackVideoCall({
-        userId: existingConversation.userId,
-        durationMinutes,
-        conversationId,
-      });
+      // Track video call usage (idempotent: avoid duplicates for same conversationId)
+      const [existingVideoUsage] = await db
+        .select({ id: usageEvents.id })
+        .from(usageEvents)
+        .where(
+          and(
+            eq(usageEvents.resourceId, conversationId),
+            eq(usageEvents.service, "stream_video_call")
+          )
+        )
+        .limit(1);
+
+      if (!existingVideoUsage) {
+        try {
+          await UsageTracker.stream.trackVideoCall({
+            userId: existingConversation.userId,
+            durationMinutes,
+            conversationId,
+          });
+        } catch {
+          // If credits are insufficient for video, don't fail the webhook
+        }
+      }
     }
 
     await db
@@ -181,16 +202,36 @@ export async function POST(req: NextRequest) {
       )
       .limit(1);
 
-    // Track transcription usage (estimate based on conversation duration)
+    // Track transcription usage (estimate based on conversation duration) with affordability check
     if (!existingTranscriptionUsage && existingConversation.startedAt && existingConversation.endedAt) {
       const durationMs = existingConversation.endedAt.getTime() - existingConversation.startedAt.getTime();
       const durationMinutes = durationMs / 1000 / 60;
 
-      await UsageTracker.stream.trackTranscription({
-        userId: existingConversation.userId,
-        durationMinutes,
-        conversationId,
-      });
+      // Pre-check credits to avoid incomplete processing states
+      const estimate = await UsageTracker.stream.estimateTranscriptionCost(durationMinutes);
+      const canAfford = await UsageTracker.canAfford(existingConversation.userId, estimate.credits);
+      if (!canAfford) {
+        await db
+          .update(conversations)
+          .set({ status: "completed", updatedAt: new Date() })
+          .where(eq(conversations.id, conversationId));
+        return NextResponse.json({ status: "ok", skipped: "insufficient_credits" });
+      }
+
+      try {
+        await UsageTracker.stream.trackTranscription({
+          userId: existingConversation.userId,
+          durationMinutes,
+          conversationId,
+        });
+      } catch {
+        // If a race condition caused insufficient credits, mark completed to avoid stuck state
+        await db
+          .update(conversations)
+          .set({ status: "completed", updatedAt: new Date() })
+          .where(eq(conversations.id, conversationId));
+        return NextResponse.json({ status: "ok", skipped: "insufficient_credits" });
+      }
     }
 
     await inngest.send({
