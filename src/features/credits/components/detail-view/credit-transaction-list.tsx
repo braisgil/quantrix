@@ -4,7 +4,7 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { 
   ArrowDownCircle, 
@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useQueryCreditTransactions } from "../../api";
 import { cn } from "@/lib/utils";
+import { CreditTransactionListSkeleton } from "../skeletons";
 
 const TRANSACTION_ICONS = {
   purchase: ArrowDownCircle,
@@ -127,21 +128,5 @@ export const CreditTransactionList = ({
   );
 };
 
-export const CreditTransactionListSkeleton = () => {
-  return (
-    <Card>
-      <CardHeader>
-        <Skeleton className="h-6 w-40" />
-        <Skeleton className="h-4 w-60" />
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-3">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-20 w-full" />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+
 

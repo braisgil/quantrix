@@ -1,7 +1,7 @@
 // Public API for premium feature - provides clean interface for external consumers
 
 // Main views (most common use case)
-export { UpgradeView, UpgradeViewLoading } from './views';
+export { UpgradeView } from './views';
 
 // Public types
 export type { 

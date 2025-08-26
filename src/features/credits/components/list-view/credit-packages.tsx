@@ -4,11 +4,12 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { CheckCircle2, Sparkles, TrendingUp, Zap } from "lucide-react";
 import { useQueryCreditPackages } from "../../api";
 import { useInitiateCreditPurchase } from "../../api";
 import { cn } from "@/lib/utils";
+import { CreditPackagesSkeleton } from "../skeletons";
 
 interface CreditPackagesProps {
   className?: string;
@@ -157,34 +158,5 @@ const CreditPackageCard = ({
   );
 };
 
-export const CreditPackagesSkeleton = ({ columns = 3 }: { columns?: 2 | 3 | 4 }) => {
-  const gridCols = {
-    2: "grid-cols-1 md:grid-cols-2",
-    3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
-    4: "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
-  };
 
-  return (
-    <div className={`grid ${gridCols[columns]} gap-4`}>
-      {Array.from({ length: columns }).map((_, i) => (
-        <Card key={i} className="flex flex-col">
-          <CardHeader>
-            <Skeleton className="h-6 w-32" />
-            <Skeleton className="h-4 w-full" />
-          </CardHeader>
-          <CardContent className="flex-1 space-y-4">
-            <Skeleton className="h-10 w-24" />
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Skeleton className="h-10 w-full" />
-          </CardFooter>
-        </Card>
-      ))}
-    </div>
-  );
-};
 

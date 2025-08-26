@@ -3,7 +3,7 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   BarChart, 
@@ -19,6 +19,7 @@ import {
 } from "recharts";
 import { Brain, Video, MessageSquare, Mic } from "lucide-react";
 import { useQueryCreditUsageStats } from "../../api";
+import { CreditUsageChartSkeleton } from "../skeletons";
 
 const SERVICE_ICONS = {
   openai_gpt4o: Brain,
@@ -172,22 +173,5 @@ export const CreditUsageChart = () => {
   );
 };
 
-export const CreditUsageChartSkeleton = () => {
-  return (
-    <Card>
-      <CardHeader>
-        <Skeleton className="h-6 w-32" />
-        <Skeleton className="h-4 w-48" />
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <Skeleton className="h-[300px] w-full" />
-        <div className="space-y-2">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-16 w-full" />
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
+
 

@@ -1,4 +1,4 @@
-export { UpgradeView, UpgradeViewLoading } from '../views';
+export { UpgradeView } from '../views';
 
 // Pricing components
 export { PricingCard, PricingGrid } from './pricing';

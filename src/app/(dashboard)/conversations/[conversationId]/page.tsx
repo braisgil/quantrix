@@ -3,7 +3,7 @@ import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { getQueryClient } from '@/trpc/server';
 import { trpc } from '@/trpc/server';
 import { ConversationDetailView } from '@/features/conversations/views';
-import { ConversationSkeleton } from '@/features/conversations/components/shared/conversation-skeleton';
+import { ConversationSkeleton } from '@/features/conversations/components';
 
 interface ConversationPageProps {
   params: Promise<{
@@ -26,7 +26,7 @@ export default async function ConversationPage({ params }: ConversationPageProps
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<ConversationSkeleton variant="detail-view" />}>
+      <Suspense fallback={<ConversationSkeleton />}>
         <ConversationDetailView conversationId={conversationId} />
       </Suspense>
     </HydrationBoundary>

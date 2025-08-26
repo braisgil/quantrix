@@ -10,10 +10,13 @@ export { ConversationHeader } from './detail-view/conversation-header';
 export { ConversationDetailsCard } from './detail-view/conversation-details-card';
 export { ConversationSummaryCard } from './detail-view/conversation-summary-card';
 
-// Shared components  
-export { 
-  ConversationSkeleton, 
-  ErrorBoundary, 
+// Shared components
+export {
+  ErrorBoundary,
   ConversationNavigationHeader,
-  type ConversationSkeletonVariant 
-} from './shared'; 
+} from './shared';
+
+// Skeletons
+export {
+  ConversationSkeleton
+} from './skeletons'; 

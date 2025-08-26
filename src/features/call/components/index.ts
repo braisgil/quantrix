@@ -11,4 +11,6 @@ export { CallEnded } from './call-ended';
 
 // Shared Components
 export { CallErrorBoundary } from './shared/error-boundary';
-export { CallSkeleton, CallConnectingSkeleton } from './shared/call-skeleton';
+
+// Skeletons
+export { CallSkeleton, CallConnectingSkeleton } from './skeletons';

@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+
 import { 
   Tooltip,
   TooltipContent,
@@ -12,6 +12,7 @@ import {
 import { Coins, AlertCircle } from "lucide-react";
 import { useQueryCreditBalanceNonSuspense } from "../../api";
 import { cn } from "@/lib/utils";
+import { CreditBalanceCompactSkeleton } from "../skeletons";
 
 interface CreditBalanceCompactProps {
   className?: string;
@@ -75,12 +76,5 @@ export const CreditBalanceCompact = ({
   );
 };
 
-export const CreditBalanceCompactSkeleton = () => {
-  return (
-    <div className="flex items-center gap-2 h-9 px-3">
-      <Skeleton className="size-4 rounded-full" />
-      <Skeleton className="h-4 w-12" />
-    </div>
-  );
-};
+
 
