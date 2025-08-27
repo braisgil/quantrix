@@ -13,13 +13,17 @@ export { AgentDetailsCard } from './detail-view/agent-details-card';
 export { AgentSpecializationCard } from './detail-view/agent-specialization-card';
 export { AgentCustomConfigCard } from './detail-view/agent-custom-config-card';
 
-// Shared components  
-export { 
-  AgentSkeleton, 
-  ErrorBoundary, 
+// Shared components
+export {
+  ErrorBoundary,
   AgentNavigationHeader,
-  type AgentSkeletonVariant 
 } from './shared';
+
+// Skeletons
+export {
+  AgentSkeleton,
+  type AgentSkeletonVariant
+} from './skeletons';
 
 // Views
 export { AgentListView } from '../views/agent-list-view';

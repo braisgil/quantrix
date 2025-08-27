@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getQueryClient, trpc } from "@/trpc/server";
-import { UpgradeView, UpgradeViewLoading } from "@/features/premium/components";
+import { UpgradeView } from "@/features/premium/components";
+import { UpgradeViewLoading } from "@/features/premium/views/upgrade-view";
 
 export default async function UpgradePage() {
   const queryClient = getQueryClient();
