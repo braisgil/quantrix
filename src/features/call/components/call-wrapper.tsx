@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { CallSkeleton } from "./shared/call-skeleton";
+import { CallSkeleton } from "./skeletons";
 import type { CallUIProps } from "../types";
 
 // Dynamically import the entire call UI to prevent SSR issues

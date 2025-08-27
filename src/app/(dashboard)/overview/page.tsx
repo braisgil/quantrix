@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { getQueryClient, trpc } from '@/trpc/server';
-import { AgentSkeleton } from '@/features/agents/components/shared/agent-skeleton';
+import { OverviewSkeleton } from '@/features/overview/components/skeletons';
 import { OverviewView } from '@/features/overview/views';
 
 export default async function OverviewPage() {
@@ -24,7 +24,7 @@ export default async function OverviewPage() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense fallback={<AgentSkeleton variant="list" />}> 
+      <Suspense fallback={<OverviewSkeleton />}>
         <OverviewView />
       </Suspense>
     </HydrationBoundary>

@@ -1,2 +1,2 @@
-export { UpgradeView, UpgradeViewLoading } from './upgrade-view';
+export { UpgradeView } from './upgrade-view';
 

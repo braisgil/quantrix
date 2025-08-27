@@ -24,12 +24,6 @@ export const UpgradeView = () => {
   );
 };
 
-export const UpgradeViewLoading = () => {
-  return (
-    <div className="flex items-center justify-center p-6 text-sm text-muted-foreground">
-      Loading…
-    </div>
-  );
-};
+
 
 

@@ -1,7 +1,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
-export type AgentSkeletonVariant = 'list' | 'detail' | 'card';
+export type AgentSkeletonVariant = 'list' | 'detail';
 
 interface AgentSkeletonProps {
   variant?: AgentSkeletonVariant;
@@ -9,8 +9,8 @@ interface AgentSkeletonProps {
   className?: string;
 }
 
-export const AgentSkeleton: React.FC<AgentSkeletonProps> = ({ 
-  variant = 'list', 
+export const AgentSkeleton: React.FC<AgentSkeletonProps> = ({
+  variant = 'list',
   count = 3,
   className = ''
 }) => {
@@ -47,7 +47,7 @@ export const AgentSkeleton: React.FC<AgentSkeletonProps> = ({
             <Skeleton className="w-8 h-8 rounded-xl" />
             <Skeleton className="h-8 w-48" />
           </div>
-          
+
           {/* Categories and Badges */}
           <div className="flex flex-wrap gap-2 justify-center mb-2">
             <Skeleton className="h-6 w-20" />
@@ -130,37 +130,12 @@ export const AgentSkeleton: React.FC<AgentSkeletonProps> = ({
     </div>
   );
 
-  const renderCardSkeleton = () => (
-    <div className="matrix-card p-6 border-primary/20">
-      <div className="space-y-4">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <Skeleton className="w-8 h-8 rounded-lg" />
-          <Skeleton className="h-6 w-32" />
-        </div>
-        
-        {/* Content */}
-        <div className="space-y-3">
-          <Skeleton className="h-4 w-full" />
-          <Skeleton className="h-4 w-3/4" />
-          <Skeleton className="h-4 w-1/2" />
-        </div>
-        
-        {/* Badges */}
-        <div className="flex gap-2">
-          <Skeleton className="h-5 w-16" />
-          <Skeleton className="h-5 w-20" />
-        </div>
-      </div>
-    </div>
-  );
+
 
   const renderSkeleton = () => {
     switch (variant) {
       case 'detail':
         return renderDetailSkeleton();
-      case 'card':
-        return renderCardSkeleton();
       case 'list':
       default:
         return renderListSkeleton();
@@ -172,4 +147,5 @@ export const AgentSkeleton: React.FC<AgentSkeletonProps> = ({
       {renderSkeleton()}
     </div>
   );
-}; 
+};
+

@@ -3,7 +3,7 @@ import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import { getQueryClient } from '@/trpc/server';
 import { trpc } from '@/trpc/server';
 import { AgentDetailView } from '@/features/agents/components';
-import { AgentSkeleton } from '@/features/agents/components/shared/agent-skeleton';
+import { AgentSkeleton } from '@/features/agents/components';
 
 interface PageProps {
   params: Promise<{ agentId: string }>;
