@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, Download, ExternalLink } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import type { ConversationDetail } from '../../types';
 import ReactMarkdown from 'react-markdown';
@@ -11,7 +11,6 @@ interface ConversationSummaryCardProps {
 }
 
 export const ConversationSummaryCard: React.FC<ConversationSummaryCardProps> = ({ conversation }) => {
-  const hasRecording = !!conversation.recordingUrl;
   const hasSummary = !!conversation.summary;
   const [isExpanded, setIsExpanded] = useState(false);
   const isLong = (conversation.summary || '').length > 280;
@@ -20,7 +19,7 @@ export const ConversationSummaryCard: React.FC<ConversationSummaryCardProps> = (
     <div>
       <div className="flex items-center gap-3 mb-3">
         <FileText className="w-4 h-4 text-primary" />
-        <h4 className="text-lg font-bold quantrix-gradient matrix-text-glow">Summary & Resources</h4>
+        <h4 className="text-lg font-bold quantrix-gradient matrix-text-glow">Summary</h4>
       </div>
       <div className="matrix-card border-primary/10 p-4 rounded-lg bg-primary/5">
         <div className="space-y-4">
@@ -73,28 +72,6 @@ export const ConversationSummaryCard: React.FC<ConversationSummaryCardProps> = (
             </div>
           )}
 
-          {/* Resources */}
-          <div className="space-y-2">
-            <h4 className="text-sm font-medium text-foreground">Resources</h4>
-            <div className="flex flex-wrap gap-2">
-              {hasRecording && (
-                <Button
-                  size="sm"
-                  variant="call"
-                  onClick={() => conversation.recordingUrl && window.open(conversation.recordingUrl, '_blank')}
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Recording
-                  <ExternalLink className="w-3 h-3 ml-1" />
-                </Button>
-              )}
-              {!hasRecording && (
-                <span className="text-sm text-muted-foreground">
-                  No resources available for this conversation.
-                </span>
-              )}
-            </div>
-          </div>
         </div>
       </div>
     </div>

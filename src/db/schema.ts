@@ -131,7 +131,6 @@ export const conversations = pgTable("conversations", {
   availableAt: timestamp("available_at"),
   startedAt: timestamp("started_at"),
   endedAt: timestamp("ended_at"),
-  recordingUrl: text("recording_url"),
   summary: text("summary"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),

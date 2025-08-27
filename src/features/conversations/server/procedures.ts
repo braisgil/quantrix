@@ -146,8 +146,7 @@ export const conversationRouter = createTRPCRouter({
               closed_caption_mode: "auto-on",
             },
             recording: {
-              mode: "auto-on",
-              quality: "1080p",
+              mode: "disabled",
             },
           },
         },

@@ -6,7 +6,6 @@ import {
   MessageNewEvent,
   CallEndedEvent,
   CallTranscriptionReadyEvent,
-  CallRecordingReadyEvent,
   CallSessionParticipantLeftEvent,
   CallSessionStartedEvent,
 } from "@stream-io/node-sdk";
@@ -158,16 +157,6 @@ export async function POST(req: NextRequest) {
         transcriptUrl: event.call_transcription.url,
       },
     });
-  } else if (eventType === "call.recording_ready") {
-    const event = payload as CallRecordingReadyEvent;
-    const conversationId = event.call_cid.split(":")[1]; // call_cid is formatted as "type:id"
-
-    await db
-      .update(conversations)
-      .set({
-        recordingUrl: event.call_recording.url,
-      })
-      .where(eq(conversations.id, conversationId));
   } else if (eventType === "message.new") {
     const event = payload as MessageNewEvent;
 
