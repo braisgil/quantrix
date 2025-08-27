@@ -29,6 +29,20 @@ export const DashboardTrial = () => {
           </div>
         </div>
 
+        <div className="flex flex-col gap-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <Zap className="size-3 text-muted-foreground" />
+              Monthly free credits
+            </p>
+            <p className="text-xs text-primary font-medium">
+              {Math.round(375)} / {Math.round(500)}
+            </p>
+          </div>
+          <Progress value={75} className="w-full h-1.5 matrix-border" />
+          <p className="text-[10px] text-muted-foreground mt-1">Renews on 2025-09-01</p>
+        </div>
+
         <div className="flex flex-col gap-y-3">
           <div className="flex flex-col gap-y-2">
             <div className="flex items-center justify-between">
