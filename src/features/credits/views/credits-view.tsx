@@ -1,14 +1,13 @@
 "use client";
 
 import React from 'react';
-import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import CreditPackage from '@/features/credits/components/credit-package';
 import { authClient } from '@/lib/auth-client';
-import { useQueryCreditsBalance, useQueryCreditProducts } from '@/features/credits/api';
+import { useQueryCreditProducts } from '@/features/credits/api';
 import type { CreditPackageData } from '../types';
 
 const CreditsView: React.FC = () => {
-  const { data: balanceData } = useQueryCreditsBalance();
   const { data: creditProducts } = useQueryCreditProducts();
 
   const packages: CreditPackageData[] = React.useMemo(
@@ -47,17 +46,18 @@ const CreditsView: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <CardHeader className="px-0 pb-6">
-        <div className="flex items-center gap-3 mb-2">
-          <CardTitle className="text-lg font-bold quantrix-gradient matrix-text-glow">
+    <div className="flex-1 flex flex-col gap-y-10">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
+        <div>
+          <h1 className="text-3xl font-bold quantrix-gradient matrix-text-glow">
             Credits
-          </CardTitle>
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            Manage your subscription, credits, and billing preferences
+          </p>
         </div>
-        <CardDescription>
-          Manage your credits and track usage across all services{balanceData?.balance ? ` — Balance: ${balanceData.balance.toLocaleString()} credits` : ''}
-        </CardDescription>
-      </CardHeader>
+      </div>
       <CardContent className="px-0 space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {packages?.map((pkg, index) => (

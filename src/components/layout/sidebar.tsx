@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { 
   Code, 
   Bot, 
-  Zap,
+  User,
   LayoutDashboard,
   FolderOpen,
 } from "lucide-react";
@@ -49,9 +49,9 @@ const neuralSections = [
 
 const quantumSections = [
   {
-    icon: Zap,
-    label: "Upgrade",
-    href: "/upgrade",
+    icon: User,
+    label: "Account",
+    href: "/account",
   },
 ];
 

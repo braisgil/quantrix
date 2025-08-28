@@ -120,10 +120,10 @@ export const DashboardUserButton = () => {
         </DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-primary/20" />
         <DropdownMenuItem
-          // onClick={() => authClient.customer.portal()}
+          onClick={() => router.push("/account")}
           className="cursor-pointer flex items-center justify-between hover:bg-primary/10 focus:bg-primary/10 transition-colors"
         >
-          <span className="text-foreground">Neural Billing</span>
+          <span className="text-foreground">Account & Billing</span>
           <CreditCardIcon className="size-4 text-primary" />
         </DropdownMenuItem>
         <DropdownMenuItem

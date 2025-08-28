@@ -1,24 +1,22 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ShieldCheck } from "lucide-react";
 
 export const UpgradeFooter = () => {
   return (
-    <section className="rounded-xl border matrix-border bg-background/70 p-6">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold">How Polar works here</h2>
-          <p className="text-sm text-muted-foreground">Payments, taxes, and invoices are handled by Polar. You will be redirected to a secure checkout.</p>
+    <Card className="matrix-card py-0 bg-muted/50 border-primary/20 hover:matrix-border transition-all">
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-primary/10 rounded-lg matrix-glow">
+            <ShieldCheck className="w-4 h-4 text-primary" />
+          </div>
+          <p className="text-sm text-muted-foreground">
+            Payments secured by <a href="https://polar.sh" target="_blank" rel="noopener noreferrer" className="font-medium text-foreground cursor-pointer">Polar.sh</a>
+          </p>
         </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <span>Need a different plan?</span>
-          <Button asChild variant="link" className="px-0">
-            <Link href="/overview">Contact us</Link>
-          </Button>
-        </div>
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 };

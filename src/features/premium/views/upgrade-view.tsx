@@ -1,25 +1,30 @@
 "use client";
 
 import React from "react";
-import { authClient } from "@/lib/auth-client";
 import { useQueryProducts, useQueryCurrentSubscription } from "../api";
-import { UpgradeHeader, UpgradeFooter, PricingGrid } from "../components";
+import { PricingGrid } from "../components";
 
 export const UpgradeView = () => {
   const { data: products } = useQueryProducts();
   const { data: currentSubscription } = useQueryCurrentSubscription();
 
+
   return (
-    <div className="flex-1 py-4 px-4 md:px-8 flex flex-col gap-y-10">
-      <UpgradeHeader
-        hasSubscription={!!currentSubscription}
-        onManageSubscription={() => authClient.customer.portal()}
-        currentPlanName={currentSubscription?.name}
-      />
+    <div className="flex-1 flex flex-col gap-y-10">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-0">
+        <div>
+          <h1 className="text-3xl font-bold quantrix-gradient matrix-text-glow">
+            Subscription
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            Manage your subscription and billing preferences
+          </p>
+        </div>
+      </div>
 
       <PricingGrid products={products} currentSubscription={currentSubscription} />
 
-      <UpgradeFooter />
     </div>
   );
 };
