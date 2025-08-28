@@ -1,0 +1,86 @@
+/**
+ * Credits system configuration
+ * 1 credit = $0.01 USD
+ * All pricing includes a 30% margin over base provider costs
+ */
+
+// Core pricing configuration
+export const PRICING_CONFIG = {
+  // Base conversion rate
+  CREDIT_TO_USD: 0.01,
+  
+  // OpenAI GPT-4o pricing (2024/2025): $5/M input, $15/M output
+  // With 30% margin -> $6.5/M input, $19.5/M output
+  GPT4O: {
+    INPUT_CREDITS_PER_K_TOKENS: 0.65,
+    OUTPUT_CREDITS_PER_K_TOKENS: 1.95,
+  },
+  
+  // OpenAI Realtime API (4x multiplier vs text)
+  REALTIME: {
+    INPUT_CREDITS_PER_K_TOKENS: 0.65 * 4,
+    OUTPUT_CREDITS_PER_K_TOKENS: 1.95 * 4,
+    MIN_CREDITS_PER_CALL: 10,
+  },
+  
+  // GetStream.io Video calls: $0.30/1000 participant-minutes
+  // With 2 participants and margin: 0.2 credits/minute
+  VIDEO_CALLS: {
+    CREDITS_PER_MINUTE: 0.2,
+    MIN_CREDITS_PER_SESSION: 5,
+  },
+  
+  // GetStream.io Transcription: $8/1000 minutes with margin
+  TRANSCRIPTION: {
+    CREDITS_PER_MINUTE: 1.04,
+  },
+  
+  // Chat infrastructure (per-message platform fee)
+  CHAT: {
+    CREDITS_PER_MESSAGE: 0.05,
+    MIN_CREDITS_PER_MESSAGE: 0,
+  },
+  
+  // Background job execution costs
+  INNGEST: {
+    BASE_CREDITS_PER_EXECUTION: 1,
+    CREDITS_PER_SECOND: 0.02,
+  },
+  
+  // Fallbacks
+  FALLBACK_CREDITS_PER_K_TOKENS: 1.3,
+  MIN_CREDITS_PER_CALL: 1,
+} as const;
+
+// Legacy config for backwards compatibility
+export const CREDITS_CONFIG = {
+  GPT4O_INPUT_CREDITS_PER_K_TOKENS: PRICING_CONFIG.GPT4O.INPUT_CREDITS_PER_K_TOKENS,
+  GPT4O_OUTPUT_CREDITS_PER_K_TOKENS: PRICING_CONFIG.GPT4O.OUTPUT_CREDITS_PER_K_TOKENS,
+  DEFAULT_CREDITS_PER_K_TOKENS: PRICING_CONFIG.FALLBACK_CREDITS_PER_K_TOKENS,
+  MIN_CREDITS_PER_CALL: PRICING_CONFIG.MIN_CREDITS_PER_CALL,
+  MIN_CREDITS_PER_MESSAGE: PRICING_CONFIG.CHAT.MIN_CREDITS_PER_MESSAGE,
+  REALTIME_INPUT_CREDITS_PER_K_TOKENS: PRICING_CONFIG.REALTIME.INPUT_CREDITS_PER_K_TOKENS,
+  REALTIME_OUTPUT_CREDITS_PER_K_TOKENS: PRICING_CONFIG.REALTIME.OUTPUT_CREDITS_PER_K_TOKENS,
+  REALTIME_MIN_CREDITS_PER_CALL: PRICING_CONFIG.REALTIME.MIN_CREDITS_PER_CALL,
+  CREDITS_PER_CALL_MINUTE: PRICING_CONFIG.VIDEO_CALLS.CREDITS_PER_MINUTE,
+  TRANSCRIPTION_CREDITS_PER_CALL_MINUTE: PRICING_CONFIG.TRANSCRIPTION.CREDITS_PER_MINUTE,
+  CREDITS_PER_CHAT_MESSAGE: PRICING_CONFIG.CHAT.CREDITS_PER_MESSAGE,
+  MIN_CREDITS_PER_CALL_SESSION: PRICING_CONFIG.VIDEO_CALLS.MIN_CREDITS_PER_SESSION,
+  INNGEST_BASE_CREDITS_PER_EXECUTION: PRICING_CONFIG.INNGEST.BASE_CREDITS_PER_EXECUTION,
+  INNGEST_CREDITS_PER_SECOND: PRICING_CONFIG.INNGEST.CREDITS_PER_SECOND,
+  
+  // App-specific configuration
+  QUERY_STALE_TIME: 5 * 60 * 1000, // 5 minutes
+} as const;
+
+// Trial/Free plan constants
+export const TRIAL_LIMITS = {
+  FREE_MONTHLY_CREDITS: 500,
+  CREDITS_USED_EXAMPLE: 375, // This should ideally come from actual data
+  NEXT_RENEWAL_DATE: "2025-09-01", // This should be dynamic
+} as const;
+
+// Type definitions
+export type PricingConfig = typeof PRICING_CONFIG;
+export type CreditsConfig = typeof CREDITS_CONFIG;
+export type TrialLimits = typeof TRIAL_LIMITS;

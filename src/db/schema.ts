@@ -1,4 +1,4 @@
-import { boolean, pgEnum, pgTable, text, timestamp, index } from "drizzle-orm/pg-core";
+import { boolean, pgEnum, pgTable, text, timestamp, index, integer, jsonb } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
 
 export const user = pgTable("user", {
@@ -140,4 +140,34 @@ export const conversations = pgTable("conversations", {
   statusIdx: index('conversations_status_idx').on(table.status),
   availableAtIdx: index('conversations_available_at_idx').on(table.availableAt),
   createdAtIdx: index('conversations_created_at_idx').on(table.createdAt),
+}));
+
+// Credits system
+export const creditTransactionType = pgEnum("credit_transaction_type", [
+  "purchase",
+  "usage",
+  "refund",
+  "adjustment",
+]);
+
+export const creditsWallets = pgTable("credits_wallets", {
+  userId: text("user_id").primaryKey().references(() => user.id, { onDelete: "cascade" }),
+  balance: integer("balance").notNull().default(0),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+  userIdIdx: index('credits_wallets_user_id_idx').on(table.userId),
+}));
+
+export const creditTransactions = pgTable("credit_transactions", {
+  id: text("id").primaryKey().$defaultFn(() => nanoid()),
+  userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
+  amount: integer("amount").notNull(), // positive for purchases/grants, negative for usage
+  type: creditTransactionType("type").notNull(),
+  description: text("description"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+}, (table) => ({
+  userIdIdx: index('credit_transactions_user_id_idx').on(table.userId),
+  createdAtIdx: index('credit_transactions_created_at_idx').on(table.createdAt),
 }));

@@ -1,4 +1,5 @@
 import { inngest } from "@/inngest/client";
+import { recordInngestUsageAndCharge, recordAiUsageAndCharge } from "@/features/credits/server/usage";
 import JSONL from "jsonl-parse-stringify";
 import { createAgent, openai, TextMessage } from "@inngest/agent-kit";
 import { db } from "@/db";
@@ -36,6 +37,7 @@ export const conversationsProcessing = inngest.createFunction(
   { id: "conversations/processing" },
   { event: "conversations/processing" },
   async ({ event, step }) => {
+    const startedAt = Date.now();
     const response = await step.run("fetch-transcript", async () => {
       return fetch(event.data.transcriptUrl).then((res) => res.text());
     });
@@ -109,5 +111,38 @@ export const conversationsProcessing = inngest.createFunction(
         })
         .where(eq(conversations.id, event.data.conversationId))
     });
+
+    // Attempt to attribute usage to the conversation owner for billing
+    const [conv] = await db
+      .select({ id: conversations.id, userId: conversations.userId })
+      .from(conversations)
+      .where(eq(conversations.id, event.data.conversationId));
+
+    if (conv?.userId) {
+      // Charge Inngest infra time
+      const elapsedMs = Date.now() - startedAt;
+      await recordInngestUsageAndCharge({
+        userId: conv.userId,
+        functionName: "conversations/processing",
+        executionTimeMs: elapsedMs,
+        metadata: { conversationId: conv.id },
+      });
+
+      // Estimate OpenAI token usage for summarizer and bill tokens
+      const inputText = JSON.stringify(transcriptWithSpeakers);
+      const outputText = (output[0] as TextMessage).content as string;
+      const approxTokens = (text: string) => Math.ceil(text.length / 4);
+      const promptTokens = approxTokens(inputText);
+      const completionTokens = approxTokens(outputText);
+      const totalTokens = promptTokens + completionTokens;
+
+      await recordAiUsageAndCharge({
+        userId: conv.userId,
+        totalTokens,
+        promptTokens,
+        completionTokens,
+        model: "gpt-4o",
+      });
+    }
   }
 );

@@ -141,7 +141,6 @@ export const conversationRouter = createTRPCRouter({
           },
           settings_override: {
             transcription: {
-              language: "en",
               mode: "auto-on",
               closed_caption_mode: "auto-on",
             },
