@@ -123,7 +123,7 @@ export async function recordAiUsageAndCharge(params: {
   inputCreditsPerKTokens?: number;
   outputCreditsPerKTokens?: number;
   minimumCredits?: number;
-}) {
+}): Promise<{ creditsDeducted: number }> {
   const {
     userId,
     totalTokens = 0,
@@ -182,6 +182,8 @@ export async function recordAiUsageAndCharge(params: {
       credits_charged: creditsToDeduct,
     },
   });
+
+  return { creditsDeducted: creditsToDeduct };
 }
 
 export async function recordRealtimeApiUsageAndCharge(params: {
@@ -191,7 +193,7 @@ export async function recordRealtimeApiUsageAndCharge(params: {
   outputTokens?: number;
   model?: string;
   sessionDurationMs?: number;
-}) {
+}): Promise<{ creditsDeducted: number }> {
   const {
     userId,
     totalTokens = 0,
@@ -243,6 +245,8 @@ export async function recordRealtimeApiUsageAndCharge(params: {
       credits_charged: creditsToDeduct,
     },
   });
+
+  return { creditsDeducted: creditsToDeduct };
 }
 
 export async function recordCallUsageAndCharge(params: {
@@ -252,7 +256,7 @@ export async function recordCallUsageAndCharge(params: {
   callId: string;
   conversationId: string;
   hasTranscription?: boolean;
-}) {
+}): Promise<{ creditsDeducted: number }> {
   const {
     userId,
     callDurationMs,
@@ -303,6 +307,8 @@ export async function recordCallUsageAndCharge(params: {
       credits_charged: creditsToDeduct,
     },
   });
+
+  return { creditsDeducted: creditsToDeduct };
 }
 
 export async function recordTranscriptionUsageAndCharge(params: {
@@ -310,7 +316,7 @@ export async function recordTranscriptionUsageAndCharge(params: {
   callDurationMs: number;
   callId: string;
   conversationId: string;
-}) {
+}): Promise<{ creditsDeducted: number }> {
   const {
     userId,
     callDurationMs,
@@ -354,6 +360,8 @@ export async function recordTranscriptionUsageAndCharge(params: {
       credits_charged: creditsToDeduct,
     },
   });
+
+  return { creditsDeducted: creditsToDeduct };
 }
 
 export async function recordChatMessageUsageAndCharge(params: {
@@ -361,7 +369,7 @@ export async function recordChatMessageUsageAndCharge(params: {
   messageCount: number;
   channelId: string;
   messageText?: string;
-}) {
+}): Promise<{ creditsDeducted: number }> {
   const {
     userId,
     messageCount,
@@ -402,6 +410,8 @@ export async function recordChatMessageUsageAndCharge(params: {
       credits_charged: creditsToDeduct,
     },
   });
+
+  return { creditsDeducted: creditsToDeduct };
 }
 
 export async function recordInngestUsageAndCharge(params: {
@@ -409,7 +419,7 @@ export async function recordInngestUsageAndCharge(params: {
   functionName: string;
   executionTimeMs: number;
   metadata?: Record<string, JsonValue>;
-}) {
+}): Promise<{ creditsDeducted: number }> {
   const { userId, functionName, executionTimeMs, metadata = {} } = params;
 
   const creditsToDeduct = calculateInngestCredits(executionTimeMs);
@@ -451,4 +461,6 @@ export async function recordInngestUsageAndCharge(params: {
       ),
     },
   });
+
+  return { creditsDeducted: creditsToDeduct };
 }

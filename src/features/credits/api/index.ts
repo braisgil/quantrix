@@ -1,16 +1,31 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import { CREDITS_CONFIG } from "@/constants/credits";
+import { useCallback } from "react";
+import { useCreditBalanceSubscription } from "@/hooks/use-credit-balance-subscription";
 
 /**
- * Hook to query user's credit balance
+ * Hook to query user's credit balance with real-time updates
  */
 export const useQueryCreditsBalance = () => {
   const trpc = useTRPC();
-  return useSuspenseQuery({
+  
+  const query = useSuspenseQuery({
     ...trpc.credits.getBalance.queryOptions(),
+    // Optimized for real-time updates - minimal polling/refetching
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
     staleTime: CREDITS_CONFIG.QUERY_STALE_TIME,
   });
+
+  const handleBalanceUpdate = useCallback(() => {
+    query.refetch();
+  }, [query]);
+
+  // Subscribe to real-time credit balance updates via Stream Chat
+  useCreditBalanceSubscription(handleBalanceUpdate);
+
+  return query;
 };
 
 /**
@@ -34,3 +49,6 @@ export const useQueryCreditProducts = () => {
     staleTime: CREDITS_CONFIG.QUERY_STALE_TIME,
   });
 };
+
+// Note: Credit deduction mutations are called server-side via webhooks
+// They automatically send real-time notifications to update the balance

@@ -70,7 +70,7 @@ export const CREDITS_CONFIG = {
   INNGEST_CREDITS_PER_SECOND: PRICING_CONFIG.INNGEST.CREDITS_PER_SECOND,
   
   // App-specific configuration
-  QUERY_STALE_TIME: 5 * 60 * 1000, // 5 minutes
+  QUERY_STALE_TIME: 30 * 1000, // 30 seconds for more responsive balance updates
 } as const;
 
 // Trial/Free plan constants

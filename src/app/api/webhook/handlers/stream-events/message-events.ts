@@ -8,7 +8,7 @@ import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
 import { db } from "@/db";
 import { agents, conversations, sessions } from "@/db/schema";
 import { streamChat } from "@/lib/stream-chat";
-import { recordAiUsageAndCharge, recordChatMessageUsageAndCharge } from "@/features/credits/server/usage";
+import { createWebhookCreditsClient } from "@/lib/trpc-server-client";
 import { WebhookResponses, isMessageProcessed, markMessageAsProcessed } from "../webhook-utils";
 import { NextResponse } from "next/server";
 
@@ -269,7 +269,9 @@ async function trackMessageUsage(
   }
 
   try {
-    // Record AI token usage
+    const creditsClient = await createWebhookCreditsClient();
+
+    // Record AI token usage via tRPC
     const usage = aiResponse.usage;
     if (usage) {
       console.warn('Recording AI usage', {
@@ -279,7 +281,7 @@ async function trackMessageUsage(
         completion: usage.completion_tokens,
       });
 
-      await recordAiUsageAndCharge({
+      await creditsClient.credits.deductAiUsageCredits({
         userId: ownerUserId,
         totalTokens: usage.total_tokens ?? 0,
         promptTokens: usage.prompt_tokens ?? 0,
@@ -288,13 +290,13 @@ async function trackMessageUsage(
       });
     }
 
-    // Record platform message fees (for both user and AI messages)
+    // Record platform message fees (for both user and AI messages) via tRPC
     console.warn('Recording chat message usage for user message', {
       ownerUserId,
       messageLength: userMessage.length
     });
     
-    await recordChatMessageUsageAndCharge({
+    await creditsClient.credits.deductChatMessageCredits({
       userId: ownerUserId,
       messageCount: 1,
       channelId: context.targetSessionId,
@@ -306,7 +308,7 @@ async function trackMessageUsage(
       replyLength: aiResponse.text.length
     });
     
-    await recordChatMessageUsageAndCharge({
+    await creditsClient.credits.deductChatMessageCredits({
       userId: ownerUserId,
       messageCount: 1,
       channelId: context.targetSessionId,

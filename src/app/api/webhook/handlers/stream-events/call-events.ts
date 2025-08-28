@@ -12,11 +12,7 @@ import { db } from "@/db";
 import { agents, conversations, sessions } from "@/db/schema";
 import { streamVideo } from "@/lib/stream-video";
 import { inngest } from "@/inngest/client";
-import { 
-  recordCallUsageAndCharge, 
-  recordTranscriptionUsageAndCharge, 
-  recordRealtimeApiUsageAndCharge 
-} from "@/features/credits/server/usage";
+import { createWebhookCreditsClient } from "@/lib/trpc-server-client";
 import { WebhookResponses } from "../webhook-utils";
 import { NextResponse } from "next/server";
 
@@ -119,15 +115,20 @@ export async function handleCallSessionStarted(event: CallSessionStartedEvent): 
       const usage = response?.usage as Record<string, number> | undefined;
       
       if (usage && existingSession.userId) {
-        recordRealtimeApiUsageAndCharge({
-          userId: existingSession.userId,
-          totalTokens: usage.total_tokens || 0,
-          inputTokens: usage.input_tokens || 0,
-          outputTokens: usage.output_tokens || 0,
-          model: "gpt-4o-realtime",
-        }).catch(error => {
-          console.error('Failed to record realtime API usage:', error);
-        });
+        // Use tRPC mutation for credit deduction
+        createWebhookCreditsClient()
+          .then(creditsClient => 
+            creditsClient.credits.deductRealtimeApiCredits({
+              userId: existingSession.userId,
+              totalTokens: usage.total_tokens || 0,
+              inputTokens: usage.input_tokens || 0,
+              outputTokens: usage.output_tokens || 0,
+              model: "gpt-4o-realtime",
+            })
+          )
+          .catch(error => {
+            console.error('Failed to record realtime API usage:', error);
+          });
       }
     });
 
@@ -195,16 +196,21 @@ export async function handleCallSessionEnded(event: CallEndedEvent): Promise<Nex
         const callDurationMs = Date.now() - existingConversation.startedAt.getTime();
         const participantCount = 2; // Always AI agent + user
 
-        recordCallUsageAndCharge({
-          userId: existingSession.userId,
-          callDurationMs,
-          participantCount,
-          callId: conversationId,
-          conversationId: conversationId,
-          hasTranscription: false, // TODO: Detect if transcription was enabled
-        }).catch(error => {
-          console.error('Failed to record call usage:', error);
-        });
+        // Use tRPC mutation for credit deduction
+        createWebhookCreditsClient()
+          .then(creditsClient => 
+            creditsClient.credits.deductCallUsageCredits({
+              userId: existingSession.userId,
+              callDurationMs,
+              participantCount,
+              callId: conversationId,
+              conversationId: conversationId,
+              hasTranscription: false, // TODO: Detect if transcription was enabled
+            })
+          )
+          .catch(error => {
+            console.error('Failed to record call usage:', error);
+          });
       }
     }
 
@@ -256,14 +262,19 @@ export async function handleCallTranscriptionReady(event: CallTranscriptionReady
       const callDurationMs = (existingConversation.endedAt?.getTime() ?? Date.now()) 
         - existingConversation.startedAt.getTime();
       
-      recordTranscriptionUsageAndCharge({
-        userId: existingSession.userId,
-        callDurationMs,
-        callId: conversationId,
-        conversationId: conversationId,
-      }).catch(error => {
-        console.error('Failed to record transcription usage:', error);
-      });
+      // Use tRPC mutation for credit deduction
+      createWebhookCreditsClient()
+        .then(creditsClient => 
+          creditsClient.credits.deductTranscriptionCredits({
+            userId: existingSession.userId,
+            callDurationMs,
+            callId: conversationId,
+            conversationId: conversationId,
+          })
+        )
+        .catch(error => {
+          console.error('Failed to record transcription usage:', error);
+        });
     }
 
     // Trigger conversation processing

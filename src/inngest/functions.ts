@@ -1,5 +1,5 @@
 import { inngest } from "@/inngest/client";
-import { recordInngestUsageAndCharge, recordAiUsageAndCharge } from "@/features/credits/server/usage";
+import { createWebhookCreditsClient } from "@/lib/trpc-server-client";
 import JSONL from "jsonl-parse-stringify";
 import { createAgent, openai, TextMessage } from "@inngest/agent-kit";
 import { db } from "@/db";
@@ -119,30 +119,37 @@ export const conversationsProcessing = inngest.createFunction(
       .where(eq(conversations.id, event.data.conversationId));
 
     if (conv?.userId) {
-      // Charge Inngest infra time
-      const elapsedMs = Date.now() - startedAt;
-      await recordInngestUsageAndCharge({
-        userId: conv.userId,
-        functionName: "conversations/processing",
-        executionTimeMs: elapsedMs,
-        metadata: { conversationId: conv.id },
-      });
+      try {
+        const creditsClient = await createWebhookCreditsClient();
 
-      // Estimate OpenAI token usage for summarizer and bill tokens
-      const inputText = JSON.stringify(transcriptWithSpeakers);
-      const outputText = (output[0] as TextMessage).content as string;
-      const approxTokens = (text: string) => Math.ceil(text.length / 4);
-      const promptTokens = approxTokens(inputText);
-      const completionTokens = approxTokens(outputText);
-      const totalTokens = promptTokens + completionTokens;
+        // Charge Inngest infra time with real-time notification
+        const elapsedMs = Date.now() - startedAt;
+        await creditsClient.credits.deductInngestCredits({
+          userId: conv.userId,
+          functionName: "conversations/processing",
+          executionTimeMs: elapsedMs,
+          metadata: { conversationId: conv.id },
+        });
 
-      await recordAiUsageAndCharge({
-        userId: conv.userId,
-        totalTokens,
-        promptTokens,
-        completionTokens,
-        model: "gpt-4o",
-      });
+        // Estimate OpenAI token usage for summarizer and bill tokens with real-time notification
+        const inputText = JSON.stringify(transcriptWithSpeakers);
+        const outputText = (output[0] as TextMessage).content as string;
+        const approxTokens = (text: string) => Math.ceil(text.length / 4);
+        const promptTokens = approxTokens(inputText);
+        const completionTokens = approxTokens(outputText);
+        const totalTokens = promptTokens + completionTokens;
+
+        await creditsClient.credits.deductAiUsageCredits({
+          userId: conv.userId,
+          totalTokens,
+          promptTokens,
+          completionTokens,
+          model: "gpt-4o",
+        });
+      } catch (error) {
+        console.error('Failed to record usage in Inngest function:', error);
+        // Don't fail the entire function if credit tracking fails
+      }
     }
   }
 );
