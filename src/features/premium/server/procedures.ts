@@ -26,7 +26,6 @@ export const premiumRouter = createTRPCRouter({
   getProducts: protectedProcedure.query(async () => {
     const products = await polarClient.products.list({
       isArchived: false,
-      isRecurring: true,
       sorting: ["price_amount"],
     });
 

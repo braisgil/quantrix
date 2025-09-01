@@ -26,15 +26,6 @@ export const creditsRouter = createTRPCRouter({
     return { balance: wallet?.balance ?? 0 } as const;
   }),
 
-  getCreditProducts: protectedProcedure.query(async () => {
-    const products = await polarClient.products.list({
-      isArchived: false,
-      isRecurring: false,
-      sorting: ["price_amount"],
-    });
-    return products.result.items;
-  }),
-
   getTransactions: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.auth.user.id;
     const items = await db

@@ -24,15 +24,3 @@ export type UsageEventName =
   | "transcription_usage"
   | "chat_message_usage"
   | "inngest_usage";
-
-// UI component types
-export interface CreditPackageData {
-  id: string;
-  credits: number;
-  bonusCredits: number;
-  totalCredits: number;
-  price: number;
-  name: string;
-  description?: string | null;
-  polarProductId?: string;
-}

@@ -14,11 +14,6 @@ export interface UpgradeHeaderProps {
   currentPlanName?: string | null;
 }
 
-export interface PricingCardProps {
-  product: PremiumProduct;
-  currentSubscription: PremiumSubscription;
-}
-
 export interface FeatureItemProps {
   label: string;
   icon: React.ElementType;

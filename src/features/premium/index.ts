@@ -10,7 +10,6 @@ export type {
   PremiumSubscription, 
   PremiumUsage,
   UpgradeHeaderProps,
-  PricingCardProps,
   FeatureItemProps 
 } from './types';
 

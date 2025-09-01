@@ -39,16 +39,5 @@ export const useQueryCreditTransactions = () => {
   });
 };
 
-/**
- * Hook to query available credit products/packages
- */
-export const useQueryCreditProducts = () => {
-  const trpc = useTRPC();
-  return useSuspenseQuery({
-    ...trpc.credits.getCreditProducts.queryOptions(),
-    staleTime: CREDITS_CONFIG.QUERY_STALE_TIME,
-  });
-};
-
 // Note: Credit deduction mutations are called server-side via webhooks
 // They automatically send real-time notifications to update the balance
